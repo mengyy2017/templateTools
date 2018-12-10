@@ -8,6 +8,8 @@ public class FreeMarkerUtil {
 
     private static Configuration configuration;
 
+    private static String beanFtl = "Bean.ftl";
+
     static {
         configuration = new Configuration();
         try {
@@ -17,11 +19,11 @@ public class FreeMarkerUtil {
         }
     }
 
-    public static void outputFile(String templateName, String filePath, Map<String, Object> data) {
+    public static void outputBean(String filePath, Map<String, Object> data) {
         BufferedWriter writer = null;
         try {
             writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filePath)));
-            configuration.getTemplate(templateName).process(data, writer);
+            configuration.getTemplate(beanFtl).process(data, writer);
         }  catch (Exception e) {
             e.printStackTrace();
         } finally {

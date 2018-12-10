@@ -3,27 +3,27 @@ package ${packageName};
 import java.io.Serializable;
 
 /**
- * @Title: ${beanName}
+ * @Title: ${tableName}
  * @Description: ${tableRemark!}
 
  * @author ${author}
  * @date ${date}
  */
-public class ${beanName} implements Serializable {
+public class ${tableName} implements Serializable {
 
-<#list fields as field>
-	/** ${field.remark!} */
-	private ${field.fieldType} ${field.fieldName};
+<#list columnList as column>
+	/** ${column.remark!} */
+	private ${column.fieldType} ${column.fieldName};
 </#list>
 
-<#list fields as field>
-	/** ${field.remark!} */
-	public ${field.fieldType} get${field.methods}() {
-		return ${field.fieldName};
+<#list columnList as column>
+	/** ${column.remark!} */
+	public ${column.fieldType} get${column.methods}() {
+		return ${column.fieldName};
 	}
-	/** ${field.remark!} */
-	public void set${field.methods}(${field.fieldType} ${field.fieldName}) {
-		this.${field.fieldName} = ${field.fieldName};
+	/** ${column.remark!} */
+	public void set${column.methods}(${column.fieldType} ${column.fieldName}) {
+		this.${column.fieldName} = ${column.fieldName};
 	}
 </#list>
 

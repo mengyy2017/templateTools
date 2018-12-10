@@ -1,12 +1,14 @@
 package com.templateTools.entity.model;
 
+import com.templateTools.entity.ColumnEntity;
+
 import java.util.List;
 
 public class DatabaseModel {
 
     private String tableName;
 
-    private List<String> columnNameList;
+    private List<ColumnEntity> columnList;
 
     public String getTableName() {
         return tableName;
@@ -16,11 +18,11 @@ public class DatabaseModel {
         this.tableName = tableName;
     }
 
-    public List<String> getColumnNameList() {
-        return columnNameList;
+    public List<ColumnEntity> getColumnList() {
+        return columnList;
     }
 
-    public void setColumnNameList(List<String> columnNameList) {
-        this.columnNameList = columnNameList;
+    public void setColumnList(List<ColumnEntity> columnList) {
+        this.columnList = columnList;
     }
 }

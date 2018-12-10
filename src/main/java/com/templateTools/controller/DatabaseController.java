@@ -5,6 +5,8 @@ import com.templateTools.entity.TableEntity;
 import com.templateTools.entity.model.DatabaseModel;
 import com.templateTools.service.ColumnService;
 import com.templateTools.service.TableService;
+import com.templateTools.utils.FreeMarkerUtil;
+import com.templateTools.utils.HandelDataUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -54,10 +56,14 @@ public class DatabaseController {
     @RequestMapping(value = "/createCode")
     @ResponseBody
     public Map createCode (@RequestBody List<DatabaseModel> databaseModelList){
-        Map map = new HashMap();
-        map.put("111", "222");
-        map.put("code", 200);
-        return map;
+
+        databaseModelList.stream().forEach(databaseModel -> {
+            Map databaseMap = HandelDataUtil.convert2Camel(databaseModel);
+
+            FreeMarkerUtil.outputBean("", databaseMap);
+
+        });
+        return null;
     }
 
 
