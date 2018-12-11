@@ -3,6 +3,7 @@ package com.templateTools.entity;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Table(name = "tables")
 public class TableEntity {
@@ -11,6 +12,10 @@ public class TableEntity {
     @Column(name = "table_name")
     private String id;
     private String tableName;
+    @Transient
+    private String camelTableName;
+    @Transient
+    private String upperCamelTableName;
     private String tableComment;
     private String tableSchema;
 
@@ -28,6 +33,22 @@ public class TableEntity {
 
     public void setTableName(String tableName) {
         this.tableName = tableName;
+    }
+
+    public String getCamelTableName() {
+        return camelTableName;
+    }
+
+    public void setCamelTableName(String camelTableName) {
+        this.camelTableName = camelTableName;
+    }
+
+    public String getUpperCamelTableName() {
+        return upperCamelTableName;
+    }
+
+    public void setUpperCamelTableName(String upperCamelTableName) {
+        this.upperCamelTableName = upperCamelTableName;
     }
 
     public String getTableComment() {

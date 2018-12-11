@@ -1,29 +1,29 @@
-package ${packageName};
+package ${packageName!};
 
 import java.io.Serializable;
 
 /**
- * @Title: ${tableName}
+ * @Title: ${upperCamelTableName}
  * @Description: ${tableRemark!}
 
- * @author ${author}
- * @date ${date}
+ * @author ${author!}
+ * @date ${date!}
  */
-public class ${tableName} implements Serializable {
+public class ${upperCamelTableName} implements Serializable {
 
 <#list columnList as column>
-	/** ${column.remark!} */
-	private ${column.fieldType} ${column.fieldName};
+
+	private ${column.javaType} ${column.camelColName}; // ${column.columnComment!}
 </#list>
 
 <#list columnList as column>
-	/** ${column.remark!} */
-	public ${column.fieldType} get${column.methods}() {
-		return ${column.fieldName};
+	/** ${column.columnComment!} */
+	public ${column.javaType} get${column.upperCamelColName}() {
+		return ${column.camelColName};
 	}
-	/** ${column.remark!} */
-	public void set${column.methods}(${column.fieldType} ${column.fieldName}) {
-		this.${column.fieldName} = ${column.fieldName};
+	/** ${column.columnComment!} */
+	public void set${column.upperCamelColName}(${column.javaType} ${column.camelColName}) {
+		this.${column.camelColName} = ${column.camelColName};
 	}
 </#list>
 

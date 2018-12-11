@@ -8,7 +8,7 @@ public class DatabaseModel {
 
     private String tableName;
 
-    private List<ColumnEntity> columnList;
+    private List<ColumnEntity> colList;
 
     public String getTableName() {
         return tableName;
@@ -18,11 +18,11 @@ public class DatabaseModel {
         this.tableName = tableName;
     }
 
-    public List<ColumnEntity> getColumnList() {
-        return columnList;
+    public List<ColumnEntity> getColList() {
+        return colList;
     }
 
-    public void setColumnList(List<ColumnEntity> columnList) {
-        this.columnList = columnList;
+    public void setColList(List<ColumnEntity> colList) {
+        this.colList = colList;
     }
 }

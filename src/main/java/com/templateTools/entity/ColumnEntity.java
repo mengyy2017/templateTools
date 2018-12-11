@@ -3,6 +3,7 @@ package com.templateTools.entity;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Table(name = "columns")
 public class ColumnEntity {
@@ -15,7 +16,16 @@ public class ColumnEntity {
 
     private String columnName;
 
+    @Transient
+    private String camelColName;
+
+    @Transient
+    private String upperCamelColName;
+
     private String dataType;
+
+    @Transient
+    private String javaType;
 
     private String columnComment;
 
@@ -45,12 +55,36 @@ public class ColumnEntity {
         this.columnName = columnName;
     }
 
+    public String getCamelColName() {
+        return camelColName;
+    }
+
+    public void setCamelColName(String camelColName) {
+        this.camelColName = camelColName;
+    }
+
+    public String getUpperCamelColName() {
+        return upperCamelColName;
+    }
+
+    public void setUpperCamelColName(String upperCamelColName) {
+        this.upperCamelColName = upperCamelColName;
+    }
+
     public String getDataType() {
         return dataType;
     }
 
     public void setDataType(String dataType) {
         this.dataType = dataType;
+    }
+
+    public String getJavaType() {
+        return javaType;
+    }
+
+    public void setJavaType(String javaType) {
+        this.javaType = javaType;
     }
 
     public String getColumnComment() {

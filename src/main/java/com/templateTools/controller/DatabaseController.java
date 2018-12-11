@@ -58,9 +58,9 @@ public class DatabaseController {
     public Map createCode (@RequestBody List<DatabaseModel> databaseModelList){
 
         databaseModelList.stream().forEach(databaseModel -> {
-            Map databaseMap = HandelDataUtil.convert2Camel(databaseModel);
+            Map databaseMap = HandelDataUtil.convertData(databaseModel);
 
-            FreeMarkerUtil.outputBean("", databaseMap);
+            FreeMarkerUtil.outputBean(databaseMap);
 
         });
         return null;

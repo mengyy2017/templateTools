@@ -1,40 +1,45 @@
 package com.templateTools.utils;
 
+import com.templateTools.pub.common.Consts;
 import freemarker.template.Configuration;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Map;
 
 public class FreeMarkerUtil {
 
     private static Configuration configuration;
 
-    private static String beanFtl = "Bean.ftl";
-
     static {
         configuration = new Configuration();
         try {
-            configuration.setDirectoryForTemplateLoading(new File(FreeMarkerUtil.class.getResource("template").getPath()));
+            configuration.setDirectoryForTemplateLoading(new File(FreeMarkerUtil.class.getResource("/template").getPath()));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static void outputBean(String filePath, Map<String, Object> data) {
+    public static void outputBean(Map<String, Object> data) {
+
         BufferedWriter writer = null;
+
         try {
-            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filePath)));
-            configuration.getTemplate(beanFtl).process(data, writer);
+            Path beanPath = Consts.beanFilePath.resolve(data.get(Consts.UPPER_CAMEL_TABLE_NAME).toString() + Consts.JAVA_SUFFIX);
+            if(!Files.exists(beanPath.getParent()))
+                Files.createDirectories(beanPath.getParent());
+
+            try(Writer outputStreamWriter = new OutputStreamWriter(new FileOutputStream(beanPath.toFile()))){
+                writer = new BufferedWriter(outputStreamWriter);
+                configuration.getTemplate(Consts.beanFtl).process(data, writer);
+            }
+
         }  catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            try {
-                writer.flush();
-                writer.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
+
     }
+
 
 
 }
