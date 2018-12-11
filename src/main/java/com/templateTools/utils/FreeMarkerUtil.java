@@ -21,23 +21,16 @@ public class FreeMarkerUtil {
     }
 
     public static void outputBean(Map<String, Object> data) {
-
-        BufferedWriter writer = null;
-
         try {
             Path beanPath = Consts.beanFilePath.resolve(data.get(Consts.UPPER_CAMEL_TABLE_NAME).toString() + Consts.JAVA_SUFFIX);
             if(!Files.exists(beanPath.getParent()))
                 Files.createDirectories(beanPath.getParent());
-
-            try(Writer outputStreamWriter = new OutputStreamWriter(new FileOutputStream(beanPath.toFile()))){
-                writer = new BufferedWriter(outputStreamWriter);
+            try(Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(beanPath.toFile())))){
                 configuration.getTemplate(Consts.beanFtl).process(data, writer);
             }
-
-        }  catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
 
