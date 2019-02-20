@@ -1,5 +1,6 @@
 package com.templateTools.utils;
 
+import java.util.LinkedList;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
@@ -25,6 +26,25 @@ public class BuildUtil {
         for (FunAndVal funAndVal: funAndVals) {
             funAndVal.apply(o);
         }
+        return o;
+    }
+
+    public static <T, E, O> O newAndPuts0(Supplier<O> supplier, Puts<T, E, O> puts, KeyAndVal<T, E> ...keyAndVals){
+        O o = supplier.get();
+        for (KeyAndVal<T, E> keyAndVal : keyAndVals) {
+            puts.apply(o, keyAndVal.getV1(), keyAndVal.getV2());
+        }
+        return o;
+    }
+
+    public static <T, E, O> O newAndPuts(Supplier<O> supplier, Puts<T, E, O> puts, LinkedList linkedList){
+        O o = supplier.get();
+        while (linkedList.size() > 0){
+            T v1 = (T)linkedList.poll();
+            E v2 = (E)linkedList.poll();
+            puts.apply(o, v1, v2);
+        }
+
         return o;
     }
 

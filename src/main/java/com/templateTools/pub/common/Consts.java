@@ -1,5 +1,8 @@
 package com.templateTools.pub.common;
 
+import com.templateTools.utils.BuildUtil;
+import com.templateTools.utils.KeyAndVal;
+
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -68,12 +71,17 @@ public class Consts {
 
     List<Object> actionMapper = Arrays.asList(actionClassiPath, JAVA_SUFFIX, "Action.ftl");
 
+
+    static {
+        BuildUtil.newAndPuts(HashMap::new, HashMap::put, Stream.of("123", "456").collect(Collectors.toCollection(LinkedList::new)));
+    }
+
     List<Object> pageMapper = Arrays.asList(pageClassiPath, HTML_SUFFIX,
             Arrays.asList(
-                    Arrays.asList("ListPage.ftl", entityTypePath),
-                    Arrays.asList("NewPage.ftl", daoTypePath),
-                    Arrays.asList("AddPage.ftl", serviceTypePath),
-                    Arrays.asList("EditPage.ftl", serviceImplTypePath)
+                    "ListPage.ftl",
+                    "NewPage.ftl",
+                    "AddPage.ftl",
+                    "EditPage.ftl"
             )
     );
 
