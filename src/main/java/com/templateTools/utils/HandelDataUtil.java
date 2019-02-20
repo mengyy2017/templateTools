@@ -17,6 +17,8 @@ public class HandelDataUtil {
 
         String camelTableName = convert2Camel(databaseModel.getTableName());
         String upperCamelTableName = convert2UpperCamel(camelTableName);
+        databaseMap.put(Consts.TABLENAME, databaseModel.getTableName());
+        databaseMap.put(Consts.MODULENAME, databaseModel.getTableName().split("_")[0]);
         databaseMap.put(Consts.CAMEL_TABLE_NAME, camelTableName);
         databaseMap.put(Consts.UPPER_CAMEL_TABLE_NAME, upperCamelTableName);
 

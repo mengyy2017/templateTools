@@ -60,7 +60,7 @@ public class DatabaseController {
         databaseModelList.stream().forEach(databaseModel -> {
             Map databaseMap = HandelDataUtil.convertData(databaseModel);
 
-            FreeMarkerUtil.outputBean(databaseMap);
+            FreeMarkerUtil.outputFile(databaseMap);
 
         });
         return null;

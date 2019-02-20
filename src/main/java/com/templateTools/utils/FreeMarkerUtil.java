@@ -5,6 +5,7 @@ import freemarker.template.Configuration;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
 
 public class FreeMarkerUtil {
@@ -20,17 +21,18 @@ public class FreeMarkerUtil {
         }
     }
 
-    public static void outputBean(Map<String, Object> data) {
-        try {
-            Path beanPath = Consts.beanFilePath.resolve(data.get(Consts.UPPER_CAMEL_TABLE_NAME).toString() + Consts.JAVA_SUFFIX);
-            if(!Files.exists(beanPath.getParent()))
-                Files.createDirectories(beanPath.getParent());
-            try(Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(beanPath.toFile())))){
-                configuration.getTemplate(Consts.beanFtl).process(data, writer);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public static void outputFile(Map<String, Object> data) {
+//        try {
+//            Path beanPath = Consts.beanFilePath.resolve(data.get(Consts.UPPER_CAMEL_TABLE_NAME).toString() + Consts.JAVA_SUFFIX);
+//            beanPath.toString();
+//            if(!Files.exists(beanPath.getParent()))
+//                Files.createDirectories(beanPath.getParent());
+//            try(Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(beanPath.toFile())))){
+//                configuration.getTemplate(Consts.beanFtl).process(data, writer);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
 

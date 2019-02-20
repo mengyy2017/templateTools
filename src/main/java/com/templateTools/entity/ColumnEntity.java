@@ -31,6 +31,10 @@ public class ColumnEntity {
 
     private String tableSchema;
 
+    private String columnKey;
+
+    private String characterMaximumLength;
+
     public String getId() {
         return id;
     }
@@ -101,5 +105,21 @@ public class ColumnEntity {
 
     public void setTableSchema(String tableSchema) {
         this.tableSchema = tableSchema;
+    }
+
+    public String getColumnKey() {
+        return columnKey;
+    }
+
+    public void setColumnKey(String columnKey) {
+        this.columnKey = columnKey;
+    }
+
+    public String getCharacterMaximumLength() {
+        return characterMaximumLength;
+    }
+
+    public void setCharacterMaximumLength(String characterMaximumLength) {
+        this.characterMaximumLength = characterMaximumLength;
     }
 }
