@@ -10,7 +10,7 @@ public class BuildUtil {
         String b = "b";
         int e = 2;
 //        Car car = newAndSet0(Car::new, new String[]{a, b}, Car::setAaa, Car::setBbb);
-//        Car car1 = newAndSet(Car::new, buildValAndFun(a, Car::setAaa), buildValAndFun(e, Car::setEee));
+//        Car car1 = newAndSet(Car::new, getValAndFun(a, Car::setAaa), getValAndFun(e, Car::setEee));
     }
 
     public static <O> O newAndSet0(Supplier<O> supplier, String[] valueArr , SSetter<O> ...setter){
@@ -23,6 +23,13 @@ public class BuildUtil {
 
     public static <O> O newAndSet(Supplier<O> supplier, FunAndVal ...funAndVals){
         O o = supplier.get();
+        for (FunAndVal funAndVal: funAndVals) {
+            funAndVal.apply(o);
+        }
+        return o;
+    }
+
+    public static <O> O setVals(O o, FunAndVal ...funAndVals){
         for (FunAndVal funAndVal: funAndVals) {
             funAndVal.apply(o);
         }
@@ -48,7 +55,7 @@ public class BuildUtil {
         return o;
     }
 
-    public static <O, T> FunAndVal<O, T> buildValAndFun(T value, Fun<O, T> fun){
+    public static <O, T> FunAndVal<O, T> getValAndFun(T value, Fun<O, T> fun){
         BiFunction<Fun<O, T>, T, FunAndVal<O, T>> biFunction = FunAndVal::new;
         return biFunction.apply(fun, value);
     }

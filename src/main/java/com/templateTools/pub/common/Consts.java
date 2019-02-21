@@ -1,8 +1,10 @@
 package com.templateTools.pub.common;
 
 import com.templateTools.utils.BuildUtil;
-import com.templateTools.utils.KeyAndVal;
-
+import freemarker.template.Configuration;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -18,73 +20,47 @@ public class Consts {
     public static String HTML_SUFFIX = ".html";
     public static String XML_SUFFIX = ".xml";
 
-    public static String basePath = "C://template";
+    public static String fileSparator = "/";
 
-    // bussiness
-    public static String bussiClassiPath = basePath + "bussi";
+    public static String basePath = "C:" + File.separator + "template";
+
+    public static String bussiClassiPath = basePath + File.separator + "bussi"; // bussiness
+    public static String mapperClassiPath = basePath  + File.separator + "mapper"; // resource
+    public static String actionClassiPath = basePath + File.separator + "controller"; // action
+    public static String pageClassiPath = basePath  + File.separator + "page"; // page
+
     public static String entityTypePath = "entity";
     public static String daoTypePath = "dao";
     public static String serviceTypePath = "service";
-    public static String serviceImplTypePath = "service//impl";
+    public static String serviceImplTypePath = "service" + File.separator + "impl";
 
-    // resource
-    public static String mapperClassiPath = basePath + "mapper";
-
-    // action
-    public static String actionClassiPath = basePath + "controller";
-
-    // page
-    public static String pageClassiPath = basePath + "page";
-
-
-    // param 1.xxx.ftl 2.classification  +|模块名|+  3.type 4.suffix
-//    Map bussiMap = Stream.of("bussi")
-    public static List<String> beanList = Arrays.asList("Bean.ftl", bussiClassiPath, entityTypePath, JAVA_SUFFIX);
-    public static List<String> daoList = Arrays.asList("Dao.ftl", bussiClassiPath, daoTypePath, JAVA_SUFFIX);
-    public static List<String> serviceList = Arrays.asList("Service.ftl", bussiClassiPath, serviceTypePath, JAVA_SUFFIX);
-    public static List<String> serviceImplList = Arrays.asList("ServiceImpl.ftl", bussiClassiPath, serviceImplTypePath, JAVA_SUFFIX);
-
-    // mapper
-    public static List<String> mapperList = Arrays.asList("Mapper.ftl", mapperClassiPath, "", XML_SUFFIX);
-
-    // action
-    public static List<String> actionList = Arrays.asList("Action.ftl", actionClassiPath, "", JAVA_SUFFIX);
-
-    // page
-    public static List<String> listPageList = Arrays.asList("ListPage.ftl", pageClassiPath, "", HTML_SUFFIX);
-    public static List<String> newPageList = Arrays.asList("NewPage.ftl", pageClassiPath, "", HTML_SUFFIX);
-    public static List<String> addPageList = Arrays.asList("AddPage.ftl", pageClassiPath, "", HTML_SUFFIX);
-    public static List<String> editPageList = Arrays.asList("EditPage.ftl", pageClassiPath, "", HTML_SUFFIX);
-
-//    Map<Integer, String> map = list.stream().collect(Collectors.toMap(Person::getId, Person::getName));
-
-    List<Object> listBussi = Arrays.asList(bussiClassiPath, JAVA_SUFFIX,
-            Arrays.asList(
-                    Arrays.asList("Bean.ftl", entityTypePath),
-                    Arrays.asList("Dao.ftl", daoTypePath),
-                    Arrays.asList("Service.ftl", serviceTypePath),
-                    Arrays.asList("ServiceImpl.ftl", serviceImplTypePath)
-            )
-    );
-
-    List<Object> listMapper = Arrays.asList(mapperClassiPath, XML_SUFFIX, "Mapper.ftl");
-
-    List<Object> actionMapper = Arrays.asList(actionClassiPath, JAVA_SUFFIX, "Action.ftl");
-
+    public static Configuration configuration;
 
     static {
-        BuildUtil.newAndPuts(HashMap::new, HashMap::put, Stream.of("123", "456").collect(Collectors.toCollection(LinkedList::new)));
+        configuration = new Configuration();
+        try {
+            URL url = Consts.class.getResource( Consts.fileSparator+ "template");
+            if(url != null)
+                configuration.setDirectoryForTemplateLoading(new File(url.getPath()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    List<Object> pageMapper = Arrays.asList(pageClassiPath, HTML_SUFFIX,
-            Arrays.asList(
-                    "ListPage.ftl",
-                    "NewPage.ftl",
-                    "AddPage.ftl",
-                    "EditPage.ftl"
-            )
-    );
+    public static HashMap outParamMap;
 
-
+    static {
+        outParamMap = BuildUtil.newAndPuts(HashMap::new, HashMap::put, Stream.of(mapperClassiPath + "_" + XML_SUFFIX, Arrays.asList("_Mapper.ftl_@@Mapper")
+                        , actionClassiPath + "_" + JAVA_SUFFIX, Arrays.asList("_Action.ftl_@@Controller")
+                        , pageClassiPath + "_" + HTML_SUFFIX, Arrays.asList("_ListPage.ftl_list@@", "_NewPage.ftl_new@@",
+                                                                            "_AddPage.ftl_add@@", "_EditPage.ftl_edit@@"
+                                                                        )
+                        , bussiClassiPath + "_" + JAVA_SUFFIX, Arrays.asList(entityTypePath + "_Bean.ftl_@@", daoTypePath + "_Dao.ftl_@@Mapper",
+                                                                            serviceImplTypePath + "_ServiceImpl.ftl_@@ServiceImpl",
+                                                                            serviceTypePath + "_Service.ftl_I@@Service"
+                                                                        )
+                ).collect(Collectors.toCollection(LinkedList::new))
+        );
+    }
 
 }

@@ -1,40 +1,65 @@
 package com.templateTools.utils;
 
 import com.templateTools.pub.common.Consts;
-import freemarker.template.Configuration;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Map;
 
 public class FreeMarkerUtil {
 
-    private static Configuration configuration;
+    public static void outputFile(Map<String, Object> dataMap){
 
-    static {
-        configuration = new Configuration();
+        Consts.outParamMap.keySet().stream().forEach(key -> {
+
+            String[] keyArr = key.toString().split("_");
+            Path classiPath = Paths.get(keyArr[0]); String suffix = keyArr[1];
+
+            String moduleName = dataMap.get(Consts.MODULENAME).toString();
+            String upperCamelTableName = dataMap.get(Consts.UPPER_CAMEL_TABLE_NAME).toString();
+
+            List<String> ftlsAndParamList = (List<String>)Consts.outParamMap.get(key);
+
+            ftlsAndParamList.stream().forEach(ftlParam -> {
+                String[] ftlParamArr = ftlParam.split("_");
+                String fileTypeName = ftlParamArr[0];
+                String ftlName = ftlParamArr[1];
+                String outPutFileName = ftlParamArr[2].replace("@@", upperCamelTableName);
+
+                Path outFilePath = classiPath.resolve(moduleName).resolve(fileTypeName)
+                        .resolve(outPutFileName + suffix);
+
+                processData(ftlName, dataMap, outFilePath);
+            });
+
+        });
+
+    }
+
+    private static Writer createOutPutFile(Path outFilePath){
+        Writer writer = null;
         try {
-            configuration.setDirectoryForTemplateLoading(new File(FreeMarkerUtil.class.getResource("/template").getPath()));
+            if(!Files.exists(outFilePath.getParent()))
+                Files.createDirectories(outFilePath.getParent());
+            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outFilePath.toFile())));
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return writer;
     }
 
-    public static void outputFile(Map<String, Object> data) {
-//        try {
-//            Path beanPath = Consts.beanFilePath.resolve(data.get(Consts.UPPER_CAMEL_TABLE_NAME).toString() + Consts.JAVA_SUFFIX);
-//            beanPath.toString();
-//            if(!Files.exists(beanPath.getParent()))
-//                Files.createDirectories(beanPath.getParent());
-//            try(Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(beanPath.toFile())))){
-//                configuration.getTemplate(Consts.beanFtl).process(data, writer);
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+    private static void processData(String ftlName,Map<String, Object> data, Path outFilePath){
+        try {
+            if(FreeMarkerUtil.class.getResource(Consts.fileSparator + "template" + Consts.fileSparator + ftlName) != null){
+                Writer writer = createOutPutFile(outFilePath);
+                Consts.configuration.getTemplate(ftlName).process(data, writer);
+                writer.flush(); writer.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-
-
 
 }

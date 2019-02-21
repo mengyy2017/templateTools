@@ -4,27 +4,29 @@ import com.templateTools.entity.ColumnEntity;
 import com.templateTools.entity.model.DatabaseModel;
 import com.templateTools.pub.common.Consts;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-public class HandelDataUtil {
+public class HandelDataUtil extends BuildUtil{
 
     public static Map convertData(DatabaseModel databaseModel){
-        Map databaseMap = new HashMap();
 
         String camelTableName = convert2Camel(databaseModel.getTableName());
         String upperCamelTableName = convert2UpperCamel(camelTableName);
-        databaseMap.put(Consts.TABLENAME, databaseModel.getTableName());
-        databaseMap.put(Consts.MODULENAME, databaseModel.getTableName().split("_")[0]);
-        databaseMap.put(Consts.CAMEL_TABLE_NAME, camelTableName);
-        databaseMap.put(Consts.UPPER_CAMEL_TABLE_NAME, upperCamelTableName);
+        List<ColumnEntity> columnList = databaseModel.getColList().stream().map(
+                                columnEntity -> columnEntity2Java(columnEntity)).collect(Collectors.toList());
 
-        List<ColumnEntity> columnList = databaseModel.getColList().stream()
-                .map(columnEntity -> columnEntity2Java(columnEntity)).collect(Collectors.toList());
-        databaseMap.put(Consts.COLUMNLIST, columnList);
+        Map databaseMap = BuildUtil.newAndPuts(HashMap::new, HashMap::put
+                , Stream.of(Consts.UPPER_CAMEL_TABLE_NAME, upperCamelTableName, Consts.COLUMNLIST, columnList,
+                        Consts.TABLENAME, databaseModel.getTableName(), Consts.CAMEL_TABLE_NAME, camelTableName,
+                        Consts.MODULENAME, databaseModel.getTableName().split("_")[0]
+                ).collect(Collectors.toCollection(LinkedList::new))
+        );
 
         return databaseMap;
     }
@@ -34,47 +36,48 @@ public class HandelDataUtil {
 
         String camelColName = convert2Camel(columnName);
         String upperCamelColName = convert2UpperCamel(camelColName);
-        columnEntity.setCamelColName(camelColName);
-        columnEntity.setUpperCamelColName(upperCamelColName);
 
-        setColumnJavaType(columnEntity);
+        BuildUtil.setVals(columnEntity, getValAndFun(camelColName, ColumnEntity::setCamelColName)
+                                , getValAndFun(upperCamelColName, ColumnEntity::setUpperCamelColName)
+                                , getValAndFun(getColumnJavaType(columnEntity), ColumnEntity::setJavaType));
 
         return columnEntity;
     }
 
-    private static void setColumnJavaType(ColumnEntity columnEntity){
+    private static String getColumnJavaType(ColumnEntity columnEntity){
+        String javaType = "String";
         switch (columnEntity.getDataType()){
-            case "char":
-                columnEntity.setJavaType("String");
-                break;
-            case "varchar":
-                columnEntity.setJavaType("String");
-                break;
-            case "text":
-                columnEntity.setJavaType("String");
-                break;
+//            case "char":
+//                columnEntity.setJavaType("String");
+//                break;
+//            case "varchar":
+//                columnEntity.setJavaType("String");
+//                break;
+//            case "text":
+//                columnEntity.setJavaType("String");
+//                break;
             case "integer":
-                columnEntity.setJavaType("long");
+                javaType = "long";
                 break;
             case "samllint":
-                columnEntity.setJavaType("int");
+                javaType = "int";
                 break;
             case "int":
-                columnEntity.setJavaType("int");
+                javaType = "int";
                 break;
             case "decimal":
-                columnEntity.setJavaType("double");
+                javaType = "double";
                 break;
             case "date":
-                columnEntity.setJavaType("Date");
+                javaType = "Date";
                 break;
             case "datetime":
-                columnEntity.setJavaType("Date");
+                javaType = "Date";
                 break;
             default:
-                columnEntity.setJavaType("String");
                 break;
         }
+        return javaType;
     }
 
     public static String convert2Camel(String nameInDatabase){
