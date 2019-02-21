@@ -40,23 +40,18 @@ public class DatabaseController extends BaseController {
 
         Example example = new Example(TableEntity.class);
 
-//        Example a = oneConstr(Example::new, TableEntity.class);
-//        putsVals(a, Example.Criteria::,"tableSchema", TABLE_SCHEMA);
-
         example.createCriteria().andEqualTo("tableSchema", TABLE_SCHEMA);
 
-        List<TableEntity> list = tableService.selectByExample(example);
-        return list;
+        return tableService.selectByExample(example);
     }
 
     @RequestMapping(value = "/getAllColumns")
     @ResponseBody
     public List<ColumnEntity> getTableColumn(ColumnEntity columnEntity){
 
-        columnEntity.setTableSchema(TABLE_SCHEMA);
+        setVals(columnEntity, getVAndF(TABLE_SCHEMA, ColumnEntity::setTableSchema));
 
-        List<ColumnEntity> list = columnService.select(columnEntity);
-        return list;
+        return columnService.select(columnEntity);
     }
 
     @RequestMapping(value = "/createCode")
@@ -66,13 +61,12 @@ public class DatabaseController extends BaseController {
         databaseModelList.stream().forEach(dbModel -> {
 
             if(dbModel.getColList().size() == 0){
-                List<ColumnEntity> columnList = columnService.select(newAndSet(ColumnEntity::new, getVAndF(dbModel.getTableName(), ColumnEntity::setTableName)));
+                List<ColumnEntity> columnList = columnService.select(
+                        newAndSet(ColumnEntity::new, getVAndF(dbModel.getTableName(), ColumnEntity::setTableName)));
                 setVals(dbModel, getVAndF(columnList, DatabaseModel::setColList));
             }
 
-            Map databaseMap = HandelDataUtil.convertData(dbModel);
-
-            FreeMarkerUtil.outputFile(databaseMap);
+            FreeMarkerUtil.outputFile(HandelDataUtil.convertData(dbModel));
 
         });
         return null;

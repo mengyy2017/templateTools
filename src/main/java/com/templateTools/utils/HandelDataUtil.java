@@ -21,11 +21,10 @@ public class HandelDataUtil extends BuildUtil{
         List<ColumnEntity> columnList = databaseModel.getColList().stream().map(
                                 columnEntity -> columnEntity2Java(columnEntity)).collect(Collectors.toList());
 
-        Map databaseMap = BuildUtil.newAndPuts(HashMap::new, HashMap::put
-                , Stream.of(Consts.UPPER_CAMEL_TABLE_NAME, upperCamelTableName, Consts.COLUMNLIST, columnList,
-                        Consts.TABLENAME, databaseModel.getTableName(), Consts.CAMEL_TABLE_NAME, camelTableName,
-                        Consts.MODULENAME, databaseModel.getTableName().split("_")[0]
-                ).collect(Collectors.toCollection(LinkedList::new))
+        Map databaseMap = BuildUtil.newAndPuts(HashMap::new, HashMap::put,
+                Consts.UPPER_CAMEL_TABLE_NAME, upperCamelTableName, Consts.COLUMNLIST, columnList,
+                Consts.TABLENAME, databaseModel.getTableName(), Consts.CAMEL_TABLE_NAME, camelTableName,
+                Consts.MODULENAME, databaseModel.getTableName().split("_")[0]
         );
 
         return databaseMap;
