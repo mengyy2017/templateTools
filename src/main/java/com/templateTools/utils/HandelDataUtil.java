@@ -37,9 +37,9 @@ public class HandelDataUtil extends BuildUtil{
         String camelColName = convert2Camel(columnName);
         String upperCamelColName = convert2UpperCamel(camelColName);
 
-        BuildUtil.setVals(columnEntity, getValAndFun(camelColName, ColumnEntity::setCamelColName)
-                                , getValAndFun(upperCamelColName, ColumnEntity::setUpperCamelColName)
-                                , getValAndFun(getColumnJavaType(columnEntity), ColumnEntity::setJavaType));
+        BuildUtil.setVals(columnEntity, getVAndF(camelColName, ColumnEntity::setCamelColName)
+                                , getVAndF(upperCamelColName, ColumnEntity::setUpperCamelColName)
+                                , getVAndF(getColumnJavaType(columnEntity), ColumnEntity::setJavaType));
 
         return columnEntity;
     }

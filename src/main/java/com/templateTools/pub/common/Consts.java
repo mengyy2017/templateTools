@@ -50,7 +50,7 @@ public class Consts {
     public static HashMap outParamMap;
 
     static {
-        outParamMap = BuildUtil.newAndPuts(HashMap::new, HashMap::put, Stream.of(mapperClassiPath + "_" + XML_SUFFIX, Arrays.asList("_Mapper.ftl_@@Mapper")
+        outParamMap = BuildUtil.newAndPuts(HashMap::new, HashMap::put, mapperClassiPath + "_" + XML_SUFFIX, Arrays.asList("_Mapper.ftl_@@Mapper")
                         , actionClassiPath + "_" + JAVA_SUFFIX, Arrays.asList("_Action.ftl_@@Controller")
                         , pageClassiPath + "_" + HTML_SUFFIX, Arrays.asList("_ListPage.ftl_list@@", "_NewPage.ftl_new@@",
                                                                             "_AddPage.ftl_add@@", "_EditPage.ftl_edit@@"
@@ -59,7 +59,6 @@ public class Consts {
                                                                             serviceImplTypePath + "_ServiceImpl.ftl_@@ServiceImpl",
                                                                             serviceTypePath + "_Service.ftl_I@@Service"
                                                                         )
-                ).collect(Collectors.toCollection(LinkedList::new))
         );
     }
 

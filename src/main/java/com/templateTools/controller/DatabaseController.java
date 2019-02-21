@@ -1,5 +1,6 @@
 package com.templateTools.controller;
 
+import com.templateTools.base.controller.BaseController;
 import com.templateTools.entity.ColumnEntity;
 import com.templateTools.entity.TableEntity;
 import com.templateTools.entity.model.DatabaseModel;
@@ -18,10 +19,11 @@ import tk.mybatis.mapper.entity.Example;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 @Controller
 @RequestMapping(value = "/database")
-public class DatabaseController {
+public class DatabaseController extends BaseController {
 
     @Value("${table.schema}")
     private String TABLE_SCHEMA;
@@ -37,6 +39,10 @@ public class DatabaseController {
     public List<TableEntity> getAllTables(){
 
         Example example = new Example(TableEntity.class);
+
+//        Example a = oneConstr(Example::new, TableEntity.class);
+//        putsVals(a, Example.Criteria::,"tableSchema", TABLE_SCHEMA);
+
         example.createCriteria().andEqualTo("tableSchema", TABLE_SCHEMA);
 
         List<TableEntity> list = tableService.selectByExample(example);
@@ -57,8 +63,14 @@ public class DatabaseController {
     @ResponseBody
     public Map createCode (@RequestBody List<DatabaseModel> databaseModelList){
 
-        databaseModelList.stream().forEach(databaseModel -> {
-            Map databaseMap = HandelDataUtil.convertData(databaseModel);
+        databaseModelList.stream().forEach(dbModel -> {
+
+            if(dbModel.getColList().size() == 0){
+                List<ColumnEntity> columnList = columnService.select(newAndSet(ColumnEntity::new, getVAndF(dbModel.getTableName(), ColumnEntity::setTableName)));
+                setVals(dbModel, getVAndF(columnList, DatabaseModel::setColList));
+            }
+
+            Map databaseMap = HandelDataUtil.convertData(dbModel);
 
             FreeMarkerUtil.outputFile(databaseMap);
 

@@ -2,7 +2,10 @@ package com.templateTools.utils;
 
 import java.util.LinkedList;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class BuildUtil {
     public static void main(String[] args) {
@@ -10,7 +13,11 @@ public class BuildUtil {
         String b = "b";
         int e = 2;
 //        Car car = newAndSet0(Car::new, new String[]{a, b}, Car::setAaa, Car::setBbb);
-//        Car car1 = newAndSet(Car::new, getValAndFun(a, Car::setAaa), getValAndFun(e, Car::setEee));
+//        Car car1 = newAndSet(Car::new, getVAndF(a, Car::setAaa), getVAndF(e, Car::setEee));
+    }
+
+    public static <T, O> O oneConstr(Function<T, O> function, T t){
+        return function.apply(t);
     }
 
     public static <O> O newAndSet0(Supplier<O> supplier, String[] valueArr , SSetter<O> ...setter){
@@ -44,7 +51,7 @@ public class BuildUtil {
         return o;
     }
 
-    public static <T, E, O> O newAndPuts(Supplier<O> supplier, Puts<T, E, O> puts, LinkedList linkedList){
+    public static <T, E, O> O newAndPuts1(Supplier<O> supplier, Puts<T, E, O> puts, LinkedList linkedList){
         O o = supplier.get();
         while (linkedList.size() > 0){
             T v1 = (T)linkedList.poll();
@@ -55,33 +62,36 @@ public class BuildUtil {
         return o;
     }
 
-    public static <O, T> FunAndVal<O, T> getValAndFun(T value, Fun<O, T> fun){
+    public static <T, E, O> O newAndPuts(Supplier<O> supplier, Puts<T, E, O> puts, Object ...objs){
+        O o = supplier.get();
+        LinkedList linkedList = Stream.of(objs).collect(Collectors.toCollection(LinkedList::new));
+
+        while (linkedList.size() > 0){
+            T v1 = (T)linkedList.poll();
+            E v2 = (E)linkedList.poll();
+            puts.apply(o, v1, v2);
+        }
+
+        return o;
+    }
+
+    public static <T, E, O> O putsVals(O o, Puts<T, E, O> puts, Object ...objs){
+
+        LinkedList linkedList = Stream.of(objs).collect(Collectors.toCollection(LinkedList::new));
+
+        while (linkedList.size() > 0){
+            T v1 = (T)linkedList.poll();
+            E v2 = (E)linkedList.poll();
+            puts.apply(o, v1, v2);
+        }
+        return o;
+    }
+
+    public static <O, T> FunAndVal<O, T> getVAndF(T value, Fun<O, T> fun){
         BiFunction<Fun<O, T>, T, FunAndVal<O, T>> biFunction = FunAndVal::new;
         return biFunction.apply(fun, value);
     }
 
-}
-
-class FunAndVal<O, T>{
-
-    private T value;
-
-    private Fun<O, T> fun;
-
-    public FunAndVal(Fun<O, T> fun, T value) {
-        this.value = value;
-        this.fun = fun;
-    }
-
-    public void apply(O o){
-        this.fun.apply(o, this.value);
-    }
-
-}
-
-@FunctionalInterface
-interface Fun<O, T> {
-    void apply(O o, T value);
 }
 
 @FunctionalInterface
