@@ -1,6 +1,5 @@
 package com.templateTools;
 
-import com.templateTools.base.mapper.CommonMapper;
 import com.templateTools.pub.filter.AccessControlFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
