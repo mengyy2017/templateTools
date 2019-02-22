@@ -8,29 +8,20 @@ import java.net.URL;
 import java.util.*;
 
 public class Consts {
-    public static String TABLENAME = "tableName";
-    public static String MODULENAME = "moduleName";
-    public static String CAMEL_TABLE_NAME = "camelTableName";
-    public static String UPPER_CAMEL_TABLE_NAME = "upperCamelTableName";
-    public static String COLUMNLIST = "columnList";
+    public static String JAVA_SUFFIX = ".java", HTML_SUFFIX = ".html", XML_SUFFIX = ".xml";
 
-    public static String JAVA_SUFFIX = ".java";
-    public static String HTML_SUFFIX = ".html";
-    public static String XML_SUFFIX = ".xml";
+    public static String fileSparator = "/", basePath = "C:" + File.separator + "template";
 
-    public static String fileSparator = "/";
+    public static String TABLENAME = "tableName", MODULENAME = "moduleName", COLUMNLIST = "columnList",
+            UPPER_CAMEL_TABLE_NAME = "upperCamelTableName", CAMEL_TABLE_NAME = "camelTableName";
 
-    public static String basePath = "C:" + File.separator + "template";
+    public static String bussiClassiPath = basePath + File.separator + "bussi", // bussiness
+            mapperClassiPath = basePath  + File.separator + "mapper", // resource
+            actionClassiPath = basePath + File.separator + "controller", // action
+            pageClassiPath = basePath  + File.separator + "page"; // page
 
-    public static String bussiClassiPath = basePath + File.separator + "bussi"; // bussiness
-    public static String mapperClassiPath = basePath  + File.separator + "mapper"; // resource
-    public static String actionClassiPath = basePath + File.separator + "controller"; // action
-    public static String pageClassiPath = basePath  + File.separator + "page"; // page
-
-    public static String entityTypePath = "entity";
-    public static String daoTypePath = "dao";
-    public static String serviceTypePath = "service";
-    public static String serviceImplTypePath = "service" + File.separator + "impl";
+    public static String entityTypePath = "entity", daoTypePath = "dao",
+            serviceTypePath = "service", serviceImplTypePath = "service" + File.separator + "impl";
 
     public static Configuration configuration;
 
