@@ -8,6 +8,7 @@ import java.net.URL;
 import java.util.*;
 
 public class Consts {
+
     public static String JAVA_SUFFIX = ".java", HTML_SUFFIX = ".html", XML_SUFFIX = ".xml";
 
     public static String fileSparator = "/", basePath = "C:" + File.separator + "template";
@@ -39,16 +40,16 @@ public class Consts {
     public static HashMap outParamMap;
 
     static {
-        outParamMap = BuildUtil.newAndPuts(HashMap::new, HashMap::put, mapperClassiPath + "_" + XML_SUFFIX, Arrays.asList("_Mapper.ftl_@@Mapper")
+        outParamMap = BuildUtil.newAndPuts(HashMap::new, HashMap::put
+                        , mapperClassiPath + "_" + XML_SUFFIX, Arrays.asList("_Mapper.ftl_@@Mapper")
                         , actionClassiPath + "_" + JAVA_SUFFIX, Arrays.asList("_Action.ftl_@@Controller")
                         , pageClassiPath + "_" + HTML_SUFFIX, Arrays.asList("_ListPage.ftl_list@@", "_NewPage.ftl_new@@",
-                                                                            "_AddPage.ftl_add@@", "_EditPage.ftl_edit@@"
-                                                                        )
-                        , bussiClassiPath + "_" + JAVA_SUFFIX, Arrays.asList(entityTypePath + "_Bean.ftl_@@", daoTypePath + "_Dao.ftl_@@Mapper",
-                                                                            serviceImplTypePath + "_ServiceImpl.ftl_@@ServiceImpl",
-                                                                            serviceTypePath + "_Service.ftl_I@@Service"
-                                                                        )
-        );
+                                                        "_AddPage.ftl_add@@", "_EditPage.ftl_edit@@")
+                        , bussiClassiPath + "_" + JAVA_SUFFIX, Arrays.asList(entityTypePath + "_Bean.ftl_@@",
+                                                        serviceImplTypePath + "_ServiceImpl.ftl_@@ServiceImpl",
+                                                        serviceTypePath + "_Service.ftl_I@@Service",
+                                                        daoTypePath + "_Dao.ftl_@@Mapper")
+            );
     }
 
 }
