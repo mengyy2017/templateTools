@@ -11,7 +11,7 @@
     &quot;       "
   <![CDATA[ 这里写你的SQL或者符号 ]]> 
  -->
-${"<!--"} ${author}		${date} ${"-->"}
+${"<!--"} ${author!}		${date!} ${"-->"}
 ${"<!--"} ${tableRemark!} ${"-->"}
 <mapper namespace="${namespace}Mapper" >
   	<!-- 添加,插入记录   -->

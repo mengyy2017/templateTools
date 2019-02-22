@@ -3,6 +3,9 @@ package com.templateTools.utils;
 import com.templateTools.entity.ColumnEntity;
 import com.templateTools.entity.model.DatabaseModel;
 import com.templateTools.pub.common.Consts;
+import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
+import org.springframework.util.PropertyPlaceholderHelper;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,10 +22,14 @@ public class HandelDataUtil extends BuildUtil{
         List<ColumnEntity> columnList = databaseModel.getColList().stream().map(
                                 columnEntity -> columnEntity2Java(columnEntity)).collect(Collectors.toList());
 
+//        PropertyPlaceholderConfigurer p = new PropertyPlaceholderConfigurer();
+//        PropertyPlace
+
         Map databaseMap = BuildUtil.newAndPuts(HashMap::new, HashMap::put,
                 Consts.UPPER_CAMEL_TABLE_NAME, upperCamelTableName, Consts.COLUMNLIST, columnList,
                 Consts.TABLENAME, databaseModel.getTableName(), Consts.CAMEL_TABLE_NAME, camelTableName,
-                Consts.MODULENAME, databaseModel.getTableName().split("_")[0]
+                Consts.MODULENAME, databaseModel.getTableName().split("_")[0],
+                "namespace", "${java.namespace}"
         );
 
         return databaseMap;

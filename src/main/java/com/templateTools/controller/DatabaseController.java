@@ -66,7 +66,9 @@ public class DatabaseController extends BaseController {
                 setVals(dbModel, getVAndF(columnList, DatabaseModel::setColList));
             }
 
-            FreeMarkerUtil.outputFile(HandelDataUtil.convertData(dbModel));
+            HandelDataUtil.convertData(dbModel);
+
+//            FreeMarkerUtil.outputFile(HandelDataUtil.convertData(dbModel));
 
         });
         return null;

@@ -28,7 +28,7 @@
 
     <#list columnList as column>
         <#if column.columnKey == "PRI">
-        <input type="hidden" id="id" name="id" value="cur${upperCamelTableName}.id">
+        <input type="hidden" id="id" name="id" value="${r'${cur'}${upperCamelTableName}.id}">
         <#elseif column.characterMaximumLength! == "1">
         <div class="form-group col-lg-10 col-sm-12 col-xs-12">
             <label for="isValid" class="col-lg-4 col-sm-4 col-xs-4 control-label">${column.columnComment!}:</label>
@@ -43,7 +43,7 @@
         <div class="form-group col-lg-10 col-sm-12 col-xs-12">
             <label for="code" class="col-lg-4 col-sm-4 col-xs-4 control-label">${column.columnComment!}:</label>
             <div class="col-lg-7 col-sm-7 col-xs-7">
-                <input type="text" class="form-control" id="${column.camelColName}" name="${column.camelColName}" value="cur${upperCamelTableName}.${column.camelColName}" placeholder="请填写${column.columnComment!}">
+                <input type="text" class="form-control" id="${column.camelColName}" name="${column.camelColName}" value="${r'${cur'}${upperCamelTableName}.${column.camelColName}}" placeholder="请填写${column.columnComment!}">
             </div>
         </div>
         </#if>
