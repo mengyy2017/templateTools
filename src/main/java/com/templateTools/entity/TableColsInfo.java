@@ -1,10 +1,10 @@
-package com.templateTools.entity.model;
+package com.templateTools.entity;
 
 import com.templateTools.entity.ColumnEntity;
 
 import java.util.List;
 
-public class DatabaseModel {
+public class TableColsInfo {
 
     private String tableName;
 

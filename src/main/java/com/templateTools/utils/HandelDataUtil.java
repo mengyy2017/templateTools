@@ -1,10 +1,8 @@
 package com.templateTools.utils;
 
 import com.templateTools.entity.ColumnEntity;
-import com.templateTools.entity.model.DatabaseModel;
+import com.templateTools.entity.TableColsInfo;
 import com.templateTools.pub.common.Consts;
-import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
-import org.springframework.util.PropertyPlaceholderHelper;
 
 import java.util.HashMap;
 import java.util.List;
@@ -15,11 +13,11 @@ import java.util.stream.Collectors;
 
 public class HandelDataUtil extends BuildUtil{
 
-    public static Map convertData(DatabaseModel databaseModel){
+    public static Map convertData(TableColsInfo tableColsInfo){
 
-        String camelTableName = convert2Camel(databaseModel.getTableName());
+        String camelTableName = convert2Camel(tableColsInfo.getTableName());
         String upperCamelTableName = convert2UpperCamel(camelTableName);
-        List<ColumnEntity> columnList = databaseModel.getColList().stream().map(
+        List<ColumnEntity> columnList = tableColsInfo.getColList().stream().map(
                                 columnEntity -> columnEntity2Java(columnEntity)).collect(Collectors.toList());
 
 //        PropertyPlaceholderConfigurer p = new PropertyPlaceholderConfigurer();
@@ -27,8 +25,8 @@ public class HandelDataUtil extends BuildUtil{
 
         Map databaseMap = BuildUtil.newAndPuts(HashMap::new, HashMap::put,
                 Consts.UPPER_CAMEL_TABLE_NAME, upperCamelTableName, Consts.COLUMNLIST, columnList,
-                Consts.TABLENAME, databaseModel.getTableName(), Consts.CAMEL_TABLE_NAME, camelTableName,
-                Consts.MODULENAME, databaseModel.getTableName().split("_")[0],
+                Consts.TABLENAME, tableColsInfo.getTableName(), Consts.CAMEL_TABLE_NAME, camelTableName,
+                Consts.MODULENAME, tableColsInfo.getTableName().split("_")[0],
                 "namespace", "${java.namespace}"
         );
 
