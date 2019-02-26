@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import tk.mybatis.mapper.entity.Example;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.List;
@@ -39,9 +40,10 @@ public class DatabaseController extends BaseController {
 
     @RequestMapping(value = "/setCreateInfo")
     @ResponseBody
-    public List<TableEntity> setCreateInfo(@RequestBody CreateInfo createInfo){
+    public List<TableEntity> setCreateInfo(@RequestBody CreateInfo createInfo, HttpServletRequest request){
 
-        ThreadLocalUtil.getThreadLocal().set(createInfo);
+        ThreadLocalUtil.getCreateInfoThreadLocal().set(createInfo);
+        // ThreadLocalUtil.getRequestThreadLocal().set(request);
         Example example = new Example(TableEntity.class);
         example.createCriteria().andEqualTo("tableSchema", createInfo.getDatabaseSchema());
 

@@ -2,7 +2,7 @@ package com.templateTools.entity;
 
 import java.util.List;
 
-public class CreateInfo extends BaseEntity {
+public class CreateInfo {
 
     private String databaseAdress;
 

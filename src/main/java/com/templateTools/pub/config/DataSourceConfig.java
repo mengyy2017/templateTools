@@ -18,5 +18,4 @@ public class DataSourceConfig {
         return builder.build();
     }
 
-
 }

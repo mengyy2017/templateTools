@@ -1,6 +1,6 @@
 package com.templateTools.entity;
 
-public class BaseEntity {
+public class AuthToken {
 
     private String createInfoToken;
 
