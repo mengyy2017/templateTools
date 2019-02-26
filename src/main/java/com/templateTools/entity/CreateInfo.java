@@ -2,9 +2,19 @@ package com.templateTools.entity;
 
 import java.util.List;
 
-public class CreateInfo {
+public class CreateInfo extends BaseEntity {
+
+    private String databaseAdress;
 
     private String databaseType;
+
+    private String databasePort;
+
+    private String databaseSchema;
+
+    private String databaseUsername;
+
+    private String databasePassword;
 
     private String codePackage;
 
@@ -42,5 +52,45 @@ public class CreateInfo {
 
     public void setTableColsInfoList(List<TableColsInfo> tableColsInfoList) {
         this.tableColsInfoList = tableColsInfoList;
+    }
+
+    public String getDatabaseAdress() {
+        return databaseAdress;
+    }
+
+    public void setDatabaseAdress(String databaseAdress) {
+        this.databaseAdress = databaseAdress;
+    }
+
+    public String getDatabasePort() {
+        return databasePort;
+    }
+
+    public void setDatabasePort(String databasePort) {
+        this.databasePort = databasePort;
+    }
+
+    public String getDatabaseSchema() {
+        return databaseSchema;
+    }
+
+    public void setDatabaseSchema(String databaseSchema) {
+        this.databaseSchema = databaseSchema;
+    }
+
+    public String getDatabaseUsername() {
+        return databaseUsername;
+    }
+
+    public void setDatabaseUsername(String databaseUsername) {
+        this.databaseUsername = databaseUsername;
+    }
+
+    public String getDatabasePassword() {
+        return databasePassword;
+    }
+
+    public void setDatabasePassword(String databasePassword) {
+        this.databasePassword = databasePassword;
     }
 }

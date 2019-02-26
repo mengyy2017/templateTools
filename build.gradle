@@ -29,4 +29,8 @@ dependencies {
     compile 'tk.mybatis:mapper-spring-boot-starter:2.1.0'
     compile 'mysql:mysql-connector-java:5.1.47'
     compile 'org.freemarker:freemarker:2.3.9'
+    compile group: 'org.springframework.boot', name: 'spring-boot-autoconfigure', version: '2.1.1.RELEASE'
+    compile group: 'org.apache.tomcat', name: 'tomcat-jdbc', version: '9.0.14'
+
+
 }

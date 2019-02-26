@@ -6,7 +6,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 @Table(name = "tables")
-public class TableEntity {
+public class TableEntity extends BaseEntity {
 
     @Id
     @Column(name = "table_name")

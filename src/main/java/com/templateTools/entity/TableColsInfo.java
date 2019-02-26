@@ -4,7 +4,7 @@ import com.templateTools.entity.ColumnEntity;
 
 import java.util.List;
 
-public class TableColsInfo {
+public class TableColsInfo extends BaseEntity {
 
     private String tableName;
 
