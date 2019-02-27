@@ -14,6 +14,7 @@ public class AccessControlFilter implements Filter {
         String origin = res.getHeader("Origin");
         resp.setHeader("Access-Control-Allow-Origin", origin);
         resp.setHeader("Access-Control-Allow-Headers", "content-type");
+        resp.setHeader("Access-Control-Allow-Credentials", "true");
         resp.setStatus(200);
         chain.doFilter(res, resp);
     }
