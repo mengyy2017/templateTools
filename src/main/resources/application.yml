@@ -20,14 +20,3 @@ mapper:
 server:
   port: 8099
 
-#table:
-#  schema: wxj
-
-#java:
-#  namespace: com.yishi
-
-
-
-
-
-

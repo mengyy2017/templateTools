@@ -68,9 +68,9 @@ public class DatabaseController extends BaseController {
     @ResponseBody
     public List<ColumnEntity> getTableColumn(ColumnEntity columnEntity){
 
-        setVals(columnEntity, getVAndF("wxj", ColumnEntity::setTableSchema));
+        List<ColumnEntity> list = columnService.select(columnEntity);
 
-        return columnService.select(columnEntity);
+        return list;
     }
 
     @RequestMapping(value = "/createCode")

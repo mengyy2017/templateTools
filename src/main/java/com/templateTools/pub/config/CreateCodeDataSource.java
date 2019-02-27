@@ -6,10 +6,7 @@ import org.apache.tomcat.jdbc.pool.DataSource;
 import java.lang.reflect.Proxy;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -24,7 +21,7 @@ public class CreateCodeDataSource extends DataSource {
         try {
 
             String authToken = ThreadLocalUtil.getAuthToken();
-            LinkedList<Connection> someConnLinkedList = dataSourceConHM.get(authToken);
+            LinkedList<Connection> someConnLinkedList = dataSourceConHM.get(Optional.ofNullable(authToken).orElse(""));
 
             if (authToken == null || someConnLinkedList == null)
                 return createConnection();
@@ -64,7 +61,10 @@ public class CreateCodeDataSource extends DataSource {
         return (Connection)Proxy.newProxyInstance(connection.getClass().getClassLoader(), connection.getClass().getInterfaces(),
                 (proxy, method, args) -> {
                     if ("close".equals(method.getName())){
-                        dataSourceConHM.put(token, Stream.of(connection).collect(Collectors.toCollection(LinkedList::new)));
+                        if(dataSourceConHM.get(token) == null)
+                            dataSourceConHM.put(token, Stream.of(connection).collect(Collectors.toCollection(LinkedList::new)));
+                        else
+                            dataSourceConHM.get(token).addLast(connection);
                         this.notifyAll();
                         return null;
                     }
