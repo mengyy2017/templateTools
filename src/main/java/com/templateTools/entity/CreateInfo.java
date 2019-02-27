@@ -93,4 +93,9 @@ public class CreateInfo {
     public void setDatabasePassword(String databasePassword) {
         this.databasePassword = databasePassword;
     }
+
+    @Override
+    public String toString() {
+        return databaseAdress + databaseType + databasePort + databaseSchema + databaseUsername + databasePassword;
+    }
 }
