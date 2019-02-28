@@ -5,9 +5,6 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
-import java.sql.Connection;
-import java.util.LinkedList;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Aspect
 @Component
@@ -16,7 +13,7 @@ public class ConnAspect {
     @Before("execution(* java.sql.Connection.*())")
     public void beforConnectionClose(JoinPoint joinPoint) {
         String authToken = ThreadLocalUtil.getAuthToken();
-        ConcurrentHashMap<String, LinkedList<Connection>> conHM = CreateCodeDataSource.getDataSourceConHM();
+//        ConcurrentHashMap<String, LinkedList<Connection>> conHM = CreateCodeDataSource.getDataSourceConHM();
         Object a = joinPoint.getTarget();
         String aa = "";
     }
