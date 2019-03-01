@@ -14,32 +14,6 @@ public class CreateCodeDataSource extends DataSource {
 
     private static ConcurrentHashMap<String, LinkedList<ConnHolder>> dataSourceConHM = new ConcurrentHashMap<>();
 
-    static {
-        new Thread(() -> {
-            while (true) {
-                dataSourceConHM.values().forEach(linkedList -> {
-                    try {
-                        for(int i = 0; i < linkedList.size(); i++){
-                            ConnHolder connHolder = linkedList.get(i);
-                            System.out.println("连接个数：" + linkedList.size());
-                            System.out.println("索引：" + i);
-                            System.out.println(connHolder.get().isClosed());
-                            System.out.println(connHolder.getLastUseTime());
-                            System.out.println("----------------------------");
-                        }
-                        Thread.sleep(20000);
-                        ConnHolder connHolder = linkedList.get(1);
-                        if(connHolder != null) {
-                            connHolder.get().close();
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                });
-            }
-        }).start();
-    }
-
     @Override
     public Connection getConnection() {
         try {
@@ -60,11 +34,13 @@ public class CreateCodeDataSource extends DataSource {
     private Connection createConnection() throws Exception {
 
         CreateInfo createInfo = ThreadLocalUtil.getCreateInfoThreadLocal().get();
+        if(createInfo == null) throw new RuntimeException("连接超时");
+
         DataSource dataSource = createDataSource(createInfo);
 
         String authToken = createInfo.toString();
 
-        for(int i = 0; i < 5; i++){
+        for(int i = 0; i < 2; i++){
             Connection conn = dataSource.getConnection();
             if (dataSourceConHM.get(authToken) == null)
                 dataSourceConHM.put(authToken, Stream.of(creHolder(conn)).collect(Collectors.toCollection(LinkedList::new)));
