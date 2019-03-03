@@ -21,8 +21,8 @@ public class ScheduledConfig {
     @Qualifier(value = "getTaskExecutor")
     Executor poolExecutor;
 
-//    @Scheduled(fixedRate = 600000)
-    @Scheduled(fixedRate = 15000)
+    // 15分钟
+    @Scheduled(fixedRate =  900000)
     public void checkIdleConnSchedule() {
         System.out.println("======================================================checkIdleConnSchedule");
 

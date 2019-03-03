@@ -34,7 +34,6 @@ public class CreateCodeDataSource extends DataSource {
     private Connection createConnection() throws Exception {
 
         CreateInfo createInfo = ThreadLocalUtil.getCreateInfoThreadLocal().get();
-        if(createInfo == null) throw new RuntimeException("连接超时");
 
         DataSource dataSource = createDataSource(createInfo);
 

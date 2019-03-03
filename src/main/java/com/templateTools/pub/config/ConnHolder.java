@@ -11,7 +11,7 @@ public class ConnHolder {
     private LocalDateTime lastUseTime;
 
     // 秒
-    private static long idleTime = 35;
+    private static long idleTime = 900;
 
     public ConnHolder(Connection connection) {
         this.connection = connection;

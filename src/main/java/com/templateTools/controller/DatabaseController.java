@@ -57,8 +57,13 @@ public class DatabaseController extends BaseController {
 
     @RequestMapping(value = "/getAllColumns")
     @ResponseBody
-    public List<ColumnEntity> getTableColumn(ColumnEntity columnEntity){
-        return columnService.select(columnEntity);
+    public List<ColumnEntity> getTableColumn(ColumnEntity columnEntity) throws Exception {
+        try{
+            return columnService.select(columnEntity);
+        } catch (Exception e) {
+            // throw new Exception("连接超时");
+        }
+        return null;
     }
 
     @RequestMapping(value = "/createCode")
