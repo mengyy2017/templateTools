@@ -18,7 +18,7 @@ import java.util.concurrent.locks.ReentrantLock;
 @Configuration
 @ComponentScan("com.templateTools.pub.config")
 @EnableAsync
-public class ThreadConfig {
+public class ThreadConf {
 
     private Lock lock = new ReentrantLock();
 

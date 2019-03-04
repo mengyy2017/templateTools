@@ -9,17 +9,15 @@ import com.templateTools.service.ColumnService;
 import com.templateTools.service.TableService;
 import com.templateTools.utils.HandelDataUtil;
 import com.templateTools.utils.ThreadLocalUtil;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Example;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
-@Controller
+@RestController
 @RequestMapping(value = "/database")
 public class DatabaseController extends BaseController {
 
@@ -29,7 +27,8 @@ public class DatabaseController extends BaseController {
     @Autowired
     ColumnService columnService;
 
-    @RequestMapping(value = "/setCreateInfo")
+    @ApiOperation(value = "初始化连接信息并查询所有表", notes = "根据信息初始化连接并查询连接内的所有表")
+    @PostMapping(value = "/setCreateInfo")
     @ResponseBody
     public List<TableEntity> setCreateInfo(@RequestBody CreateInfo createInfo, HttpServletResponse response){
 
@@ -44,7 +43,7 @@ public class DatabaseController extends BaseController {
         return list;
     }
 
-    @RequestMapping(value = "/getAllTables")
+    @GetMapping(value = "/getAllTables")
     @ResponseBody
     public List<TableEntity> getAllTables(){
 
@@ -55,7 +54,7 @@ public class DatabaseController extends BaseController {
         return tableService.selectByExample(example);
     }
 
-    @RequestMapping(value = "/getAllColumns")
+    @GetMapping(value = "/getAllColumns")
     @ResponseBody
     public List<ColumnEntity> getTableColumn(ColumnEntity columnEntity) throws Exception {
         try{
@@ -66,7 +65,7 @@ public class DatabaseController extends BaseController {
         return null;
     }
 
-    @RequestMapping(value = "/createCode")
+    @PostMapping(value = "/createCode")
     @ResponseBody
     public Map createCode (@RequestBody List<TableColsInfo> tableColsInfoList){
 
