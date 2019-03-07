@@ -23,6 +23,7 @@ public class ConnAspect {
         String bb = "";
     }
 
+    // 这个拦截不到 没有加spring的注解  TableEntity上的那个注解是java的
     @Before("execution(* com.templateTools.entity.TableEntity.*(..))")
     public void aaaa(){
         String bb = "";
@@ -32,7 +33,7 @@ public class ConnAspect {
 //    @Before("execution(* com.templateTools.service.TableService.*(..))")
 //    public void aaaaa(JoinPoint joinPoint){
 //        Object a = joinPoint.getTarget();
-//        String bb = "";
+//        System.out.println("代理TableService的方法");
 //    }
 
 
