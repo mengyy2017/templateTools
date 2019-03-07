@@ -1,4 +1,4 @@
-package com.templateTools.utils;
+package com.templateTools.pub.commModel;
 
 @FunctionalInterface
 public interface Puts<T, E, O> {

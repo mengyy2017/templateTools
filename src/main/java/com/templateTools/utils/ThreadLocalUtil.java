@@ -1,10 +1,9 @@
 package com.templateTools.utils;
 
-import com.templateTools.entity.CreateInfo;
+import com.templateTools.entity.model.CreateInfo;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
 
 public class ThreadLocalUtil {
 

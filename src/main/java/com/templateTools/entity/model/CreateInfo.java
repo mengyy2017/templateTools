@@ -1,4 +1,4 @@
-package com.templateTools.entity;
+package com.templateTools.entity.model;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.templateTools.entity;
+package com.templateTools.entity.model;
 
 public class AuthToken {
 

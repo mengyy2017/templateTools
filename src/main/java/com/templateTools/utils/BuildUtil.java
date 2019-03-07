@@ -1,5 +1,6 @@
 package com.templateTools.utils;
 
+import com.templateTools.pub.commModel.*;
 import java.util.LinkedList;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -20,7 +21,7 @@ public class BuildUtil {
         return function.apply(t);
     }
 
-    public static <O> O newAndSet0(Supplier<O> supplier, String[] valueArr , SSetter<O> ...setter){
+    public static <O> O newAndSet0(Supplier<O> supplier, String[] valueArr , SSetter<O>...setter){
         O o = supplier.get();
         for(int i = 0; i < setter.length; i++){
             setter[i].apply(o, valueArr[i]);
@@ -28,7 +29,7 @@ public class BuildUtil {
         return o;
     }
 
-    public static <O> O newAndSet(Supplier<O> supplier, FunAndVal ...funAndVals){
+    public static <O> O newAndSet(Supplier<O> supplier, FunAndVal...funAndVals){
         O o = supplier.get();
         for (FunAndVal funAndVal: funAndVals) {
             funAndVal.apply(o);
@@ -43,7 +44,7 @@ public class BuildUtil {
         return o;
     }
 
-    public static <T, E, O> O newAndPuts0(Supplier<O> supplier, Puts<T, E, O> puts, KeyAndVal<T, E> ...keyAndVals){
+    public static <T, E, O> O newAndPuts0(Supplier<O> supplier, Puts<T, E, O> puts, KeyAndVal<T, E>...keyAndVals){
         O o = supplier.get();
         for (KeyAndVal<T, E> keyAndVal : keyAndVals) {
             puts.apply(o, keyAndVal.getV1(), keyAndVal.getV2());
@@ -53,32 +54,24 @@ public class BuildUtil {
 
     public static <T, E, O> O newAndPuts1(Supplier<O> supplier, Puts<T, E, O> puts, LinkedList linkedList){
         O o = supplier.get();
-        while (linkedList.size() > 0){
-            T v1 = (T)linkedList.poll();
-            E v2 = (E)linkedList.poll();
-            puts.apply(o, v1, v2);
-        }
-
-        return o;
+        return putsValsLoop(o, puts, linkedList);
     }
 
     public static <T, E, O> O newAndPuts(Supplier<O> supplier, Puts<T, E, O> puts, Object ...objs){
         O o = supplier.get();
         LinkedList linkedList = Stream.of(objs).collect(Collectors.toCollection(LinkedList::new));
 
-        while (linkedList.size() > 0){
-            T v1 = (T)linkedList.poll();
-            E v2 = (E)linkedList.poll();
-            puts.apply(o, v1, v2);
-        }
-
-        return o;
+        return putsValsLoop(o, puts, linkedList);
     }
 
     public static <T, E, O> O putsVals(O o, Puts<T, E, O> puts, Object ...objs){
 
         LinkedList linkedList = Stream.of(objs).collect(Collectors.toCollection(LinkedList::new));
 
+        return putsValsLoop(o, puts, linkedList);
+    }
+
+    private static <T, E, O> O putsValsLoop(O o, Puts<T, E, O> puts, LinkedList linkedList) {
         while (linkedList.size() > 0){
             T v1 = (T)linkedList.poll();
             E v2 = (E)linkedList.poll();
@@ -94,7 +87,5 @@ public class BuildUtil {
 
 }
 
-@FunctionalInterface
-interface SSetter<O> extends Fun<O, String> {
-}
+
 

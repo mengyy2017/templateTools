@@ -1,4 +1,4 @@
-package com.templateTools.utils;
+package com.templateTools.pub.commModel;
 
 public class KeyAndVal<T, E>{
     public T v1;

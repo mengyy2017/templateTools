@@ -1,7 +1,7 @@
 package com.templateTools.utils;
 
 import com.templateTools.entity.ColumnEntity;
-import com.templateTools.entity.TableColsInfo;
+import com.templateTools.entity.model.TableColsInfo;
 import com.templateTools.pub.common.Consts;
 
 import java.util.HashMap;

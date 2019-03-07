@@ -18,7 +18,7 @@ public class ConnAspect {
         String aa = "";
     }
 
-    @Before("execution(* com.templateTools.entity.CreateInfo.*(..))")
+    @Before("execution(* com.templateTools.entity.model.CreateInfo.*(..))")
     public void aaa(){
         String bb = "";
     }

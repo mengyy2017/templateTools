@@ -2,9 +2,9 @@ package com.templateTools.controller;
 
 import com.templateTools.base.controller.BaseController;
 import com.templateTools.entity.ColumnEntity;
-import com.templateTools.entity.CreateInfo;
+import com.templateTools.entity.model.CreateInfo;
 import com.templateTools.entity.TableEntity;
-import com.templateTools.entity.TableColsInfo;
+import com.templateTools.entity.model.TableColsInfo;
 import com.templateTools.service.ColumnService;
 import com.templateTools.service.TableService;
 import com.templateTools.utils.HandelDataUtil;

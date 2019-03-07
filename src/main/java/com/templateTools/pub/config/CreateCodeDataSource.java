@@ -1,6 +1,6 @@
 package com.templateTools.pub.config;
 
-import com.templateTools.entity.CreateInfo;
+import com.templateTools.entity.model.CreateInfo;
 import com.templateTools.utils.ThreadLocalUtil;
 import org.apache.tomcat.jdbc.pool.DataSource;
 import java.lang.reflect.Proxy;
