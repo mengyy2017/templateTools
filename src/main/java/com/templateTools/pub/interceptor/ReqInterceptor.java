@@ -1,4 +1,4 @@
-package com.templateTools.pub.config;
+package com.templateTools.pub.interceptor;
 
 import com.templateTools.utils.ThreadLocalUtil;
 import org.springframework.web.servlet.HandlerInterceptor;

@@ -1,4 +1,4 @@
-package com.templateTools.pub.config;
+package com.templateTools.pub.commModel;
 
 import java.sql.Connection;
 import java.time.LocalDateTime;

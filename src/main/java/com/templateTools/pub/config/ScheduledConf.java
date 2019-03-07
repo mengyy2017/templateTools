@@ -15,7 +15,7 @@ import java.util.concurrent.Executor;
 public class ScheduledConf {
 
     @Autowired
-    ThreadConf threadConf;
+    ThreadPoolConf threadPoolConf;
 
     @Autowired
     @Qualifier(value = "getTaskExecutor")
@@ -26,7 +26,7 @@ public class ScheduledConf {
     public void checkIdleConnSchedule() {
         System.out.println("======================================================checkIdleConnSchedule");
 
-        threadConf.checkIdleConnTask();
+        threadPoolConf.checkIdleConnTask();
 //        threadConfig.checkIdleConnTask();
 
         ThreadPoolTaskExecutor executor = (ThreadPoolTaskExecutor) poolExecutor;

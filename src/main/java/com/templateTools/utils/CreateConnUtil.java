@@ -1,7 +1,7 @@
-package com.templateTools.pub.config;
+package com.templateTools.utils;
 
 import com.templateTools.entity.model.CreateInfo;
-import com.templateTools.utils.ThreadLocalUtil;
+import com.templateTools.pub.commModel.ConnHolder;
 import org.apache.tomcat.jdbc.pool.DataSource;
 import java.lang.reflect.Proxy;
 import java.sql.Connection;
@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class CreateCodeDataSource extends DataSource {
+public class CreateConnUtil extends DataSource {
 
     private static ConcurrentHashMap<String, LinkedList<ConnHolder>> dataSourceConHM = new ConcurrentHashMap<>();
 

@@ -1,5 +1,7 @@
 package com.templateTools.pub.config;
 
+import com.templateTools.pub.commModel.ConnHolder;
+import com.templateTools.utils.CreateConnUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +20,7 @@ import java.util.concurrent.locks.ReentrantLock;
 @Configuration
 @ComponentScan("com.templateTools.pub.config")
 @EnableAsync
-public class ThreadConf {
+public class ThreadPoolConf {
 
     private Lock lock = new ReentrantLock();
 
@@ -35,7 +37,7 @@ public class ThreadConf {
     @Async(value = "getTaskExecutor")
     public void checkIdleConnTask() {
         System.out.println("线程名称：" + Thread.currentThread().getName());
-        ConcurrentHashMap<String, LinkedList<ConnHolder>> conMap = CreateCodeDataSource.getDataSourceConHM();
+        ConcurrentHashMap<String, LinkedList<ConnHolder>> conMap = CreateConnUtil.getDataSourceConHM();
 
         conMap.keySet().forEach(key -> {
             LinkedList<ConnHolder> linkedList = conMap.get(key);
