@@ -9,13 +9,13 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class BuildUtil {
-    public static void main(String[] args) {
-        String a = "a";
-        String b = "b";
-        int e = 2;
+//    public static void main(String[] args) {
+//        String a = "a";
+//        String b = "b";
+//        int e = 2;
 //        Car car = newAndSet0(Car::new, new String[]{a, b}, Car::setAaa, Car::setBbb);
 //        Car car1 = newAndSet(Car::new, getVAndF(a, Car::setAaa), getVAndF(e, Car::setEee));
-    }
+//    }
 
     public static <T, O> O oneConstr(Function<T, O> function, T t){
         return function.apply(t);

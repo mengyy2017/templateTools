@@ -3,7 +3,6 @@ package com.templateTools.utils;
 import com.templateTools.entity.ColumnEntity;
 import com.templateTools.entity.model.TableColsInfo;
 import com.templateTools.pub.common.Consts;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
