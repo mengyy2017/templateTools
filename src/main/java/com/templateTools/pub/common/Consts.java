@@ -9,6 +9,8 @@ import java.util.*;
 
 public class Consts {
 
+    public static String LOGIN_CHEK_URL = "/j_login";
+
     public static String JAVA_SUFFIX = ".java", HTML_SUFFIX = ".html", XML_SUFFIX = ".xml";
 
     public static String fileSparator = "/", basePath = "C:" + File.separator + "template";

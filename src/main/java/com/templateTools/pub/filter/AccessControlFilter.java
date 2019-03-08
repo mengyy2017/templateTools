@@ -10,6 +10,8 @@ public class AccessControlFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest res = (HttpServletRequest)request;
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
         HttpServletResponse resp = (HttpServletResponse)response;
         String origin = res.getHeader("Origin");
         resp.setHeader("Access-Control-Allow-Origin", origin);

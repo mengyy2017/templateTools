@@ -21,6 +21,5 @@ public class Application {
         accessControlFilter.addUrlPatterns("/*");
         accessControlFilter.setName("accessControlFilter");
         return accessControlFilter;
-
     }
 }
