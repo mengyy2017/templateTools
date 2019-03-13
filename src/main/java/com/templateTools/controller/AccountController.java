@@ -3,6 +3,8 @@ package com.templateTools.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Controller
 @RequestMapping(value = "/account")
 public class AccountController {
@@ -13,7 +15,9 @@ public class AccountController {
     }
 
     @RequestMapping("/index")
-    public String index() {
+    public String index(HttpServletRequest request) {
+        request.getParameter("username");
+
         return null;
     }
 

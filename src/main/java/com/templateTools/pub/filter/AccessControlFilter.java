@@ -4,6 +4,7 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Enumeration;
 
 public class AccessControlFilter implements Filter {
 
@@ -12,6 +13,7 @@ public class AccessControlFilter implements Filter {
         HttpServletRequest res = (HttpServletRequest)request;
         String username = request.getParameter("username");
         String password = request.getParameter("password");
+        Enumeration paramNames = request.getParameterNames();
         HttpServletResponse resp = (HttpServletResponse)response;
         String origin = res.getHeader("Origin");
         resp.setHeader("Access-Control-Allow-Origin", origin);

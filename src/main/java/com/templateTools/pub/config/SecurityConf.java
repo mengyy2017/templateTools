@@ -31,6 +31,7 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         // 这个设置不拦截静态资源
 //        web.ignoring().antMatchers(loginUrl); // 登录在http那设置
+        web.ignoring().antMatchers(indexUrl);
     }
 
     @Override
