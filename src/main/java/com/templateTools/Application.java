@@ -16,11 +16,11 @@ public class Application {
         SpringApplication.run(Application.class);
     }
 
-    @Bean
-    public FilterRegistrationBean accessControlFilterFactory(){
-        FilterRegistrationBean accessControlFilter = new FilterRegistrationBean(new AccessControlFilter());
-        accessControlFilter.addUrlPatterns("/*");
-        accessControlFilter.setName("accessControlFilter");
-        return accessControlFilter;
-    }
+//    @Bean
+//    public FilterRegistrationBean accessControlFilterFactory(){
+//        FilterRegistrationBean accessControlFilter = new FilterRegistrationBean(new AccessControlFilter());
+//        accessControlFilter.addUrlPatterns("/*");
+//        accessControlFilter.setName("accessControlFilter");
+//        return accessControlFilter;
+//    }
 }

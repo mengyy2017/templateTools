@@ -24,6 +24,8 @@ public class MetadataSource implements FilterInvocationSecurityMetadataSource {
             attrs = Arrays.asList(new SecurityConfig("ROLE_ANONYMOUS"));
         } else if (Consts.LOGIN_CHEK_URL.equals(requestUrl)){
             attrs = Arrays.asList(new SecurityConfig("ROLE_ANONYMOUS"));
+        } else {
+            attrs = Arrays.asList(new SecurityConfig("ROLE_ANONYMOUS"));
         }
 
         return attrs;

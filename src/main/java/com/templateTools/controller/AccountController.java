@@ -1,5 +1,6 @@
 package com.templateTools.controller;
 
+import com.templateTools.entity.UserEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -16,7 +17,7 @@ public class AccountController {
 
     @RequestMapping("/index")
     public String index(HttpServletRequest request) {
-        request.getParameter("username");
+        String a = request.getParameter("username");
 
         return null;
     }
@@ -27,7 +28,9 @@ public class AccountController {
     }
 
     @RequestMapping("/accDenied")
-    public String accDenied() {
+    public String accDenied(HttpServletRequest request, UserEntity userEntity) {
+        String a = request.getParameter("firstName");
+        String aa = request.getParameter("username");
         return null;
     }
 

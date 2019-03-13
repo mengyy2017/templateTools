@@ -15,9 +15,14 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
+import org.springframework.security.web.util.matcher.RegexRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.regex.Pattern;
 
 @EnableWebSecurity
 public class SecurityConf extends WebSecurityConfigurerAdapter {
@@ -31,7 +36,7 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         // 这个设置不拦截静态资源
 //        web.ignoring().antMatchers(loginUrl); // 登录在http那设置
-        web.ignoring().antMatchers(indexUrl);
+//        web.ignoring().antMatchers(accDeniedUrl);
     }
 
     @Override
@@ -48,6 +53,7 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
         http.logout().logoutUrl(logoutUrl).logoutSuccessUrl(logoutUrl).invalidateHttpSession(true);
 
         http.csrf().disable();
+//        http.csrf().ignoringRequestMatchers(getRequestMatcher());
 
         http.sessionManagement().sessionAuthenticationFailureHandler((request, response, exception) -> {
             exception.printStackTrace();
@@ -60,6 +66,24 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
         http.addFilterBefore(interceptor(), FilterSecurityInterceptor.class);
     }
 
+    @Bean
+    public RequestMatcher getRequestMatcher(){
+        Pattern allowedMethods = Pattern.compile("^(GET|HEAD|TRACE|OPTIONS)$");
+        RegexRequestMatcher unprotectedMatcher = new RegexRequestMatcher("/unprotected", null);
+
+        RequestMatcher requestMatcher = new RequestMatcher() {
+            @Override
+            public boolean matches(HttpServletRequest request) {
+                if(allowedMethods.matcher(request.getMethod()).matches()){
+                    return false;
+                }
+
+                return !unprotectedMatcher.matches(request);
+            }
+        };
+        return requestMatcher;
+    }
+
     //配置跨域访问资源
     private CorsConfigurationSource CorsConfigurationSource() {
         CorsConfigurationSource source =   new UrlBasedCorsConfigurationSource();
@@ -67,6 +91,7 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
         corsConfiguration.addAllowedOrigin("*");	//同源配置，*表示任何请求都视为同源，若需指定ip和端口可以改为如“localhost：8080”，多个以“，”分隔；
         corsConfiguration.addAllowedHeader("*");//header，允许哪些header，本案中使用的是token，此处可将*替换为token；
         corsConfiguration.addAllowedMethod("*");	//允许的请求方法，PSOT、GET等
+        corsConfiguration.setAllowCredentials(true);
         ((UrlBasedCorsConfigurationSource) source).registerCorsConfiguration("/**",corsConfiguration); //配置允许跨域访问的url
         return source;
     }
