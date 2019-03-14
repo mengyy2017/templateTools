@@ -4,6 +4,7 @@ import com.templateTools.entity.UserEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -17,10 +18,9 @@ public class AccountController {
     }
 
     @RequestMapping("/index")
-    public String index(HttpServletRequest request) {
-        String a = request.getParameter("username");
-
-        return null;
+    @ResponseBody
+    public String index() {
+        return "success";
     }
 
     @RequestMapping("/logout")
@@ -32,7 +32,15 @@ public class AccountController {
     public String accDenied(HttpServletRequest request) {
         String a = request.getParameter("firstName");
         String aa = request.getParameter("username");
-        return null;
+        return "message: access denied!";
+    }
+
+    @RequestMapping("/error")
+    @ResponseBody
+    public String error(HttpServletRequest request) {
+        String a = request.getParameter("firstName");
+        String aa = request.getParameter("username");
+        return "message: 服务器出错！";
     }
 
 }

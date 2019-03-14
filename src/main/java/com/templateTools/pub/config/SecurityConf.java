@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.util.matcher.RegexRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
@@ -46,14 +47,12 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
 
         http.formLogin().loginProcessingUrl(Consts.LOGIN_CHEK_URL)
                 .usernameParameter("username").passwordParameter("password")
-                .loginPage(loginUrl).successForwardUrl(indexUrl)
-                .failureHandler((request, response, exception) -> {
+                .successForwardUrl(indexUrl).failureHandler((request, response, exception) -> {
                     exception.printStackTrace();
                 });
-        http.logout().logoutUrl(logoutUrl).logoutSuccessUrl(logoutUrl).invalidateHttpSession(true);
+        http.logout().logoutUrl(logoutUrl).logoutSuccessUrl(logoutUrl).invalidateHttpSession(false);
 
         http.csrf().disable();
-//        http.csrf().ignoringRequestMatchers(getRequestMatcher());
 
         http.sessionManagement().sessionAuthenticationFailureHandler((request, response, exception) -> {
             exception.printStackTrace();
@@ -64,24 +63,6 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
         });
 
         http.addFilterBefore(interceptor(), FilterSecurityInterceptor.class);
-    }
-
-    @Bean
-    public RequestMatcher getRequestMatcher(){
-        Pattern allowedMethods = Pattern.compile("^(GET|HEAD|TRACE|OPTIONS)$");
-        RegexRequestMatcher unprotectedMatcher = new RegexRequestMatcher("/unprotected", null);
-
-        RequestMatcher requestMatcher = new RequestMatcher() {
-            @Override
-            public boolean matches(HttpServletRequest request) {
-                if(allowedMethods.matcher(request.getMethod()).matches()){
-                    return false;
-                }
-
-                return !unprotectedMatcher.matches(request);
-            }
-        };
-        return requestMatcher;
     }
 
     //配置跨域访问资源
@@ -107,7 +88,6 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         // 自定义UserDetailsService,设置加密算法
-//        auth.
         auth.userDetailsService(accountDetailsService).passwordEncoder(new RawEncoder());
 //                .passwordEncoder(passwordEncoder())
         //不删除凭据，以便记住用户

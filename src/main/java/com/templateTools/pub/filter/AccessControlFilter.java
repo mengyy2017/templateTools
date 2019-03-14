@@ -9,6 +9,11 @@ import java.util.Enumeration;
 public class AccessControlFilter implements Filter {
 
     @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
+
+    }
+
+    @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest res = (HttpServletRequest)request;
         HttpServletResponse resp = (HttpServletResponse)response;
@@ -18,5 +23,10 @@ public class AccessControlFilter implements Filter {
         resp.setHeader("Access-Control-Allow-Credentials", "true");
         resp.setStatus(200);
         chain.doFilter(res, resp);
+    }
+
+    @Override
+    public void destroy() {
+
     }
 }
