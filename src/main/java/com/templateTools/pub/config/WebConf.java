@@ -10,7 +10,7 @@ public class WebConf implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new ReqInterceptor()).addPathPatterns("/**");
+//        registry.addInterceptor(new ReqInterceptor()).addPathPatterns("/**");
     }
 
 }

@@ -37,6 +37,14 @@ public class BuildUtil {
         return o;
     }
 
+    public <O> O newAndSetNonStatic(Supplier<O> supplier, FunAndVal...funAndVals){
+        O o = supplier.get();
+        for (FunAndVal funAndVal: funAndVals) {
+            funAndVal.apply(o);
+        }
+        return o;
+    }
+
     public static <O> O setVals(O o, FunAndVal ...funAndVals){
         for (FunAndVal funAndVal: funAndVals) {
             funAndVal.apply(o);
@@ -71,7 +79,7 @@ public class BuildUtil {
         return putsValsLoop(o, puts, linkedList);
     }
 
-    private static <T, E, O> O putsValsLoop(O o, Puts<T, E, O> puts, LinkedList linkedList) {
+    public static <T, E, O> O putsValsLoop(O o, Puts<T, E, O> puts, LinkedList linkedList) {
         while (linkedList.size() > 0){
             T v1 = (T)linkedList.poll();
             E v2 = (E)linkedList.poll();

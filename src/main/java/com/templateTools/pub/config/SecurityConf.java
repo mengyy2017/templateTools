@@ -5,6 +5,7 @@ import com.templateTools.pub.config.confModel.AccDeciManager;
 import com.templateTools.pub.config.confModel.AccountDetailsService;
 import com.templateTools.pub.config.confModel.MetadataSource;
 import com.templateTools.pub.config.confModel.RawEncoder;
+import com.templateTools.pub.filter.ReqFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,6 +15,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -32,6 +34,9 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
 //        web.ignoring().antMatchers(loginUrl); // 登录在http那设置
 //        web.ignoring().antMatchers(accDeniedUrl);
     }
+
+    @Autowired
+    private ReqFilter reqFilter;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -55,7 +60,8 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
             accessDeniedException.printStackTrace();
         });
 
-        http.addFilterBefore(interceptor(), FilterSecurityInterceptor.class);
+        http.addFilterBefore(reqFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(filter(), FilterSecurityInterceptor.class);
     }
 
     //配置跨域访问资源
@@ -94,12 +100,12 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
     AccDeciManager accDeciManager;
 
     @Bean
-    public FilterSecurityInterceptor interceptor() throws Exception {
-        FilterSecurityInterceptor interceptor = new FilterSecurityInterceptor();
-        interceptor.setSecurityMetadataSource(metadataSource);
-        interceptor.setAccessDecisionManager(accDeciManager);
-        interceptor.setAuthenticationManager(authenticationManagerBean());
-        return interceptor;
+    public FilterSecurityInterceptor filter() throws Exception {
+        FilterSecurityInterceptor filter = new FilterSecurityInterceptor();
+        filter.setSecurityMetadataSource(metadataSource);
+        filter.setAccessDecisionManager(accDeciManager);
+        filter.setAuthenticationManager(authenticationManagerBean());
+        return filter;
     }
 
 }

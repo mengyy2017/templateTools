@@ -6,7 +6,6 @@ import com.templateTools.pub.common.Consts;
 import org.apache.tomcat.jdbc.pool.DataSource;
 import java.lang.reflect.Proxy;
 import java.sql.Connection;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -19,14 +18,11 @@ public class CreateConnUtil extends DataSource {
     @Override
     public Connection getConnection() {
         try {
-            String authToken = ThreadLocalUtil.getAuthToken();
-
-//            if(Consts.LOGIN_CHEK_URL.equals(ThreadLocalUtil.getRequestThreadLocal().get().getRequestURI())) {
-//                LinkedList<ConnHolder> logiConn = dataSourceConHM.get(Consts.LOGI_CONN);
-//                if (logiConn == null || logiConn.size() == 0) {
-//                   return getLogiConn();
-//                }
-//            }
+            String authToken;
+            if (Consts.LOGIN_CHEK_URL.equals(ThreadLocalUtil.getRequestThreadLocal().get().getRequestURI()))
+                authToken = "127.0.0.1_mysql_3306_security_root_1";
+            else
+                authToken = ThreadLocalUtil.getAuthToken() == null ? ThreadLocalUtil.getCreateInfoThreadLocal().get().toString() : ThreadLocalUtil.getAuthToken();
             return popConnection(authToken);
 
         } catch (Exception e) {
@@ -53,17 +49,14 @@ public class CreateConnUtil extends DataSource {
     private Connection popConnection(String authToken) throws Exception {
 //        List<Connection> syncList = Collections.synchronizedList(linkedList);
 
-        authToken = authToken == null ? ThreadLocalUtil.getCreateInfoThreadLocal().get().toString() : authToken;
-
        if (dataSourceConHM.get(authToken) == null)
             createPutConn(CreateInfo.toCreateInfo(authToken));
 
         LinkedList<ConnHolder> linkedList = dataSourceConHM.get(authToken);
 
         synchronized (this) {
-            while (linkedList.size() == 0){
+            while (linkedList.size() == 0)
                 this.wait();
-            }
             return getConncetionProxy(linkedList.pop().get(), authToken);
         }
     }
@@ -95,16 +88,6 @@ public class CreateConnUtil extends DataSource {
         dataSource.setPassword(createInfo.getDatabasePassword());
 
         return dataSource;
-    }
-
-    public Connection getLogiConn() throws Exception {
-        DataSource dataSource = new DataSource();
-        dataSource.setUrl("jdbc:mysql://127.0.0.1:3306/security?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8");
-        dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-        dataSource.setUsername("root");
-        dataSource.setPassword("1");
-        dataSourceConHM.put(Consts.LOGI_CONN, new LinkedList(Arrays.asList(dataSource.getConnection())));
-        return popConnection(Consts.LOGI_CONN);
     }
 
     public static ConcurrentHashMap<String, LinkedList<ConnHolder>> getDataSourceConHM() {

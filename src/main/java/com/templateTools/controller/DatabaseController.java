@@ -2,6 +2,7 @@ package com.templateTools.controller;
 
 import com.templateTools.base.controller.BaseController;
 import com.templateTools.entity.ColumnEntity;
+import com.templateTools.entity.UserEntity;
 import com.templateTools.entity.model.CreateInfo;
 import com.templateTools.entity.TableEntity;
 import com.templateTools.entity.model.TableColsInfo;
@@ -54,7 +55,7 @@ public class DatabaseController extends BaseController {
         return tableService.selectByExample(example);
     }
 
-    @GetMapping(value = "/getAllColumns")
+    @PostMapping(value = "/getAllColumns")
     @ResponseBody
     public List<ColumnEntity> getTableColumn(ColumnEntity columnEntity) throws Exception {
         try{

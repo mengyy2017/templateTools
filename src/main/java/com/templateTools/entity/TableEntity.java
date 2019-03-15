@@ -11,12 +11,17 @@ public class TableEntity {
     @Id
     @Column(name = "table_name")
     private String id;
+
     private String tableName;
+
     @Transient
     private String camelTableName;
+
     @Transient
     private String upperCamelTableName;
+
     private String tableComment;
+
     private String tableSchema;
 
     public String getId() {

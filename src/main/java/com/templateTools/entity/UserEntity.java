@@ -1,26 +1,18 @@
 package com.templateTools.entity;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
-import java.util.Collection;
 
-@Table(name = "user")
-public class UserEntity extends User implements Serializable {
-
-    public UserEntity(String username, String password, Collection<? extends GrantedAuthority> authorities) {
-        super(username, password, authorities);
-    }
-
-    public UserEntity(String username, String password, boolean enabled, boolean accountNonExpired, boolean credentialsNonExpired, boolean accountNonLocked, Collection<? extends GrantedAuthority> authorities) {
-        super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
-    }
+@Table(name = "sys_user")
+public class UserEntity implements Serializable {
 
     @Id
     private String id;
+
+    private String username;
+
+    private String password;
 
     public String getId() {
         return id;
@@ -28,6 +20,22 @@ public class UserEntity extends User implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
 }
