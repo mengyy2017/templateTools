@@ -1,7 +1,6 @@
 package com.templateTools.utils;
 
 import com.templateTools.entity.model.CreateInfo;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 

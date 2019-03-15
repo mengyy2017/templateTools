@@ -2,11 +2,12 @@ package com.templateTools.utils;
 
 import com.templateTools.entity.model.CreateInfo;
 import com.templateTools.pub.commModel.ConnHolder;
+import com.templateTools.pub.common.Consts;
 import org.apache.tomcat.jdbc.pool.DataSource;
 import java.lang.reflect.Proxy;
 import java.sql.Connection;
+import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -19,12 +20,14 @@ public class CreateConnUtil extends DataSource {
     public Connection getConnection() {
         try {
             String authToken = ThreadLocalUtil.getAuthToken();
-            LinkedList<ConnHolder> someConnLinkedList = dataSourceConHM.get(Optional.ofNullable(authToken).orElse(""));
 
-            if (authToken == null || someConnLinkedList == null)
-                return createConnection();
-            else
-                return popConnection(authToken);
+//            if(Consts.LOGIN_CHEK_URL.equals(ThreadLocalUtil.getRequestThreadLocal().get().getRequestURI())) {
+//                LinkedList<ConnHolder> logiConn = dataSourceConHM.get(Consts.LOGI_CONN);
+//                if (logiConn == null || logiConn.size() == 0) {
+//                   return getLogiConn();
+//                }
+//            }
+            return popConnection(authToken);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -32,12 +35,9 @@ public class CreateConnUtil extends DataSource {
         return null;
     }
 
-    private Connection createConnection() throws Exception {
-
-        CreateInfo createInfo = ThreadLocalUtil.getCreateInfoThreadLocal().get();
+    private void createPutConn(CreateInfo createInfo) throws Exception {
 
         DataSource dataSource = createDataSource(createInfo);
-
         String authToken = createInfo.toString();
 
         for(int i = 0; i < 2; i++){
@@ -48,11 +48,15 @@ public class CreateConnUtil extends DataSource {
                 dataSourceConHM.get(authToken).addFirst(creHolder(conn));
         }
 
-        return popConnection(authToken);
     }
 
     private Connection popConnection(String authToken) throws Exception {
 //        List<Connection> syncList = Collections.synchronizedList(linkedList);
+
+        authToken = authToken == null ? ThreadLocalUtil.getCreateInfoThreadLocal().get().toString() : authToken;
+
+       if (dataSourceConHM.get(authToken) == null)
+            createPutConn(CreateInfo.toCreateInfo(authToken));
 
         LinkedList<ConnHolder> linkedList = dataSourceConHM.get(authToken);
 
@@ -82,7 +86,6 @@ public class CreateConnUtil extends DataSource {
         if ("mysql".equals(createInfo.getDatabaseType())) {
             dataSource.setUrl("jdbc:mysql://" + createInfo.getDatabaseAdress() + ":" + createInfo.getDatabasePort() + "/information_schema?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8");
             dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-
         } else if ("oracle".equals(createInfo.getDatabaseType())) {
             dataSource.setUrl("oracle:thin:@" + createInfo.getDatabaseAdress() + ":" + createInfo.getDatabasePort() + ":orcl" + "信息先不填 以后再改");
             dataSource.setDriverClassName("oracle.jdbc.OracleDriver");
@@ -92,6 +95,16 @@ public class CreateConnUtil extends DataSource {
         dataSource.setPassword(createInfo.getDatabasePassword());
 
         return dataSource;
+    }
+
+    public Connection getLogiConn() throws Exception {
+        DataSource dataSource = new DataSource();
+        dataSource.setUrl("jdbc:mysql://127.0.0.1:3306/security?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8");
+        dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+        dataSource.setUsername("root");
+        dataSource.setPassword("1");
+        dataSourceConHM.put(Consts.LOGI_CONN, new LinkedList(Arrays.asList(dataSource.getConnection())));
+        return popConnection(Consts.LOGI_CONN);
     }
 
     public static ConcurrentHashMap<String, LinkedList<ConnHolder>> getDataSourceConHM() {

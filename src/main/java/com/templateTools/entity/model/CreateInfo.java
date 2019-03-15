@@ -1,8 +1,9 @@
 package com.templateTools.entity.model;
 
+import com.templateTools.utils.BuildUtil;
 import java.util.List;
 
-public class CreateInfo {
+public class CreateInfo extends BuildUtil {
 
     private String databaseAdress;
 
@@ -96,6 +97,15 @@ public class CreateInfo {
 
     @Override
     public String toString() {
-        return databaseAdress + databaseType + databasePort + databaseSchema + databaseUsername + databasePassword;
+        return databaseAdress + "_" + databaseType + "_" + databasePort + "_" + databaseSchema + "_" + databaseUsername + "_" + databasePassword;
     }
+
+    public static CreateInfo toCreateInfo(String authToken) {
+        String[] authTokenArr = authToken.split("_");
+        return newAndSet0(CreateInfo::new, new String[]{authTokenArr[0], authTokenArr[1], authTokenArr[2]
+                ,authTokenArr[3], authTokenArr[4], authTokenArr[5]}, CreateInfo::setDatabaseAdress
+                , CreateInfo::setDatabaseType, CreateInfo::setDatabasePort, CreateInfo::setDatabaseSchema
+                , CreateInfo::setDatabaseUsername, CreateInfo::setDatabasePassword);
+    }
+
 }

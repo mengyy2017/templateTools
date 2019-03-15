@@ -15,8 +15,6 @@ import java.util.stream.Collectors;
 public class AccDeciManager implements AccessDecisionManager {
     @Override
     public void decide(Authentication authentication, Object object, Collection<ConfigAttribute> configAttributes) throws AccessDeniedException, InsufficientAuthenticationException {
-        if(configAttributes == null) return;
-
         // 所需要的
         List confAttrsList = configAttributes.stream().map(configAttribute -> configAttribute.getAttribute()).collect(Collectors.toList());
         // 有的
@@ -25,7 +23,7 @@ public class AccDeciManager implements AccessDecisionManager {
         if (confAttrsList.size() > 0)
             return;
         else
-            throw new AccessDeniedException(" 没有权限访问！ ");
+            throw new AccessDeniedException(" 没有权限访问！");
 //            return;
 
     }

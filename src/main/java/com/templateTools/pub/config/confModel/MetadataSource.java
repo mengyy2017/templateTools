@@ -1,6 +1,5 @@
 package com.templateTools.pub.config.confModel;
 
-import com.templateTools.pub.common.Consts;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.web.FilterInvocation;
@@ -13,19 +12,16 @@ import java.util.Collection;
 public class MetadataSource implements FilterInvocationSecurityMetadataSource {
 
     // 根据访问资源的地址查找所需要的权限
+    // 如果返回的结果是null 说明访问这个路径不需要权限 就不会再走decide方法
     @Override
     public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
 
         String requestUrl = ((FilterInvocation) object).getRequestUrl();
         Collection<ConfigAttribute> attrs = null;
-        if ("/database/setCreateInfo".matches(requestUrl)) {
+        if (requestUrl.matches("/database/setCreateInfo")) {
             attrs = Arrays.asList(new SecurityConfig("ROLE_ADMIN"));
-        } else if (requestUrl.matches("/account.*")){
-            attrs = Arrays.asList(new SecurityConfig("ROLE_ANONYMOUS"));
-        } else if (Consts.LOGIN_CHEK_URL.equals(requestUrl)){
-            attrs = Arrays.asList(new SecurityConfig("ROLE_ANONYMOUS"));
-        } else {
-            attrs = Arrays.asList(new SecurityConfig("ROLE_ANONYMOUS"));
+        } else if (requestUrl.matches("/database/getAllColumns.*")) {
+            attrs = Arrays.asList(new SecurityConfig("ROLE_ADMIN"));
         }
 
         return attrs;
