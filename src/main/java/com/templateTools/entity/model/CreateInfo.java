@@ -13,6 +13,8 @@ public class CreateInfo extends BuildUtil {
 
     private String databaseSchema;
 
+    private String tableSchema;
+
     private String databaseUsername;
 
     private String databasePassword;
@@ -79,6 +81,14 @@ public class CreateInfo extends BuildUtil {
         this.databaseSchema = databaseSchema;
     }
 
+    public String getTableSchema() {
+        return tableSchema;
+    }
+
+    public void setTableSchema(String tableSchema) {
+        this.tableSchema = tableSchema;
+    }
+
     public String getDatabaseUsername() {
         return databaseUsername;
     }
@@ -97,15 +107,15 @@ public class CreateInfo extends BuildUtil {
 
     @Override
     public String toString() {
-        return databaseAdress + "_" + databaseType + "_" + databasePort + "_" + databaseSchema + "_" + databaseUsername + "_" + databasePassword;
+        return databaseAdress + "~" + databaseType + "~" + databasePort + "~" + databaseSchema + "~" + tableSchema + "~" + databaseUsername + "~" + databasePassword;
     }
 
     public static CreateInfo toCreateInfo(String authToken) {
-        String[] authTokenArr = authToken.split("_");
+        String[] authTokenArr = authToken.split("~");
         return newAndSet0(CreateInfo::new, new String[]{authTokenArr[0], authTokenArr[1], authTokenArr[2]
-                ,authTokenArr[3], authTokenArr[4], authTokenArr[5]}, CreateInfo::setDatabaseAdress
+                ,authTokenArr[3], authTokenArr[4], authTokenArr[5], authTokenArr[6]}, CreateInfo::setDatabaseAdress
                 , CreateInfo::setDatabaseType, CreateInfo::setDatabasePort, CreateInfo::setDatabaseSchema
-                , CreateInfo::setDatabaseUsername, CreateInfo::setDatabasePassword);
+                , CreateInfo::setTableSchema, CreateInfo::setDatabaseUsername, CreateInfo::setDatabasePassword);
     }
 
 }

@@ -1,6 +1,5 @@
 package com.templateTools.pub.config.confModel;
 
-import com.templateTools.entity.ColumnEntity;
 import com.templateTools.entity.SysMenuEntity;
 import com.templateTools.entity.UserEntity;
 import com.templateTools.entity.model.UserSecurity;
@@ -19,24 +18,22 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Component
-public class AccountDetailsService implements UserDetailsService {
+public class AccountDetailsService extends BuildUtil implements UserDetailsService {
 
     @Autowired
     private UserService userService;
 
     @Autowired
-    private static SysMenuService sysMenuService;
+    private SysMenuService sysMenuService;
 
     // 只有访问设置的loginProcessingUrl那个地址 才会调用这个方法
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        UserEntity userEntity = BuildUtil.newAndSet(UserEntity::new, BuildUtil.getVAndF("admin", UserEntity::setUsername));
-        userEntity = userService.selectOne(userEntity);
+        UserEntity userEntity = userService.selectOne(newAndSet(UserEntity::new, getVAndF(username, UserEntity::setUsername)));
+        UserSecurity userSecurity = new UserSecurity(userEntity.getUsername(), userEntity.getPassword(),  Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN")));
 
         setUrlPermission();
-
-        UserSecurity userSecurity = new UserSecurity(userEntity.getUsername(), userEntity.getPassword(),  Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN")));
 
         return userSecurity;
     }

@@ -37,7 +37,7 @@ public class DatabaseController extends BaseController {
         response.addCookie(new Cookie("authToken", createInfo.toString()));
 
         Example example = new Example(TableEntity.class);
-        example.createCriteria().andEqualTo("tableSchema", createInfo.getDatabaseSchema());
+        example.createCriteria().andEqualTo("tableSchema", createInfo.getTableSchema());
 
         List<TableEntity> list = tableService.selectByExample(example);
 

@@ -20,7 +20,7 @@ public class CreateConnUtil extends DataSource {
         try {
             String authToken;
             if (Consts.LOGIN_CHEK_URL.equals(ThreadLocalUtil.getRequestThreadLocal().get().getRequestURI()))
-                authToken = "127.0.0.1_mysql_3306_security_root_1";
+                authToken = "127.0.0.1~mysql~3306~security~noneTableSchema~root~1";
             else
                 authToken = ThreadLocalUtil.getAuthToken() == null ? ThreadLocalUtil.getCreateInfoThreadLocal().get().toString() : ThreadLocalUtil.getAuthToken();
             return popConnection(authToken);
@@ -29,21 +29,6 @@ public class CreateConnUtil extends DataSource {
             e.printStackTrace();
         }
         return null;
-    }
-
-    private void createPutConn(CreateInfo createInfo) throws Exception {
-
-        DataSource dataSource = createDataSource(createInfo);
-        String authToken = createInfo.toString();
-
-        for(int i = 0; i < 2; i++){
-            Connection conn = dataSource.getConnection();
-            if (dataSourceConHM.get(authToken) == null)
-                dataSourceConHM.put(authToken, Stream.of(creHolder(conn)).collect(Collectors.toCollection(LinkedList::new)));
-            else
-                dataSourceConHM.get(authToken).addFirst(creHolder(conn));
-        }
-
     }
 
     private Connection popConnection(String authToken) throws Exception {
@@ -59,6 +44,21 @@ public class CreateConnUtil extends DataSource {
                 this.wait();
             return getConncetionProxy(linkedList.pop().get(), authToken);
         }
+    }
+
+    private void createPutConn(CreateInfo createInfo) throws Exception {
+
+        DataSource dataSource = createDataSource(createInfo);
+        String authToken = createInfo.toString();
+
+        for(int i = 0; i < 2; i++){
+            Connection conn = dataSource.getConnection();
+            if (dataSourceConHM.get(authToken) == null)
+                dataSourceConHM.put(authToken, Stream.of(creHolder(conn)).collect(Collectors.toCollection(LinkedList::new)));
+            else
+                dataSourceConHM.get(authToken).addFirst(creHolder(conn));
+        }
+
     }
 
     private Connection getConncetionProxy(Connection conn, String token) {
@@ -77,10 +77,10 @@ public class CreateConnUtil extends DataSource {
         DataSource dataSource = new DataSource();
 
         if ("mysql".equals(createInfo.getDatabaseType())) {
-            dataSource.setUrl("jdbc:mysql://" + createInfo.getDatabaseAdress() + ":" + createInfo.getDatabasePort() + "/information_schema?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8");
+            dataSource.setUrl("jdbc:mysql://" + createInfo.getDatabaseAdress() + ":" + createInfo.getDatabasePort() + "/" + createInfo.getDatabaseSchema() +"?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8");
             dataSource.setDriverClassName("com.mysql.jdbc.Driver");
         } else if ("oracle".equals(createInfo.getDatabaseType())) {
-            dataSource.setUrl("oracle:thin:@" + createInfo.getDatabaseAdress() + ":" + createInfo.getDatabasePort() + ":orcl" + "信息先不填 以后再改");
+            dataSource.setUrl("oracle:thin:@" + createInfo.getDatabaseAdress() + ":" + createInfo.getDatabasePort() + ":" + createInfo.getDatabaseSchema() + "信息先不填 以后再改");
             dataSource.setDriverClassName("oracle.jdbc.OracleDriver");
         }
 
