@@ -16,66 +16,66 @@
 <mapper namespace="com.templateTools.dao.UserMapper" >
   	<!-- 添加,插入记录   -->
 	<insert id="insertUser" parameterType="com.templateTools.entity.UserEntity" >
-	    insert into sys_user (<include refid="com.templateTools.dao.field.UserFieldMapper.insertUserColumns"/>) values(<include refid="com.templateTools.dao.field.UserFieldMapper.insertUserParams"/>)
+	    insert into sys_user (<include refid="com.templateTools.dao.field.userFieldMapper.insertUserColumns"/>) values(<include refid="com.templateTools.dao.field.userFieldMapper.insertUserParams"/>)
 	</insert>
 	
 	<!-- 删除,主键删除   -->
 	<delete id="deleteUserByPrimaryKey" parameterType="com.templateTools.entity.UserEntity">
-	    delete from sys_user where 1=1 <include refid="com.templateTools.dao.field.UserFieldMapper.noPrefixKeyUser"/>
+	    delete from sys_user where 1=1 <include refid="com.templateTools.dao.field.userFieldMapper.noPrefixKeyUser"/>
 	</delete>
 	
 	<!-- 删除,实体删除   -->
 	<delete id="deleteUserByEntity" parameterType="com.templateTools.entity.UserEntity">
-	    delete from sys_user where 1=1 <include refid="com.templateTools.dao.field.UserFieldMapper.deleteAllUser"/>
+	    delete from sys_user where 1=1 <include refid="com.templateTools.dao.field.userFieldMapper.deleteAllUser"/>
 	</delete>
 	
 	<!-- 修改,主键更新  -->
 	<update id="updateUserByPrimaryKey" parameterType="com.templateTools.entity.UserEntity" >
 		update sys_user
-			<set><include refid="com.templateTools.dao.field.UserFieldMapper.updateUserParams"/></set>
-			where 1=1 <include refid="com.templateTools.dao.field.UserFieldMapper.noPrefixKeyUser"/>
+			<set><include refid="com.templateTools.dao.field.userFieldMapper.updateUserParams"/></set>
+			where 1=1 <include refid="com.templateTools.dao.field.userFieldMapper.noPrefixKeyUser"/>
 	</update>
 
 	<!-- 查询,实体查询   -->
-	<select id="selectUserAndRoles" resultMap="com.templateTools.dao.field.UserFieldMapper.userResultMap" parameterType="com.templateTools.entity.UserEntity">
-		select <include refid="com.templateTools.dao.field.UserFieldMapper.userColumns"/>
-		,r.role_code as roleCode
-		,r.role_name as roleName
+	<select id="selectUserAndRoles" resultMap="com.templateTools.dao.field.userFieldMapper.userResultMap" parameterType="com.templateTools.entity.UserEntity">
+		select <include refid="com.templateTools.dao.field.userFieldMapper.userColumns"/>
+		,r.role_code as role_code
+		,r.role_name as role_name
 		from sys_user sys_user
 		left join sys_user_role ur on sys_user.id = ur.user_id
 		left join sys_role r on ur.role_id = r.id
-		where 1=1 and sys_user.isdel=0 <include refid="com.templateTools.dao.field.UserFieldMapper.andAllUser"/>
+		where 1=1 and sys_user.isdel=0 <include refid="com.templateTools.dao.field.userFieldMapper.andAllUser"/>
 	</select>
 	
 	<!-- 查询,实体查询   -->
-	<select id="selectUserByEntry" resultMap="com.templateTools.dao.field.UserFieldMapper.userResultMap" parameterType="com.templateTools.entity.UserEntity">
-		select <include refid="com.templateTools.dao.field.UserFieldMapper.userColumns"/>
+	<select id="selectUserByEntry" resultMap="com.templateTools.dao.field.userFieldMapper.userResultMap" parameterType="com.templateTools.entity.UserEntity">
+		select <include refid="com.templateTools.dao.field.userFieldMapper.userColumns"/>
 		from sys_user sys_user 
-		where 1=1 and sys_user.isdel=0 <include refid="com.templateTools.dao.field.UserFieldMapper.andAllUser"/>
+		where 1=1 and sys_user.isdel=0 <include refid="com.templateTools.dao.field.userFieldMapper.andAllUser"/>
 	</select>
 	
 	<!-- 查询,ID查询   -->
-	<select id="selectUserById" resultMap="com.templateTools.dao.field.UserFieldMapper.userResultMap" parameterType="java.lang.String">
-		select <include refid="com.templateTools.dao.field.UserFieldMapper.userColumns"/>
+	<select id="selectUserById" resultMap="com.templateTools.dao.field.userFieldMapper.userResultMap" parameterType="java.lang.String">
+		select <include refid="com.templateTools.dao.field.userFieldMapper.userColumns"/>
 		from sys_user sys_user 
-		where 1=1 and sys_user.isdel=0 <include refid="com.templateTools.dao.field.UserFieldMapper.primaryKeyUser"/>
+		where 1=1 and sys_user.isdel=0 <include refid="com.templateTools.dao.field.userFieldMapper.primaryKeyUser"/>
 	</select>
 	
   	<!-- 批量插入 mysql -->
   	<insert id="insertUserBatch_mysql" parameterType="java.util.List">
-  		insert into sys_user (<include refid="com.templateTools.dao.field.UserFieldMapper.insertUserBatchColumns"/>)
+  		insert into sys_user (<include refid="com.templateTools.dao.field.userFieldMapper.insertUserBatchColumns"/>)
   		values
   		<foreach collection="list" item="item" index="index" separator=",">
-  			(<include refid="com.templateTools.dao.field.UserFieldMapper.insertUserBatchParams"/>)
+  			(<include refid="com.templateTools.dao.field.userFieldMapper.insertUserBatchParams"/>)
   		</foreach>
   	</insert>
   	<!-- 批量插入 oracle -->
   	<insert id="insertUserBatch_oracle" parameterType="java.util.List" useGeneratedKeys="false">
   		insert all
   		<foreach collection="list" item="item" index="index">
-  		into sys_user (<include refid="com.templateTools.dao.field.UserFieldMapper.insertUserBatchColumns"/>)
+  		into sys_user (<include refid="com.templateTools.dao.field.userFieldMapper.insertUserBatchColumns"/>)
   		values 
-  			(<include refid="com.templateTools.dao.field.UserFieldMapper.insertUserBatchParams"/>)
+  			(<include refid="com.templateTools.dao.field.userFieldMapper.insertUserBatchParams"/>)
   		</foreach>
   		select 1 from dual
   	</insert>
@@ -92,7 +92,7 @@
 	<update id="logicUserDelete" parameterType="com.templateTools.entity.UserEntity" >
 		update sys_user
 			set isdelete = 1 	<!-- 逻辑删除 -->
-		where 1=1 <include refid="com.templateTools.dao.field.UserFieldMapper.noPrefixKeyUser"/>
+		where 1=1 <include refid="com.templateTools.dao.field.userFieldMapper.noPrefixKeyUser"/>
 	</update>
 	
   	<!-- 批量逻辑删除 -->

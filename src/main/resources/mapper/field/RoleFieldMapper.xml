@@ -13,7 +13,7 @@
  -->
 <!-- 		 -->
 <!--  -->
-<mapper namespace="com.templateTools.dao.field.RoleFieldMapper" >
+<mapper namespace="com.templateTools.dao.field.roleFieldMapper" >
 	<!-- Result Map 数据库映射到实体类  -->
 	<resultMap id="roleResultMap" type="com.templateTools.entity.RoleEntity" >
 		<result column="id" property="id" jdbcType="VARCHAR" javaType="String"/>	<!--  -->
@@ -26,8 +26,8 @@
 	<sql id="roleColumns" >
 		<trim suffix="" suffixOverrides=",">
 			sys_role.id	as	id,	<!--  -->
-			sys_role.role_code	as	roleCode,	<!--  -->
-			sys_role.role_name	as	roleName,	<!--  -->
+			sys_role.role_code		<!--  -->
+			sys_role.role_name		<!--  -->
 			sys_role.isdel	as	isdel,	<!--  -->
 		</trim>
 	</sql>

@@ -13,7 +13,7 @@
  -->
 ${"<!--"} ${author!}		${date!} ${"-->"}
 ${"<!--"} ${tableRemark!} ${"-->"}
-<mapper namespace="${namespace}field.${upperCamelTableName}FieldMapper" >
+<mapper namespace="${namespace}field.${camelTableName}FieldMapper" >
 	<!-- Result Map 数据库映射到实体类  -->
 	<resultMap id="${camelTableName}ResultMap" type="${entityDotAllPath}${upperCamelTableName}Entity" >
 	<#list columnList as columnEntity>
@@ -25,7 +25,7 @@ ${"<!--"} ${tableRemark!} ${"-->"}
 	<sql id="${camelTableName}Columns" >
 		<trim suffix="" suffixOverrides=",">
 		<#list columnList as columnEntity>
-			${tableName}.${columnEntity.columnName}	as	${columnEntity.camelColName},	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
+			${tableName}.${columnEntity.columnName}	<#--as	${columnEntity.camelColName}, as后面应该是column的名字 而不是property的名字 -->	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
 		</#list>
 		</trim>
 	</sql>

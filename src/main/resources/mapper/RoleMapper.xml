@@ -16,55 +16,55 @@
 <mapper namespace="com.templateTools.dao.RoleMapper" >
   	<!-- 添加,插入记录   -->
 	<insert id="insertRole" parameterType="com.templateTools.entity.RoleEntity" >
-	    insert into sys_role (<include refid="com.templateTools.dao.field.RoleFieldMapper.insertRoleColumns"/>) values(<include refid="com.templateTools.dao.field.RoleFieldMapper.insertRoleParams"/>)
+	    insert into sys_role (<include refid="com.templateTools.dao.field.roleFieldMapper.insertRoleColumns"/>) values(<include refid="com.templateTools.dao.field.roleFieldMapper.insertRoleParams"/>)
 	</insert>
 	
 	<!-- 删除,主键删除   -->
 	<delete id="deleteRoleByPrimaryKey" parameterType="com.templateTools.entity.RoleEntity">
-	    delete from sys_role where 1=1 <include refid="com.templateTools.dao.field.RoleFieldMapper.noPrefixKeyRole"/>
+	    delete from sys_role where 1=1 <include refid="com.templateTools.dao.field.roleFieldMapper.noPrefixKeyRole"/>
 	</delete>
 	
 	<!-- 删除,实体删除   -->
 	<delete id="deleteRoleByEntity" parameterType="com.templateTools.entity.RoleEntity">
-	    delete from sys_role where 1=1 <include refid="com.templateTools.dao.field.RoleFieldMapper.deleteAllRole"/>
+	    delete from sys_role where 1=1 <include refid="com.templateTools.dao.field.roleFieldMapper.deleteAllRole"/>
 	</delete>
 	
 	<!-- 修改,主键更新  -->
 	<update id="updateRoleByPrimaryKey" parameterType="com.templateTools.entity.RoleEntity" >
 		update sys_role
-			<set><include refid="com.templateTools.dao.field.RoleFieldMapper.updateRoleParams"/></set>
-			where 1=1 <include refid="com.templateTools.dao.field.RoleFieldMapper.noPrefixKeyRole"/>
+			<set><include refid="com.templateTools.dao.field.roleFieldMapper.updateRoleParams"/></set>
+			where 1=1 <include refid="com.templateTools.dao.field.roleFieldMapper.noPrefixKeyRole"/>
 	</update>
 	
 	<!-- 查询,实体查询   -->
-	<select id="selectRoleByEntry" resultMap="com.templateTools.dao.field.RoleFieldMapper.roleResultMap" parameterType="com.templateTools.entity.RoleEntity">
-		select <include refid="com.templateTools.dao.field.RoleFieldMapper.roleColumns"/>
+	<select id="selectRoleByEntry" resultMap="com.templateTools.dao.field.roleFieldMapper.roleResultMap" parameterType="com.templateTools.entity.RoleEntity">
+		select <include refid="com.templateTools.dao.field.roleFieldMapper.roleColumns"/>
 		from sys_role sys_role 
-		where 1=1 and sys_role.isdel=0 <include refid="com.templateTools.dao.field.RoleFieldMapper.andAllRole"/>
+		where 1=1 and sys_role.isdel=0 <include refid="com.templateTools.dao.field.roleFieldMapper.andAllRole"/>
 	</select>
 	
 	<!-- 查询,ID查询   -->
-	<select id="selectRoleById" resultMap="com.templateTools.dao.field.RoleFieldMapper.roleResultMap" parameterType="java.lang.String">
-		select <include refid="com.templateTools.dao.field.RoleFieldMapper.roleColumns"/>
+	<select id="selectRoleById" resultMap="com.templateTools.dao.field.roleFieldMapper.roleResultMap" parameterType="java.lang.String">
+		select <include refid="com.templateTools.dao.field.roleFieldMapper.roleColumns"/>
 		from sys_role sys_role 
-		where 1=1 and sys_role.isdel=0 <include refid="com.templateTools.dao.field.RoleFieldMapper.primaryKeyRole"/>
+		where 1=1 and sys_role.isdel=0 <include refid="com.templateTools.dao.field.roleFieldMapper.primaryKeyRole"/>
 	</select>
 	
   	<!-- 批量插入 mysql -->
   	<insert id="insertRoleBatch_mysql" parameterType="java.util.List">
-  		insert into sys_role (<include refid="com.templateTools.dao.field.RoleFieldMapper.insertRoleBatchColumns"/>)
+  		insert into sys_role (<include refid="com.templateTools.dao.field.roleFieldMapper.insertRoleBatchColumns"/>)
   		values
   		<foreach collection="list" item="item" index="index" separator=",">
-  			(<include refid="com.templateTools.dao.field.RoleFieldMapper.insertRoleBatchParams"/>)
+  			(<include refid="com.templateTools.dao.field.roleFieldMapper.insertRoleBatchParams"/>)
   		</foreach>
   	</insert>
   	<!-- 批量插入 oracle -->
   	<insert id="insertRoleBatch_oracle" parameterType="java.util.List" useGeneratedKeys="false">
   		insert all
   		<foreach collection="list" item="item" index="index">
-  		into sys_role (<include refid="com.templateTools.dao.field.RoleFieldMapper.insertRoleBatchColumns"/>)
+  		into sys_role (<include refid="com.templateTools.dao.field.roleFieldMapper.insertRoleBatchColumns"/>)
   		values 
-  			(<include refid="com.templateTools.dao.field.RoleFieldMapper.insertRoleBatchParams"/>)
+  			(<include refid="com.templateTools.dao.field.roleFieldMapper.insertRoleBatchParams"/>)
   		</foreach>
   		select 1 from dual
   	</insert>
@@ -81,7 +81,7 @@
 	<update id="logicRoleDelete" parameterType="com.templateTools.entity.RoleEntity" >
 		update sys_role
 			set isdelete = 1 	<!-- 逻辑删除 -->
-		where 1=1 <include refid="com.templateTools.dao.field.RoleFieldMapper.noPrefixKeyRole"/>
+		where 1=1 <include refid="com.templateTools.dao.field.roleFieldMapper.noPrefixKeyRole"/>
 	</update>
 	
   	<!-- 批量逻辑删除 -->
