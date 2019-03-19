@@ -1,5 +1,6 @@
 package com.templateTools.utils;
 
+import com.templateTools.entity.model.CreateInfo;
 import com.templateTools.pub.common.Consts;
 import java.io.*;
 import java.nio.file.Files;
@@ -11,6 +12,8 @@ import java.util.Map;
 public class FreeMarkerUtil {
 
     public static void outputFile(Map<String, Object> dataMap){
+
+        String codePackage = CreateInfo.creInfoFromToken().getCodePackage();
 
         Consts.outParamMap.keySet().stream().forEach(key -> {
 
@@ -28,26 +31,21 @@ public class FreeMarkerUtil {
                 String ftlName = ftlParamArr[1];
                 String outPutFileName = ftlParamArr[2].replace("@@", upperCamelTableName);
 
-                Path outFilePath = classiPath.resolve(moduleName).resolve(fileTypeName)
+                Path outFilePath = Paths.get(Consts.basePath + File.separator + codePackage.replace(".", "\\")).resolve(classiPath).resolve(moduleName).resolve(fileTypeName)
                         .resolve(outPutFileName + suffix);
+
+                if (Consts.daoTypePath.equals(fileTypeName) && dataMap.get("namespace") == null)
+                    dataMap.put("namespace", getDotAllPath(outFilePath).replace("Mapper", ""));
+                else if (Consts.entityTypePath.equals(fileTypeName) && dataMap.get("") == null)
+                    dataMap.put("entityDotAllPath", getDotAllPath(outFilePath));
 
                 processData(ftlName, dataMap, outFilePath);
             });
-
         });
-
     }
 
-    private static Writer createOutPutFile(Path outFilePath){
-        Writer writer = null;
-        try {
-            if(!Files.exists(outFilePath.getParent()))
-                Files.createDirectories(outFilePath.getParent());
-            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outFilePath.toFile())));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return writer;
+    private static String getDotAllPath(Path path) {
+        return path.toString().replaceAll("\\..*", "").replaceAll(".*?com", "com").replace("\\", ".");
     }
 
     private static void processData(String ftlName,Map<String, Object> data, Path outFilePath){
@@ -60,6 +58,18 @@ public class FreeMarkerUtil {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private static Writer createOutPutFile(Path outFilePath){
+        Writer writer = null;
+        try {
+            if(!Files.exists(outFilePath.getParent()))
+                Files.createDirectories(outFilePath.getParent());
+            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outFilePath.toFile())));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return writer;
     }
 
 }

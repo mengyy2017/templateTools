@@ -2,12 +2,12 @@ package com.templateTools.controller;
 
 import com.templateTools.base.controller.BaseController;
 import com.templateTools.entity.ColumnEntity;
-import com.templateTools.entity.UserEntity;
 import com.templateTools.entity.model.CreateInfo;
 import com.templateTools.entity.TableEntity;
 import com.templateTools.entity.model.TableColsInfo;
 import com.templateTools.service.ColumnService;
 import com.templateTools.service.TableService;
+import com.templateTools.utils.FreeMarkerUtil;
 import com.templateTools.utils.HandelDataUtil;
 import com.templateTools.utils.ThreadLocalUtil;
 import io.swagger.annotations.ApiOperation;
@@ -57,7 +57,7 @@ public class DatabaseController extends BaseController {
 
     @PostMapping(value = "/getAllColumns")
     @ResponseBody
-    public List<ColumnEntity> getTableColumn(ColumnEntity columnEntity) throws Exception {
+    public List<ColumnEntity> getTableColumn(@RequestBody ColumnEntity columnEntity) throws Exception {
         try{
             return columnService.select(columnEntity);
         } catch (Exception e) {
@@ -74,13 +74,14 @@ public class DatabaseController extends BaseController {
 
             if(dbModel.getColList().size() == 0){
                 List<ColumnEntity> columnList = columnService.select(
-                        newAndSet(ColumnEntity::new, getVAndF(dbModel.getTableName(), ColumnEntity::setTableName)));
+                        newAndSet(ColumnEntity::new, getVAndF(dbModel.getTableName(), ColumnEntity::setTableName)
+                                    , getVAndF(CreateInfo.creInfoFromToken().getTableSchema(), ColumnEntity::setTableSchema)));
                 setVals(dbModel, getVAndF(columnList, TableColsInfo::setColList));
             }
 
             HandelDataUtil.convertData(dbModel);
 
-//            FreeMarkerUtil.outputFile(HandelDataUtil.convertData(dbModel));
+            FreeMarkerUtil.outputFile(HandelDataUtil.convertData(dbModel));
 
         });
         return null;

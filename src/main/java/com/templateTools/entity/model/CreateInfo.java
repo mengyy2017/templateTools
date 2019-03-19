@@ -1,6 +1,8 @@
 package com.templateTools.entity.model;
 
 import com.templateTools.utils.BuildUtil;
+import com.templateTools.utils.ThreadLocalUtil;
+
 import java.util.List;
 
 public class CreateInfo extends BuildUtil {
@@ -107,15 +109,21 @@ public class CreateInfo extends BuildUtil {
 
     @Override
     public String toString() {
-        return databaseAdress + "~" + databaseType + "~" + databasePort + "~" + databaseSchema + "~" + tableSchema + "~" + databaseUsername + "~" + databasePassword;
+        return databaseAdress + "~" + databaseType + "~" + databasePort + "~" + databaseSchema + "~"
+                + tableSchema + "~" + databaseUsername + "~" + databasePassword + "~" + codePackage;
     }
 
     public static CreateInfo toCreateInfo(String authToken) {
         String[] authTokenArr = authToken.split("~");
         return newAndSet0(CreateInfo::new, new String[]{authTokenArr[0], authTokenArr[1], authTokenArr[2]
-                ,authTokenArr[3], authTokenArr[4], authTokenArr[5], authTokenArr[6]}, CreateInfo::setDatabaseAdress
+                ,authTokenArr[3], authTokenArr[4], authTokenArr[5], authTokenArr[6], authTokenArr[7]}, CreateInfo::setDatabaseAdress
                 , CreateInfo::setDatabaseType, CreateInfo::setDatabasePort, CreateInfo::setDatabaseSchema
-                , CreateInfo::setTableSchema, CreateInfo::setDatabaseUsername, CreateInfo::setDatabasePassword);
+                , CreateInfo::setTableSchema, CreateInfo::setDatabaseUsername, CreateInfo::setDatabasePassword
+                , CreateInfo::setCodePackage);
+    }
+
+    public static CreateInfo creInfoFromToken() {
+        return CreateInfo.toCreateInfo(ThreadLocalUtil.getAuthToken());
     }
 
 }

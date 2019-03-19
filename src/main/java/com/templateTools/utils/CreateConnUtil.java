@@ -20,7 +20,7 @@ public class CreateConnUtil extends DataSource {
         try {
             String authToken;
             if (Consts.LOGIN_CHEK_URL.equals(ThreadLocalUtil.getRequestThreadLocal().get().getRequestURI()))
-                authToken = "127.0.0.1~mysql~3306~security~noneTableSchema~root~1";
+                authToken = "127.0.0.1~mysql~3306~security~noneTableSchema~root~1~noneCodePackage";
             else
                 authToken = ThreadLocalUtil.getAuthToken() == null ? ThreadLocalUtil.getCreateInfoThreadLocal().get().toString() : ThreadLocalUtil.getAuthToken();
             return popConnection(authToken);

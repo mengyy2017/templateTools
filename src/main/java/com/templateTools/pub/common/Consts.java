@@ -20,10 +20,10 @@ public class Consts {
     public static String TABLENAME = "tableName", MODULENAME = "moduleName", COLUMNLIST = "columnList",
             UPPER_CAMEL_TABLE_NAME = "upperCamelTableName", CAMEL_TABLE_NAME = "camelTableName";
 
-    public static String bussiClassiPath = basePath + File.separator + "bussi", // bussiness
-            mapperClassiPath = basePath  + File.separator + "mapper", // resource
-            actionClassiPath = basePath + File.separator + "controller", // action
-            pageClassiPath = basePath  + File.separator + "page"; // page
+    public static String bussiClassiPath = "bussi", // bussiness
+            mapperClassiPath = "mapper", // resource
+            actionClassiPath = "controller", // action
+            pageClassiPath = "page"; // page
 
     public static String entityTypePath = "entity", daoTypePath = "dao",
             serviceTypePath = "service", serviceImplTypePath = "service" + File.separator + "impl";
@@ -41,18 +41,22 @@ public class Consts {
         }
     }
 
-    public static HashMap outParamMap;
+    public static TreeMap outParamMap;
 
     static {
-        outParamMap = BuildUtil.newAndPuts(HashMap::new, HashMap::put
-                        , mapperClassiPath + "_" + XML_SUFFIX, Arrays.asList("_Mapper.ftl_@@Mapper")
-                        , actionClassiPath + "_" + JAVA_SUFFIX, Arrays.asList("_Action.ftl_@@Controller")
-                        , pageClassiPath + "_" + HTML_SUFFIX, Arrays.asList("_ListPage.ftl_list@@", "_NewPage.ftl_new@@",
-                                                        "_AddPage.ftl_add@@", "_EditPage.ftl_edit@@")
+        outParamMap = BuildUtil.newAndPuts(TreeMap::new, TreeMap::put
                         , bussiClassiPath + "_" + JAVA_SUFFIX, Arrays.asList(entityTypePath + "_Bean.ftl_@@",
                                                         serviceImplTypePath + "_ServiceImpl.ftl_@@ServiceImpl",
                                                         serviceTypePath + "_Service.ftl_I@@Service",
                                                         daoTypePath + "_Dao.ftl_@@Mapper")
+                                                        // asList每个字段是 "xxx_xxx.ftl_xxx@@xxx"
+                                                        // 以_分割 分成3份
+                                                        // [0]fileTypeName [1]ftlName  [2]outPutFileName(其中@@会被实体名替换)
+                        , mapperClassiPath + "_" + XML_SUFFIX, Arrays.asList("_Mapper.ftl_@@Mapper", "_FieldMapper.ftl_@@FieldMapper")
+                        , actionClassiPath + "_" + JAVA_SUFFIX, Arrays.asList("_Action.ftl_@@Controller")
+                        , pageClassiPath + "_" + HTML_SUFFIX, Arrays.asList("_ListPage.ftl_list@@", "_NewPage.ftl_new@@",
+                                                        "_AddPage.ftl_add@@", "_EditPage.ftl_edit@@")
+
             );
     }
 

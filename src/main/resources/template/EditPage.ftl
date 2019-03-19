@@ -27,7 +27,7 @@
     <form class="form-horizontal" id="edit${upperCamelTableName}Form">
 
     <#list columnList as column>
-        <#if column.columnKey == "PRI">
+        <#if column.columnKey! == "PRI">
         <input type="hidden" id="id" name="id" value="${r'${cur'}${upperCamelTableName}.id}">
         <#elseif column.characterMaximumLength! == "1">
         <div class="form-group col-lg-10 col-sm-12 col-xs-12">

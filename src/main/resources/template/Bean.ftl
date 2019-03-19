@@ -13,16 +13,16 @@ public class ${upperCamelTableName} implements Serializable {
 
 <#list columnList as column>
 
-	private ${column.javaType} ${column.camelColName}; // ${column.columnComment!}
+	private ${column.javaFiledType} ${column.camelColName}; // ${column.columnComment!}
 </#list>
 
 <#list columnList as column>
 	/** ${column.columnComment!} */
-	public ${column.javaType} get${column.upperCamelColName}() {
+	public ${column.javaFiledType} get${column.upperCamelColName}() {
 		return ${column.camelColName};
 	}
 	/** ${column.columnComment!} */
-	public void set${column.upperCamelColName}(${column.javaType} ${column.camelColName}) {
+	public void set${column.upperCamelColName}(${column.javaFiledType} ${column.camelColName}) {
 		this.${column.camelColName} = ${column.camelColName};
 	}
 </#list>

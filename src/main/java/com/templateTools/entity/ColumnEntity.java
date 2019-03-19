@@ -25,7 +25,7 @@ public class ColumnEntity {
     private String dataType;
 
     @Transient
-    private String javaType;
+    private String javaFiledType;
 
     private String columnComment;
 
@@ -83,12 +83,12 @@ public class ColumnEntity {
         this.dataType = dataType;
     }
 
-    public String getJavaType() {
-        return javaType;
+    public String getJavaFiledType() {
+        return javaFiledType;
     }
 
-    public void setJavaType(String javaType) {
-        this.javaType = javaType;
+    public void setJavaFiledType(String javaFiledType) {
+        this.javaFiledType = javaFiledType;
     }
 
     public String getColumnComment() {

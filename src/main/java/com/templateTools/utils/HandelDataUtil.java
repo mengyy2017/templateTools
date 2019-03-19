@@ -19,14 +19,11 @@ public class HandelDataUtil extends BuildUtil{
         List<ColumnEntity> columnList = tableColsInfo.getColList().stream().map(
                                 columnEntity -> columnEntity2Java(columnEntity)).collect(Collectors.toList());
 
-//        PropertyPlaceholderConfigurer p = new PropertyPlaceholderConfigurer();
-//        PropertyPlace
-
         Map databaseMap = BuildUtil.newAndPuts(HashMap::new, HashMap::put,
                 Consts.UPPER_CAMEL_TABLE_NAME, upperCamelTableName, Consts.COLUMNLIST, columnList,
                 Consts.TABLENAME, tableColsInfo.getTableName(), Consts.CAMEL_TABLE_NAME, camelTableName,
-                Consts.MODULENAME, tableColsInfo.getTableName().split("_")[0],
-                "namespace", "${java.namespace}"
+                Consts.MODULENAME, tableColsInfo.getTableName().split("_")[0]
+//                , "namespace", creInfoFromToken.getCodePackage()
         );
 
         return databaseMap;
@@ -40,7 +37,7 @@ public class HandelDataUtil extends BuildUtil{
 
         BuildUtil.setVals(columnEntity, getVAndF(camelColName, ColumnEntity::setCamelColName)
                                 , getVAndF(upperCamelColName, ColumnEntity::setUpperCamelColName)
-                                , getVAndF(getColumnJavaType(columnEntity), ColumnEntity::setJavaType));
+                                , getVAndF(getColumnJavaType(columnEntity), ColumnEntity::setJavaFiledType));
 
         return columnEntity;
     }
