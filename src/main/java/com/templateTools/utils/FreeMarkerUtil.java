@@ -31,11 +31,13 @@ public class FreeMarkerUtil {
                 String ftlName = ftlParamArr[1];
                 String outPutFileName = ftlParamArr[2].replace("@@", upperCamelTableName);
 
-                Path outFilePath = Paths.get(Consts.basePath + File.separator + codePackage.replace(".", "\\")).resolve(classiPath).resolve(moduleName).resolve(fileTypeName)
+                Path outFilePath = Paths.get(Consts.basePath + File.separator + codePackage.replace(".", "\\"))
+                        .resolve(classiPath)//.resolve(moduleName) // 路径去掉moduleName
+                        .resolve(fileTypeName)
                         .resolve(outPutFileName + suffix);
 
                 if (Consts.daoTypePath.equals(fileTypeName) && dataMap.get("namespace") == null)
-                    dataMap.put("namespace", getDotAllPath(outFilePath).replace("Mapper", ""));
+                    dataMap.put("namespace", getDotAllPath(outFilePath).replaceAll("Mapper", ""));
                 else if (Consts.entityTypePath.equals(fileTypeName) && dataMap.get("") == null)
                     dataMap.put("entityDotAllPath", getDotAllPath(outFilePath));
 
@@ -44,8 +46,10 @@ public class FreeMarkerUtil {
         });
     }
 
+    //  C://template\com\yishi\AuditSatusMapper.java
     private static String getDotAllPath(Path path) {
-        return path.toString().replaceAll("\\..*", "").replaceAll(".*?com", "com").replace("\\", ".");
+                            // 去掉后缀AuditStatusMapper.java                       // 替换前缀 C://template\com\xxx为 com\xxx      // com\xxx 换为 com.xxx
+        return path.toString().replaceAll("(\\w)*\\..*", "").replaceAll(".*?com", "com").replace("\\", ".");
     }
 
     private static void processData(String ftlName,Map<String, Object> data, Path outFilePath){

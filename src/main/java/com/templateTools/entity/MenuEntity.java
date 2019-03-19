@@ -1,10 +1,12 @@
 package com.templateTools.entity;
 
+import com.templateTools.base.entity.BaseEntity;
+
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Table(name = "sys_menu")
-public class SysMenuEntity {
+public class MenuEntity extends BaseEntity {
 
     @Id
     private String id;

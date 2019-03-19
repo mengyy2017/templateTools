@@ -20,7 +20,7 @@ public class Consts {
     public static String TABLENAME = "tableName", MODULENAME = "moduleName", COLUMNLIST = "columnList",
             UPPER_CAMEL_TABLE_NAME = "upperCamelTableName", CAMEL_TABLE_NAME = "camelTableName";
 
-    public static String bussiClassiPath = "bussi", // bussiness
+    public static String bussiClassiPath = "", //"bussi", // bussiness
             mapperClassiPath = "mapper", // resource
             actionClassiPath = "controller", // action
             pageClassiPath = "page"; // page
@@ -45,7 +45,7 @@ public class Consts {
 
     static {
         outParamMap = BuildUtil.newAndPuts(TreeMap::new, TreeMap::put
-                        , bussiClassiPath + "_" + JAVA_SUFFIX, Arrays.asList(entityTypePath + "_Bean.ftl_@@",
+                        , bussiClassiPath + "_" + JAVA_SUFFIX, Arrays.asList(entityTypePath + "_Bean.ftl_@@Entity",
                                                         serviceImplTypePath + "_ServiceImpl.ftl_@@ServiceImpl",
                                                         serviceTypePath + "_Service.ftl_I@@Service",
                                                         daoTypePath + "_Dao.ftl_@@Mapper")

@@ -16,14 +16,17 @@ public class HandelDataUtil extends BuildUtil{
 
         String camelTableName = convert2Camel(tableColsInfo.getTableName());
         String upperCamelTableName = convert2UpperCamel(camelTableName);
+        String moduleName = tableColsInfo.getTableName().split("_")[0];
         List<ColumnEntity> columnList = tableColsInfo.getColList().stream().map(
                                 columnEntity -> columnEntity2Java(columnEntity)).collect(Collectors.toList());
 
         Map databaseMap = BuildUtil.newAndPuts(HashMap::new, HashMap::put,
-                Consts.UPPER_CAMEL_TABLE_NAME, upperCamelTableName, Consts.COLUMNLIST, columnList,
-                Consts.TABLENAME, tableColsInfo.getTableName(), Consts.CAMEL_TABLE_NAME, camelTableName,
-                Consts.MODULENAME, tableColsInfo.getTableName().split("_")[0]
-//                , "namespace", creInfoFromToken.getCodePackage()
+
+//                Consts.UPPER_CAMEL_TABLE_NAME, upperCamelTableName, // 用来做最终输出文件的名字的 这个含有module的名字 需要去掉
+                Consts.UPPER_CAMEL_TABLE_NAME, upperCamelTableName.replace(convert2UpperCamel(moduleName), ""),
+                Consts.COLUMNLIST, columnList, Consts.MODULENAME, moduleName,
+                Consts.TABLENAME, tableColsInfo.getTableName(), Consts.CAMEL_TABLE_NAME, convert2LowerCamel(camelTableName.replace(moduleName, ""))
+
         );
 
         return databaseMap;
@@ -92,6 +95,12 @@ public class HandelDataUtil extends BuildUtil{
     public static String convert2UpperCamel(String camelName){
         char[] charArr = camelName.toCharArray();
         charArr[0] -= 32;
+        return  String.valueOf(charArr);
+    }
+
+    public static String convert2LowerCamel(String camelName){
+        char[] charArr = camelName.toCharArray();
+        charArr[0] += 32;
         return  String.valueOf(charArr);
     }
 }

@@ -1,11 +1,15 @@
 package com.templateTools.entity;
 
+import com.templateTools.base.entity.BaseEntity;
+
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.io.Serializable;
+import java.util.List;
 
 @Table(name = "sys_user")
-public class UserEntity implements Serializable {
+public class UserEntity extends BaseEntity implements Serializable {
 
     @Id
     private String id;
@@ -13,6 +17,9 @@ public class UserEntity implements Serializable {
     private String username;
 
     private String password;
+
+    @Transient
+    private List<RoleEntity> roleEntityList;
 
     public String getId() {
         return id;
@@ -38,4 +45,11 @@ public class UserEntity implements Serializable {
         this.password = password;
     }
 
+    public List<RoleEntity> getRoleEntityList() {
+        return roleEntityList;
+    }
+
+    public void setRoleEntityList(List<RoleEntity> roleEntityList) {
+        this.roleEntityList = roleEntityList;
+    }
 }

@@ -1,9 +1,5 @@
 package com.templateTools.pub.config.confModel;
 
-import com.templateTools.entity.SysMenuEntity;
-import com.templateTools.service.SysMenuService;
-import com.templateTools.utils.BuildUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.web.FilterInvocation;

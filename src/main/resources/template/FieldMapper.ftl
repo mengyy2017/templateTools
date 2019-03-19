@@ -13,16 +13,16 @@
  -->
 ${"<!--"} ${author!}		${date!} ${"-->"}
 ${"<!--"} ${tableRemark!} ${"-->"}
-<mapper namespace="${namespace}FieldMapper" >
+<mapper namespace="${namespace}field.${upperCamelTableName}FieldMapper" >
 	<!-- Result Map 数据库映射到实体类  -->
-	<resultMap id="columnResultMap" type="${entityDotAllPath}" >
+	<resultMap id="${camelTableName}ResultMap" type="${entityDotAllPath}${upperCamelTableName}Entity" >
 	<#list columnList as columnEntity>
-		<result column="${columnEntity.columnName}" property="${columnEntity.camelColName}" dataType="${columnEntity.dataType}" javaType="${columnEntity.javaFiledType}"/>	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
+		<result column="${columnEntity.columnName}" property="${columnEntity.camelColName}" jdbcType="${columnEntity.dataType?upper_case?upper_case}" javaType="${columnEntity.javaFiledType}"/>	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
 	</#list>
 	</resultMap>
   	
   	<!-- tableColumns  所有列 -->
-	<sql id="tableColumns" >
+	<sql id="${camelTableName}Columns" >
 		<trim suffix="" suffixOverrides=",">
 		<#list columnList as columnEntity>
 			${tableName}.${columnEntity.columnName}	as	${columnEntity.camelColName},	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
@@ -31,7 +31,7 @@ ${"<!--"} ${tableRemark!} ${"-->"}
 	</sql>
 	
 	<!-- insertColumns 入库列 -->
-	<sql id="insertColumns">
+	<sql id="insert${upperCamelTableName}Columns">
 		<trim suffix="" suffixOverrides=",">
 		<#list columnList as columnEntity>
 			<if test="${columnEntity.camelColName} != null " >
@@ -42,18 +42,18 @@ ${"<!--"} ${tableRemark!} ${"-->"}
 	</sql>
 	
 	<!-- insertParams  入库值 -->
-	<sql id="insertParams">
+	<sql id="insert${upperCamelTableName}Params">
 		<trim suffix="" suffixOverrides=",">
 		<#list columnList as columnEntity>
 			<if test="${columnEntity.camelColName} != null " >
-				${"#"}{${columnEntity.camelColName}, dataType=${columnEntity.dataType}},	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
+				${"#"}{${columnEntity.camelColName}, jdbcType=${columnEntity.dataType?upper_case}},	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
 			</if>
 		</#list>
 	    </trim>
 	</sql>
 	
 	<!-- insertBatchParams  批量入库列 -->
-	<sql id="insertBatchColumns">
+	<sql id="insert${upperCamelTableName}BatchColumns">
 		<trim suffix="" suffixOverrides=",">
 		<#list columnList as columnEntity>
 			${columnEntity.columnName},	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
@@ -62,21 +62,21 @@ ${"<!--"} ${tableRemark!} ${"-->"}
 	</sql>
 	
 	<!-- insertBatchParams  批量入库值 -->
-	<sql id="insertBatchParams">
+	<sql id="insert${upperCamelTableName}BatchParams">
 		<trim suffix="" suffixOverrides=",">
 		<#list columnList as columnEntity>
-			${"#"}{item.${columnEntity.camelColName}, dataType=${columnEntity.dataType}},	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
+			${"#"}{item.${columnEntity.camelColName}, jdbcType=${columnEntity.dataType?upper_case}},	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
 		</#list>
 	    </trim>
 	</sql>
 	
 	<!-- updateParams  更新列 -->
-	<sql id="updateParams">
+	<sql id="update${upperCamelTableName}Params">
 		<trim suffix="" suffixOverrides=",">
 		<#list columnList as columnEntity>
 			<#if columnEntity.columnKey! != "PRI">
 			<if test="${columnEntity.camelColName} != null " >
-				${columnEntity.columnName} = ${"#"}{${columnEntity.camelColName}, dataType=${columnEntity.dataType}},	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
+				${columnEntity.columnName} = ${"#"}{${columnEntity.camelColName}, jdbcType=${columnEntity.dataType?upper_case}},	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
 			</if>
 			</#if>
 		</#list>
@@ -84,25 +84,25 @@ ${"<!--"} ${tableRemark!} ${"-->"}
 	</sql>
 	
   	<!-- 查询条件  包含所有 -->
-	<sql id="andAll">
+	<sql id="andAll${upperCamelTableName}">
 		<trim  suffixOverrides="," >
 		<#list columnList as columnEntity>
 			<if test="${columnEntity.camelColName} != null " >
-				and ${tableName}.${columnEntity.columnName} = ${"#"}{${columnEntity.camelColName}, dataType=${columnEntity.dataType}}	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
+				and ${tableName}.${columnEntity.columnName} = ${"#"}{${columnEntity.camelColName}, jdbcType=${columnEntity.dataType?upper_case}}	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
 			</if>
 		</#list>
 		</trim>
 	</sql>
 	
 	<!-- 模糊查询判断 -->
-	<sql id="andLike">
+	<sql id="andLike${upperCamelTableName}">
 		<trim  suffixOverrides="," >
 		<#list columnList as columnEntity>
 			<if test="${columnEntity.camelColName} != null" >
 				<#if columnEntity.javaFiledType=="Integer" || columnEntity.javaFiledType=="short" || columnEntity.javaFiledType=="Long" || columnEntity.javaFiledType=="float" || columnEntity.javaFiledType=="Double" || columnEntity.javaFiledType=="Date" || columnEntity.javaFiledType=="java.math.BigDecimal">
-				and ${tableName}.${columnEntity.columnName} = ${"#"}{${columnEntity.camelColName}, dataType=${columnEntity.dataType}}	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
+				and ${tableName}.${columnEntity.columnName} = ${"#"}{${columnEntity.camelColName}, jdbcType=${columnEntity.dataType?upper_case}}	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
 				<#else>
-				and ${tableName}.${columnEntity.columnName} like CONCAT(CONCAT('%',${"#"}{${columnEntity.camelColName}, dataType=${columnEntity.dataType}}),'%' )	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
+				and ${tableName}.${columnEntity.columnName} like CONCAT(CONCAT('%',${"#"}{${columnEntity.camelColName}, jdbcType=${columnEntity.dataType?upper_case}}),'%' )	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
 				</#if>
 		    </if>
 		</#list>
@@ -110,30 +110,30 @@ ${"<!--"} ${tableRemark!} ${"-->"}
 	</sql>
 	
 	<!-- 删除条件  包含所有 -->
-	<sql id="deleteAll">
+	<sql id="deleteAll${upperCamelTableName}">
 		<trim  suffixOverrides="," >
 		<#list columnList as columnEntity>
 			<if test="${columnEntity.camelColName} != null " >
-				and ${columnEntity.columnName} = ${"#"}{${columnEntity.camelColName}, dataType=${columnEntity.dataType}}	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
+				and ${columnEntity.columnName} = ${"#"}{${columnEntity.camelColName}, jdbcType=${columnEntity.dataType?upper_case}}	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
 			</if>
 		</#list>
 		</trim>
 	</sql>
 	
 	<!-- primary key  没有别名的主键 列名称 ,视图获取不到主键 需要设置（用户删除、更新） -->
-	<sql id="noPrefixKey">
+	<sql id="noPrefixKey${upperCamelTableName}">
 		<#list columnList as columnEntity>
 		<#if columnEntity.columnKey! == "PRI">
-		and ${columnEntity.columnName} = ${"#"}{${columnEntity.camelColName}, dataType=${columnEntity.dataType}}	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
+		and ${columnEntity.columnName} = ${"#"}{${columnEntity.camelColName}, jdbcType=${columnEntity.dataType?upper_case}}	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
 	    </#if>
 		</#list>
 	</sql>
 	
 	<!-- primaryKey  主键 列名称 ,视图获取不到主键 需要设置 -->
-	<sql id="primaryKey">
+	<sql id="primaryKey${upperCamelTableName}">
 		<#list columnList as columnEntity>
 		<#if columnEntity.columnKey! == "PRI">
-		and ${tableName}.${columnEntity.columnName} = ${"#"}{${columnEntity.camelColName}, dataType=${columnEntity.dataType}}	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
+		and ${tableName}.${columnEntity.columnName} = ${"#"}{${columnEntity.camelColName}, jdbcType=${columnEntity.dataType?upper_case}}	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
 	    </#if>
 		</#list>
 	</sql>

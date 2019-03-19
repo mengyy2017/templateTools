@@ -13,77 +13,63 @@
  -->
 ${"<!--"} ${author!}		${date!} ${"-->"}
 ${"<!--"} ${tableRemark!} ${"-->"}
-<mapper namespace="${namespace}Mapper" >
+<mapper namespace="${namespace}${upperCamelTableName}Mapper" >
   	<!-- 添加,插入记录   -->
-	<insert id="insert" parameterType="${entityDotAllPath}" >
-	    insert into ${tableName} (<include refid="${namespace}FieldMapper.insertColumns"/>) values(<include refid="${namespace}FieldMapper.insertParams"/>)
+	<insert id="insert${upperCamelTableName}" parameterType="${entityDotAllPath}${upperCamelTableName}Entity" >
+	    insert into ${tableName} (<include refid="${namespace}field.${upperCamelTableName}FieldMapper.insert${upperCamelTableName}Columns"/>) values(<include refid="${namespace}field.${upperCamelTableName}FieldMapper.insert${upperCamelTableName}Params"/>)
 	</insert>
 	
 	<!-- 删除,主键删除   -->
-	<delete id="deleteByPrimaryKey" parameterType="${entityDotAllPath}">
-	    delete from ${tableName} where 1=1 <include refid="${namespace}FieldMapper.noPrefixKey"/>
+	<delete id="delete${upperCamelTableName}ByPrimaryKey" parameterType="${entityDotAllPath}${upperCamelTableName}Entity">
+	    delete from ${tableName} where 1=1 <include refid="${namespace}field.${upperCamelTableName}FieldMapper.noPrefixKey${upperCamelTableName}"/>
 	</delete>
 	
 	<!-- 删除,实体删除   -->
-	<delete id="deleteByEntity" parameterType="${entityDotAllPath}">
-	    delete from ${tableName} where 1=1 <include refid="${namespace}FieldMapper.deleteAll"/>
+	<delete id="delete${upperCamelTableName}ByEntity" parameterType="${entityDotAllPath}${upperCamelTableName}Entity">
+	    delete from ${tableName} where 1=1 <include refid="${namespace}field.${upperCamelTableName}FieldMapper.deleteAll${upperCamelTableName}"/>
 	</delete>
 	
 	<!-- 修改,主键更新  -->
-	<update id="updateByPrimaryKey" parameterType="${entityDotAllPath}" >
+	<update id="update${upperCamelTableName}ByPrimaryKey" parameterType="${entityDotAllPath}${upperCamelTableName}Entity" >
 		update ${tableName}
-			<set><include refid="${namespace}FieldMapper.updateParams"/></set>
-			where 1=1 <include refid="${namespace}FieldMapper.noPrefixKey"/>
+			<set><include refid="${namespace}field.${upperCamelTableName}FieldMapper.update${upperCamelTableName}Params"/></set>
+			where 1=1 <include refid="${namespace}field.${upperCamelTableName}FieldMapper.noPrefixKey${upperCamelTableName}"/>
 	</update>
 	
 	<!-- 查询,实体查询   -->
-	<select id="selectByEntry" resultMap="${namespace}FieldMapper.columnResultMap" parameterType="${entityDotAllPath}">
-		select <include refid="${namespace}FieldMapper.tableColumns"/> 
+	<select id="select${upperCamelTableName}ByEntry" resultMap="${namespace}field.${upperCamelTableName}FieldMapper.${camelTableName}ResultMap" parameterType="${entityDotAllPath}${upperCamelTableName}Entity">
+		select <include refid="${namespace}field.${upperCamelTableName}FieldMapper.${camelTableName}Columns"/>
 		from ${tableName} ${tableName} 
-		where 1=1 and ${tableName}.isdel=0 <include refid="${namespace}FieldMapper.andAll"/>
+		where 1=1 and ${tableName}.isdel=0 <include refid="${namespace}field.${upperCamelTableName}FieldMapper.andAll${upperCamelTableName}"/>
 	</select>
 	
 	<!-- 查询,ID查询   -->
-	<select id="selectById" resultMap="${namespace}FieldMapper.columnResultMap" parameterType="java.lang.String">
-		select <include refid="${namespace}FieldMapper.tableColumns"/> 
+	<select id="select${upperCamelTableName}ById" resultMap="${namespace}field.${upperCamelTableName}FieldMapper.${camelTableName}ResultMap" parameterType="java.lang.String">
+		select <include refid="${namespace}field.${upperCamelTableName}FieldMapper.${camelTableName}Columns"/>
 		from ${tableName} ${tableName} 
-		where 1=1 and ${tableName}.isdel=0 <include refid="${namespace}FieldMapper.primaryKey"/>
+		where 1=1 and ${tableName}.isdel=0 <include refid="${namespace}field.${upperCamelTableName}FieldMapper.primaryKey${upperCamelTableName}"/>
 	</select>
 	
-	<!-- 查询,Map参数查询 -->
-	<select id="selectByMap" resultMap="${namespace}FieldMapper.columnResultMap" parameterType="com.tw.base.dto.ParamDTO">
-		select <include refid="${namespace}FieldMapper.tableColumns"/>
-		from ${tableName} ${tableName} 
-		where 1=1 and ${tableName}.isdel=0 <include refid="${namespace}FieldMapper.andAll"/>
-	</select>
-	
-	<!-- 分页查询,ParamDTO参数查询 -->
-	<select id="queryPage" resultMap="${namespace}FieldMapper.columnResultMap" parameterType="com.tw.base.dto.ParamDTO">
-		select <include refid="${namespace}FieldMapper.tableColumns"/>
-		$from$ ${tableName} ${tableName} 
-		where 1=1 and ${tableName}.isdel=0 <include refid="${namespace}FieldMapper.andLike"/>
-	</select>
-  
   	<!-- 批量插入 mysql -->
-  	<insert id="insertBatch_mysql" parameterType="java.util.List">
-  		insert into ${tableName} (<include refid="${namespace}FieldMapper.insertBatchColumns"/>) 
+  	<insert id="insert${upperCamelTableName}Batch_mysql" parameterType="java.util.List">
+  		insert into ${tableName} (<include refid="${namespace}field.${upperCamelTableName}FieldMapper.insert${upperCamelTableName}BatchColumns"/>)
   		values
   		<foreach collection="list" item="item" index="index" separator=",">
-  			(<include refid="${namespace}FieldMapper.insertBatchParams"/>)
+  			(<include refid="${namespace}field.${upperCamelTableName}FieldMapper.insert${upperCamelTableName}BatchParams"/>)
   		</foreach>
   	</insert>
   	<!-- 批量插入 oracle -->
-  	<insert id="insertBatch_oracle" parameterType="java.util.List" useGeneratedKeys="false">
+  	<insert id="insert${upperCamelTableName}Batch_oracle" parameterType="java.util.List" useGeneratedKeys="false">
   		insert all
   		<foreach collection="list" item="item" index="index">
-  		into ${tableName} (<include refid="${namespace}FieldMapper.insertBatchColumns"/>) 
+  		into ${tableName} (<include refid="${namespace}field.${upperCamelTableName}FieldMapper.insert${upperCamelTableName}BatchColumns"/>)
   		values 
-  			(<include refid="${namespace}FieldMapper.insertBatchParams"/>)
+  			(<include refid="${namespace}field.${upperCamelTableName}FieldMapper.insert${upperCamelTableName}BatchParams"/>)
   		</foreach>
   		select 1 from dual
   	</insert>
   	<!-- 批量删除 -->
-  	<delete id="deleteBatch" parameterType="java.util.List">
+  	<delete id="delete${upperCamelTableName}Batch" parameterType="java.util.List">
   		delete from ${tableName} where
   		<#list columnList as columnEntity>
 		<#if columnEntity.columnKey! == "PRI">
@@ -96,14 +82,14 @@ ${"<!--"} ${tableRemark!} ${"-->"}
   	</delete>
   	
   	<!-- 逻辑删除  -->
-	<update id="logicDelete" parameterType="${entityDotAllPath}" >
+	<update id="logic${upperCamelTableName}Delete" parameterType="${entityDotAllPath}${upperCamelTableName}Entity" >
 		update ${tableName}
 			set isdelete = 1 	<!-- 逻辑删除 -->
-		where 1=1 <include refid="${namespace}FieldMapper.noPrefixKey"/>
+		where 1=1 <include refid="${namespace}field.${upperCamelTableName}FieldMapper.noPrefixKey${upperCamelTableName}"/>
 	</update>
 	
   	<!-- 批量逻辑删除 -->
-  	<update id="logicDeleteBatch" parameterType="java.util.List" >
+  	<update id="logic${upperCamelTableName}DeleteBatch" parameterType="java.util.List" >
 		update ${tableName}
 			set isdelete = 1 	<!-- 逻辑删除 -->
 		where 

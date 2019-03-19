@@ -9,7 +9,7 @@ import java.io.Serializable;
  * @author ${author!}
  * @date ${date!}
  */
-public class ${upperCamelTableName} implements Serializable {
+public class ${upperCamelTableName}Entity implements Serializable {
 
 <#list columnList as column>
 
