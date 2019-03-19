@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class FreeMarkerUtil {
 
-    public static void outputFile(Map<String, Object> dataMap){
+    public static void outputFile(Map<String, Object> dataMap) {
 
         String codePackage = CreateInfo.creInfoFromToken().getCodePackage();
 
@@ -41,7 +41,11 @@ public class FreeMarkerUtil {
                 else if (Consts.entityTypePath.equals(fileTypeName) && dataMap.get("") == null)
                     dataMap.put("entityDotAllPath", getDotAllPath(outFilePath));
 
-                processData(ftlName, dataMap, outFilePath);
+                try {
+                    processData(ftlName, dataMap, outFilePath);
+                } catch (Exception e) {
+                    throw new RuntimeException(e.getMessage());
+                }
             });
         });
     }
@@ -52,27 +56,19 @@ public class FreeMarkerUtil {
         return path.toString().replaceAll("(\\w)*\\..*", "").replaceAll(".*?com", "com").replace("\\", ".");
     }
 
-    private static void processData(String ftlName,Map<String, Object> data, Path outFilePath){
-        try {
+    private static void processData(String ftlName,Map<String, Object> data, Path outFilePath) throws Exception {
             if(FreeMarkerUtil.class.getResource(Consts.fileSparator + "template" + Consts.fileSparator + ftlName) != null){
                 Writer writer = createOutPutFile(outFilePath);
                 Consts.configuration.getTemplate(ftlName).process(data, writer);
                 writer.flush(); writer.close();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
-    private static Writer createOutPutFile(Path outFilePath){
+    private static Writer createOutPutFile(Path outFilePath) throws IOException {
         Writer writer = null;
-        try {
             if(!Files.exists(outFilePath.getParent()))
                 Files.createDirectories(outFilePath.getParent());
             writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outFilePath.toFile())));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         return writer;
     }
 

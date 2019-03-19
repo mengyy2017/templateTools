@@ -81,7 +81,11 @@ public class DatabaseController extends BaseController {
 
             HandelDataUtil.convertData(dbModel);
 
-            FreeMarkerUtil.outputFile(HandelDataUtil.convertData(dbModel));
+            try {
+                FreeMarkerUtil.outputFile(HandelDataUtil.convertData(dbModel));
+            } catch (Exception e) {
+
+            }
 
         });
         return null;

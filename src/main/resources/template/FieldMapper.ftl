@@ -17,7 +17,7 @@ ${"<!--"} ${tableRemark!} ${"-->"}
 	<!-- Result Map 数据库映射到实体类  -->
 	<resultMap id="${camelTableName}ResultMap" type="${entityDotAllPath}${upperCamelTableName}Entity" >
 	<#list columnList as columnEntity>
-		<result column="${columnEntity.columnName}" property="${columnEntity.camelColName}" jdbcType="${columnEntity.dataType?upper_case?upper_case}" javaType="${columnEntity.javaFiledType}"/>	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
+		<result column="${columnEntity.columnName}" property="${columnEntity.camelColName}" jdbcType="${columnEntity.dataType}" javaType="${columnEntity.javaFiledType}"/>	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
 	</#list>
 	</resultMap>
   	
@@ -46,7 +46,7 @@ ${"<!--"} ${tableRemark!} ${"-->"}
 		<trim suffix="" suffixOverrides=",">
 		<#list columnList as columnEntity>
 			<if test="${columnEntity.camelColName} != null " >
-				${"#"}{${columnEntity.camelColName}, jdbcType=${columnEntity.dataType?upper_case}},	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
+				${"#"}{${columnEntity.camelColName}, jdbcType=${columnEntity.dataType}},	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
 			</if>
 		</#list>
 	    </trim>
@@ -65,7 +65,7 @@ ${"<!--"} ${tableRemark!} ${"-->"}
 	<sql id="insert${upperCamelTableName}BatchParams">
 		<trim suffix="" suffixOverrides=",">
 		<#list columnList as columnEntity>
-			${"#"}{item.${columnEntity.camelColName}, jdbcType=${columnEntity.dataType?upper_case}},	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
+			${"#"}{item.${columnEntity.camelColName}, jdbcType=${columnEntity.dataType}},	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
 		</#list>
 	    </trim>
 	</sql>
@@ -76,7 +76,7 @@ ${"<!--"} ${tableRemark!} ${"-->"}
 		<#list columnList as columnEntity>
 			<#if columnEntity.columnKey! != "PRI">
 			<if test="${columnEntity.camelColName} != null " >
-				${columnEntity.columnName} = ${"#"}{${columnEntity.camelColName}, jdbcType=${columnEntity.dataType?upper_case}},	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
+				${columnEntity.columnName} = ${"#"}{${columnEntity.camelColName}, jdbcType=${columnEntity.dataType}},	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
 			</if>
 			</#if>
 		</#list>
@@ -88,7 +88,7 @@ ${"<!--"} ${tableRemark!} ${"-->"}
 		<trim  suffixOverrides="," >
 		<#list columnList as columnEntity>
 			<if test="${columnEntity.camelColName} != null " >
-				and ${tableName}.${columnEntity.columnName} = ${"#"}{${columnEntity.camelColName}, jdbcType=${columnEntity.dataType?upper_case}}	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
+				and ${tableName}.${columnEntity.columnName} = ${"#"}{${columnEntity.camelColName}, jdbcType=${columnEntity.dataType}}	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
 			</if>
 		</#list>
 		</trim>
@@ -100,9 +100,9 @@ ${"<!--"} ${tableRemark!} ${"-->"}
 		<#list columnList as columnEntity>
 			<if test="${columnEntity.camelColName} != null" >
 				<#if columnEntity.javaFiledType=="Integer" || columnEntity.javaFiledType=="short" || columnEntity.javaFiledType=="Long" || columnEntity.javaFiledType=="float" || columnEntity.javaFiledType=="Double" || columnEntity.javaFiledType=="Date" || columnEntity.javaFiledType=="java.math.BigDecimal">
-				and ${tableName}.${columnEntity.columnName} = ${"#"}{${columnEntity.camelColName}, jdbcType=${columnEntity.dataType?upper_case}}	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
+				and ${tableName}.${columnEntity.columnName} = ${"#"}{${columnEntity.camelColName}, jdbcType=${columnEntity.dataType}}	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
 				<#else>
-				and ${tableName}.${columnEntity.columnName} like CONCAT(CONCAT('%',${"#"}{${columnEntity.camelColName}, jdbcType=${columnEntity.dataType?upper_case}}),'%' )	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
+				and ${tableName}.${columnEntity.columnName} like CONCAT(CONCAT('%',${"#"}{${columnEntity.camelColName}, jdbcType=${columnEntity.dataType}}),'%' )	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
 				</#if>
 		    </if>
 		</#list>
@@ -114,7 +114,7 @@ ${"<!--"} ${tableRemark!} ${"-->"}
 		<trim  suffixOverrides="," >
 		<#list columnList as columnEntity>
 			<if test="${columnEntity.camelColName} != null " >
-				and ${columnEntity.columnName} = ${"#"}{${columnEntity.camelColName}, jdbcType=${columnEntity.dataType?upper_case}}	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
+				and ${columnEntity.columnName} = ${"#"}{${columnEntity.camelColName}, jdbcType=${columnEntity.dataType}}	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
 			</if>
 		</#list>
 		</trim>
@@ -124,7 +124,7 @@ ${"<!--"} ${tableRemark!} ${"-->"}
 	<sql id="noPrefixKey${upperCamelTableName}">
 		<#list columnList as columnEntity>
 		<#if columnEntity.columnKey! == "PRI">
-		and ${columnEntity.columnName} = ${"#"}{${columnEntity.camelColName}, jdbcType=${columnEntity.dataType?upper_case}}	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
+		and ${columnEntity.columnName} = ${"#"}{${columnEntity.camelColName}, jdbcType=${columnEntity.dataType}}	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
 	    </#if>
 		</#list>
 	</sql>
@@ -133,7 +133,7 @@ ${"<!--"} ${tableRemark!} ${"-->"}
 	<sql id="primaryKey${upperCamelTableName}">
 		<#list columnList as columnEntity>
 		<#if columnEntity.columnKey! == "PRI">
-		and ${tableName}.${columnEntity.columnName} = ${"#"}{${columnEntity.camelColName}, jdbcType=${columnEntity.dataType?upper_case}}	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
+		and ${tableName}.${columnEntity.columnName} = ${"#"}{${columnEntity.camelColName}, jdbcType=${columnEntity.dataType}}	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
 	    </#if>
 		</#list>
 	</sql>

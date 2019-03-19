@@ -80,7 +80,14 @@ public class ColumnEntity {
     }
 
     public void setDataType(String dataType) {
-        this.dataType = dataType;
+        switch (dataType) {
+            case "int":
+                this.dataType = "INTEGER";
+                break;
+            default:
+                this.dataType = dataType.toUpperCase();
+                break;
+        }
     }
 
     public String getJavaFiledType() {

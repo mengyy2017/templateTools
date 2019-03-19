@@ -1,6 +1,7 @@
 package com.templateTools.pub.config.confModel;
 
 import com.templateTools.entity.MenuEntity;
+import com.templateTools.entity.RoleEntity;
 import com.templateTools.entity.UserEntity;
 import com.templateTools.entity.model.UserSecurity;
 import com.templateTools.service.MenuService;
@@ -12,10 +13,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class AccountDetailsService extends BuildUtil implements UserDetailsService {
@@ -33,7 +34,8 @@ public class AccountDetailsService extends BuildUtil implements UserDetailsServi
         UserEntity userEntity = userService.selectUserAndRole(newAndSet(UserEntity::new, getVAndF(username, UserEntity::setUsername)));
 //        UserEntity userEntity = userService.selectOne(newAndSet(UserEntity::new, getVAndF(username, UserEntity::setUsername)));
 
-        UserSecurity userSecurity = new UserSecurity(userEntity.getUsername(), userEntity.getPassword(),  Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN")));
+        UserSecurity userSecurity = new UserSecurity(userEntity.getUsername(), userEntity.getPassword()
+                                        , userEntity.getRoleEntityList().stream().map(RoleEntity::getRoleCode).map(SimpleGrantedAuthority::new).collect(Collectors.toList()));
 
         setUrlPermission();
 
