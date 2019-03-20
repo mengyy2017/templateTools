@@ -1,5 +1,6 @@
 package com.templateTools.controller;
 
+import com.templateTools.base.controller.BaseController;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -8,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping(value = "/account")
-public class AccountController {
+public class AccountController extends BaseController {
 
     @RequestMapping("/login")
     public String login() {

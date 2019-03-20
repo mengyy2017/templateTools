@@ -1,6 +1,7 @@
 package com.templateTools.controller;
 
 import com.templateTools.base.controller.BaseController;
+import com.templateTools.base.entity.SuccResp;
 import com.templateTools.entity.ColumnEntity;
 import com.templateTools.entity.model.CreateInfo;
 import com.templateTools.entity.TableEntity;
@@ -40,6 +41,8 @@ public class DatabaseController extends BaseController {
         example.createCriteria().andEqualTo("tableSchema", createInfo.getTableSchema());
 
         List<TableEntity> list = tableService.selectByExample(example);
+
+//        oneConstr(SuccResp::new, "123");
 
         return list;
     }

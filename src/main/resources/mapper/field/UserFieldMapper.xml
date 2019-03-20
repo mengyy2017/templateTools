@@ -14,7 +14,7 @@
 <!-- 		 -->
 <!--  -->
 <mapper namespace="com.templateTools.dao.field.userFieldMapper" >
-	<!-- Result Map 数据库映射到实体类  -->
+	<!-- Resp Map 数据库映射到实体类  -->
 	<resultMap id="userResultMap" type="com.templateTools.entity.UserEntity" >
 		<result column="id" property="id" jdbcType="VARCHAR" javaType="String"/>	<!--  -->
 		<result column="username" property="username" jdbcType="VARCHAR" javaType="String"/>	<!--  -->

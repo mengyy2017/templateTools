@@ -14,7 +14,7 @@
 ${"<!--"} ${author!}		${date!} ${"-->"}
 ${"<!--"} ${tableRemark!} ${"-->"}
 <mapper namespace="${namespace}field.${camelTableName}FieldMapper" >
-	<!-- Result Map 数据库映射到实体类  -->
+	<!-- Resp Map 数据库映射到实体类  -->
 	<resultMap id="${camelTableName}ResultMap" type="${entityDotAllPath}${upperCamelTableName}Entity" >
 	<#list columnList as columnEntity>
 		<result column="${columnEntity.columnName}" property="${columnEntity.camelColName}" jdbcType="${columnEntity.dataType}" javaType="${columnEntity.javaFiledType}"/>	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
