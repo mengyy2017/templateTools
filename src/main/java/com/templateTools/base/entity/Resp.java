@@ -5,6 +5,13 @@ import java.util.HashMap;
 
 public class Resp extends HashMap<String,Object>{
 
+    public Resp() {
+    }
+
+    public Resp(Object data) {
+        this.put("data", data);
+    }
+
     public static Resp instance(){
         return new Resp();
     }

@@ -9,19 +9,24 @@ public class BaseController extends BuildUtil {
 
     private static ThreadLocal<Resp> respLocal = new ThreadLocal();
 
-    private static ThreadLocal<SuccResp> succLocal = new ThreadLocal();
-
-    private static ThreadLocal<FailResp> failLocal = new ThreadLocal();
-
     Resp succResp(Object data) {
-        if (succLocal.get() == null) {
+        if (respLocal.get() == null || respLocal.get() instanceof FailResp) {
             SuccResp succResp = oneConstr(SuccResp::new, data);
-            succLocal.set(succResp);
+            respLocal.set(succResp);
             return succResp;
         } else {
-            return succLocal.get();
+            return respLocal.get();
         }
+    }
 
+    Resp failResp(Object data) {
+        if (respLocal.get() == null || respLocal.get() instanceof SuccResp) {
+            FailResp failResp = oneConstr(FailResp::new, data);
+            respLocal.set(failResp);
+            return failResp;
+        } else {
+            return respLocal.get();
+        }
     }
 
 
