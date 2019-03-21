@@ -7,26 +7,25 @@ import com.templateTools.utils.BuildUtil;
 
 public class BaseController extends BuildUtil {
 
-    private static ThreadLocal<Resp> respLocal = new ThreadLocal();
+    public static ThreadLocal<Resp> respResult = new ThreadLocal();
 
-    Resp succResp(Object data) {
-        if (respLocal.get() == null || respLocal.get() instanceof FailResp) {
+    Resp mkSuccResp(Object data) {
+        if (respResult.get() == null || respResult.get() instanceof FailResp) {
             SuccResp succResp = oneConstr(SuccResp::new, data);
-            respLocal.set(succResp);
+            // setVals0(respResult, getVAndF0(data, ThreadLocal::set));
+            respResult.set(succResp);
             return succResp;
-        } else {
-            return respLocal.get();
-        }
+        } else
+            return respResult.get().setData(data);
     }
 
-    Resp failResp(Object data) {
-        if (respLocal.get() == null || respLocal.get() instanceof SuccResp) {
+    Resp mkFailResp(Object data) {
+        if (respResult.get() == null || respResult.get() instanceof SuccResp) {
             FailResp failResp = oneConstr(FailResp::new, data);
-            respLocal.set(failResp);
+            respResult.set(failResp);
             return failResp;
-        } else {
-            return respLocal.get();
-        }
+        } else
+            return respResult.get().setData(data);
     }
 
 
