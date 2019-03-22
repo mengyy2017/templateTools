@@ -4,29 +4,30 @@ import com.templateTools.base.entity.FailResp;
 import com.templateTools.base.entity.Resp;
 import com.templateTools.base.entity.SuccResp;
 import com.templateTools.utils.BuildUtil;
+import com.templateTools.utils.RespUtil;
 
 public class BaseController extends BuildUtil {
 
-    public static ThreadLocal<Resp> respResult = new ThreadLocal();
+    public static RespUtil respResult = new RespUtil();
 
-    Resp mkSuccResp(Object data) {
-        if (respResult.get() == null || respResult.get() instanceof FailResp) {
-            SuccResp succResp = oneConstr(SuccResp::new, data);
-            // setVals0(respResult, getVAndF0(data, ThreadLocal::set));
-            respResult.set(succResp);
-            return succResp;
-        } else
-            return respResult.get().setData(data);
+    public Resp mkSuccResp(Object data) {
+        Resp succResp = respResult.get();
+
+        if (succResp instanceof FailResp)
+            return respResult.mkEmpSuccResp().setRespData(data);
+        else
+            return succResp.setRespData(data);
+
     }
 
-    Resp mkFailResp(Object data) {
-        if (respResult.get() == null || respResult.get() instanceof SuccResp) {
-            FailResp failResp = oneConstr(FailResp::new, data);
-            respResult.set(failResp);
-            return failResp;
-        } else
-            return respResult.get().setData(data);
-    }
+    public Resp mkFailResp(String msg) {
+        Resp failResp = respResult.get();
 
+        if (failResp instanceof SuccResp)
+            return respResult.mkFailSuccResp(msg);
+        else
+            return failResp.setMsg(msg);
+
+    }
 
 }

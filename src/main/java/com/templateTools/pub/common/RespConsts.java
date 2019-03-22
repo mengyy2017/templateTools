@@ -10,21 +10,26 @@ package com.templateTools.pub.common;
  * @author
  *
  */
-public interface ResultConsts {
+public class RespConsts {
 
     /**
      * 返回结果中的error code标识
      */
-    public static final String ERROR_CODE = "error_code";
+    public static final String CODE = "code";
     /**
      * 返回结果中的错误信息标识
      */
-    public static final String ERROR_MSG = "error_msg";
+    public static final String MSG = "msg";
+
+    /**
+     * 处理成功的默认信息
+     */
+    public static final String MSG_SUCCESS = "success";
 
     /**
      * 处理成功
      */
-    public static final int CODE_SUCCESS = 200;
+    public static final int CODE_OK = 200;
 
     /**
      * 请求错误
@@ -55,9 +60,4 @@ public interface ResultConsts {
      */
     public static final int CODE_404 = 404;
 
-
-    /**
-     * 处理成功的默认信息
-     */
-    public static final String MSG_OK = "success";
 }

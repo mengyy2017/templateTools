@@ -1,6 +1,7 @@
 package com.templateTools.controller;
 
 import com.templateTools.base.controller.BaseController;
+import com.templateTools.base.entity.Resp;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -18,8 +19,8 @@ public class AccountController extends BaseController {
 
     @RequestMapping("/index")
     @ResponseBody
-    public String index() {
-        return "success";
+    public Resp<String> index() {
+        return respResult.get();
     }
 
     @RequestMapping("/logout")

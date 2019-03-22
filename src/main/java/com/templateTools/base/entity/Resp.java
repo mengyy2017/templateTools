@@ -1,51 +1,40 @@
 package com.templateTools.base.entity;
 
-import com.templateTools.pub.common.ResultConsts;
+import com.templateTools.pub.common.RespConsts;
 import java.util.HashMap;
 
-public class Resp extends HashMap<String,Object>{
+public class Resp<T> extends HashMap<String,Object>{
 
     public Resp() {
     }
 
-    public Resp(Object data) {
-        this.put("data", data);
+    public Resp(T respData) {
+        this.put("respData", respData);
     }
 
-    public static Resp instance(){
-        return new Resp();
+    public T getRespData() {
+        Object respData = this.get("respData");
+        if(respData != null)
+            return (T) respData;
+        else
+            return null;
     }
 
-    public Resp fail(){
-        return fail(ResultConsts.CODE_ERR);
-    }
-    public Resp fail(int code){
-        return this.setErrorCode(code);
-    }
-
-    public Resp success(){
-        return this.setErrorCode(ResultConsts.CODE_SUCCESS);
-    }
-
-    public Resp setErrorCode(int code){
-        this.put(ResultConsts.ERROR_CODE,code);
+    public Resp setRespData(T respData) {
+        this.put("respData", respData);
         return this;
     }
 
-    public Resp setErrorMessage(String errorMessage) {
-        this.put(ResultConsts.ERROR_MSG, errorMessage);
+    public Resp setCode(int code) {
+        this.put(RespConsts.CODE, code);
         return this;
     }
 
-    public Object getData() {
-        return this.get("data");
-    }
-
-    public Resp setData(Object data) {
-        this.put("data", data);
-
+    public Resp setMsg(String msg) {
+        this.put(RespConsts.MSG, msg);
         return this;
     }
+
 
     public Resp addAttr(String key, Object value) {
         this.put(key,value);

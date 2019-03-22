@@ -50,7 +50,7 @@ public class AccountDetailsService extends BuildUtil implements UserDetailsServi
             LinkedList<String> linkedList = sysMenuList.parallelStream().collect(LinkedList::new, (l, e) ->
             { l.add(e.getUrl()); l.add(e.getPermission()); }, (l1, l2) -> l1.addAll(l2));
 
-            MetadataSource.sysMenuPerMap = BuildUtil.putsValsLoop(new HashMap<>(), HashMap<String, String>::put, linkedList);
+            MetadataSource.sysMenuPerMap = putsValsLoop(new HashMap<>(), HashMap<String, String>::put, linkedList);
 
         }
     }

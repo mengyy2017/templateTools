@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
-public class Consts {
+public class Consts extends BuildUtil {
 
     public static String LOGIN_CHEK_URL = "/j_logi";
 
@@ -44,7 +44,7 @@ public class Consts {
     public static TreeMap outParamMap;
 
     static {
-        outParamMap = BuildUtil.newAndPuts(TreeMap::new, TreeMap::put
+        outParamMap = newAndPuts(TreeMap::new, TreeMap::put
                         , bussiClassiPath + "_" + JAVA_SUFFIX, Arrays.asList(entityTypePath + "_Bean.ftl_@@Entity",
                                                         serviceImplTypePath + "_ServiceImpl.ftl_@@ServiceImpl",
                                                         serviceTypePath + "_Service.ftl_I@@Service",

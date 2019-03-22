@@ -21,6 +21,10 @@ public class BuildUtil {
         return function.apply(t);
     }
 
+    public static <O> O zeroConstr(Supplier supplier){
+        return (O) supplier.get();
+    }
+
     public static <O> O newAndSet0(Supplier<O> supplier, String[] valueArr , SSetter<O>...setter){
         O o = supplier.get();
         for(int i = 0; i < setter.length; i++){

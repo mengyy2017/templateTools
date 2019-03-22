@@ -1,7 +1,7 @@
 package com.templateTools.controller;
 
 import com.templateTools.base.controller.BaseController;
-import com.templateTools.base.entity.SuccResp;
+import com.templateTools.base.entity.Resp;
 import com.templateTools.entity.ColumnEntity;
 import com.templateTools.entity.model.CreateInfo;
 import com.templateTools.entity.TableEntity;
@@ -32,7 +32,7 @@ public class DatabaseController extends BaseController {
     @ApiOperation(value = "初始化连接信息并查询所有表", notes = "根据信息初始化连接并查询连接内的所有表")
     @PostMapping(value = "/setCreateInfo")
     @ResponseBody
-    public List<TableEntity> setCreateInfo(@RequestBody CreateInfo createInfo, HttpServletResponse response){
+    public Resp<List<TableEntity>> setCreateInfo(@RequestBody CreateInfo createInfo, HttpServletResponse response){
 
         ThreadLocalUtil.getCreateInfoThreadLocal().set(createInfo);
         response.addCookie(new Cookie("authToken", createInfo.toString()));
@@ -40,38 +40,46 @@ public class DatabaseController extends BaseController {
         Example example = new Example(TableEntity.class);
         example.createCriteria().andEqualTo("tableSchema", createInfo.getTableSchema());
 
-        List<TableEntity> list = tableService.selectByExample(example);
+        try {
+            return mkSuccResp(tableService.selectByExample(example));
+        } catch (Exception e) {
+            mkFailResp(e.getMessage());
+        }
 
-//        oneConstr(SuccResp::new, "123");
-
-        return list;
+        return respResult.get();
     }
 
     @GetMapping(value = "/getAllTables")
     @ResponseBody
-    public List<TableEntity> getAllTables(){
+    public Resp<List<TableEntity>> getAllTables(){
 
         Example example = new Example(TableEntity.class);
 
         example.createCriteria().andEqualTo("tableSchema", "wxj");
 
-        return tableService.selectByExample(example);
+        try {
+            return mkSuccResp(tableService.selectByExample(example));
+        } catch (Exception e) {
+            mkFailResp(e.getMessage());
+        }
+
+        return respResult.get();
     }
 
     @PostMapping(value = "/getAllColumns")
     @ResponseBody
-    public List<ColumnEntity> getTableColumn(@RequestBody ColumnEntity columnEntity) throws Exception {
+    public Resp<List<ColumnEntity>> getTableColumn(@RequestBody ColumnEntity columnEntity) throws Exception {
         try{
-            return columnService.select(columnEntity);
+            return mkSuccResp(columnService.select(columnEntity));
         } catch (Exception e) {
-            // throw new Exception("连接超时");
+            mkFailResp(e.getMessage());
         }
-        return null;
+        return respResult.get();
     }
 
     @PostMapping(value = "/createCode")
     @ResponseBody
-    public Map createCode (@RequestBody List<TableColsInfo> tableColsInfoList){
+    public Resp createCode (@RequestBody List<TableColsInfo> tableColsInfoList){
 
         tableColsInfoList.stream().forEach(dbModel -> {
 
@@ -87,11 +95,10 @@ public class DatabaseController extends BaseController {
             try {
                 FreeMarkerUtil.outputFile(HandelDataUtil.convertData(dbModel));
             } catch (Exception e) {
-
+                mkFailResp(e.getMessage());
             }
-
         });
-        return null;
+        return respResult.get();
     }
 
 
