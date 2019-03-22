@@ -8,6 +8,8 @@ public class RespUtil extends ThreadLocal<Resp> {
 
     @Override
     public Resp get() {
+        System.out.println("----------" + Thread.currentThread());
+        System.out.println("----------" + super.get());
         if (super.get() == null)
             return mkEmpSuccResp();
         else

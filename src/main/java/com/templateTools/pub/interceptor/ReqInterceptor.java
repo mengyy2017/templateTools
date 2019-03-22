@@ -1,6 +1,6 @@
 package com.templateTools.pub.interceptor;
 
-import com.templateTools.utils.ThreadLocalUtil;
+import com.templateTools.base.controller.BaseController;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
@@ -11,8 +11,6 @@ public class ReqInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        ThreadLocalUtil.getRequestThreadLocal().set(request);
-
         return true;
     }
 
@@ -22,5 +20,6 @@ public class ReqInterceptor implements HandlerInterceptor {
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+        BaseController.respResult.remove();
     }
 }

@@ -23,7 +23,8 @@ public class AccDeciManager implements AccessDecisionManager {
         if (confAttrsList.size() > 0)
             return;
         else
-            throw new AccessDeniedException(" 没有权限访问！");
+            throw new AccessDeniedException("没有权限访问！");
+//            throw new InsufficientAuthenticationException("没有权限访问！");
 //            return;
 
     }
