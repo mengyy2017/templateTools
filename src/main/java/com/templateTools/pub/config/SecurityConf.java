@@ -1,10 +1,7 @@
 package com.templateTools.pub.config;
 
 import com.templateTools.pub.common.Consts;
-import com.templateTools.pub.config.confModel.AccDeciManager;
-import com.templateTools.pub.config.confModel.AccountDetailsService;
-import com.templateTools.pub.config.confModel.MetadataSource;
-import com.templateTools.pub.config.confModel.RawEncoder;
+import com.templateTools.pub.config.confModel.*;
 import com.templateTools.pub.filter.ReqFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -14,8 +11,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -45,14 +45,16 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
         http.cors().configurationSource(CorsConfigurationSource());
 
         http.formLogin().loginProcessingUrl(Consts.LOGIN_CHEK_URL)
-                .loginPage(Consts.loginUrl)
-                .usernameParameter("username").passwordParameter("password")
+                .loginPage(Consts.loginUrl).usernameParameter("username").passwordParameter("password")
                 .successForwardUrl(indexUrl).failureHandler((request, response, exception) -> {
                     exception.printStackTrace();
                 });
+
         http.logout().logoutUrl(logoutUrl).logoutSuccessUrl(logoutUrl).invalidateHttpSession(false);
 
         http.csrf().disable();
+
+//        http.authenticationProvider().
 
         http.sessionManagement().sessionAuthenticationFailureHandler((request, response, exception) -> {
             exception.printStackTrace();
@@ -64,6 +66,7 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
 
         http.addFilterBefore(reqFilter, UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(filter(), FilterSecurityInterceptor.class);
+        http.addFilterAt(exTransFilter(), ExceptionTranslationFilter.class);
     }
 
     //配置跨域访问资源
@@ -108,6 +111,21 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
         filter.setAccessDecisionManager(accDeciManager);
         filter.setAuthenticationManager(authenticationManagerBean());
         return filter;
+    }
+
+    @Bean
+    public ExceptionTranslationFilter exTransFilter() {
+        ExceptionTranslationFilter exceptionTranslationFilter = new ExceptionTranslationFilter(((request, response, authException) -> {
+            System.out.println("11111111111111111111111111111111111111111111");
+        }));
+        return exceptionTranslationFilter;
+    }
+
+    public SecurityContextPersistenceFilter contextFilter() {
+        SecurityContextPersistenceFilter contextFilter = new SecurityContextPersistenceFilter();
+//        contextFilter.
+
+        return null;
     }
 
 }
