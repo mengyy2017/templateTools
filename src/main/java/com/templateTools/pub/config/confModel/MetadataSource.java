@@ -20,9 +20,8 @@ public class MetadataSource implements FilterInvocationSecurityMetadataSource {
         String requestUrl = ((FilterInvocation) object).getRequestUrl();
         Collection<ConfigAttribute> attrs;
 
-        if (sysMenuPerMap == null) {
+        if (sysMenuPerMap == null)
             return Arrays.asList(new SecurityConfig("NO_LOGIN"));
-        }
 
         String permission = sysMenuPerMap.get(requestUrl);
 

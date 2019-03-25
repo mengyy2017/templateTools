@@ -23,7 +23,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 public class SecurityConf extends WebSecurityConfigurerAdapter {
 
-    private static String loginUrl = "/account/login";
+
     private static String indexUrl = "/account/index";
     private static String logoutUrl = "/account/logout";
     private static String accDeniedUrl = "/account/accDenied";
@@ -31,7 +31,7 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         // 这个设置不拦截静态资源
-        web.ignoring().antMatchers(loginUrl); // 处理发送登录信息的地址在http那的loginProcessingUrl()方法
+        web.ignoring().antMatchers(Consts.loginUrl); // 处理发送登录信息的地址在http那的loginProcessingUrl()方法
                                             // 这个是没有登录时报错时要访问的地址 需要放行
 //        web.ignoring().antMatchers(accDeniedUrl);
     }
@@ -45,7 +45,7 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
         http.cors().configurationSource(CorsConfigurationSource());
 
         http.formLogin().loginProcessingUrl(Consts.LOGIN_CHEK_URL)
-                .loginPage(loginUrl)
+                .loginPage(Consts.loginUrl)
                 .usernameParameter("username").passwordParameter("password")
                 .successForwardUrl(indexUrl).failureHandler((request, response, exception) -> {
                     exception.printStackTrace();
