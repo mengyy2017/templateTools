@@ -1,6 +1,7 @@
 package com.templateTools.pub.filter;
 
 import com.sun.deploy.net.HttpResponse;
+import com.templateTools.pub.common.Consts;
 import com.templateTools.pub.common.RespConsts;
 import com.templateTools.utils.ThreadLocalUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class ReqFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse resp = (HttpServletResponse) response;
 
-        if (SecurityContextHolder.getContext().getAuthentication() == null){
+        if (SecurityContextHolder.getContext().getAuthentication() == null && !Consts.LOGIN_CHEK_URL.equals(req.getRequestURI())){
             resp.setCharacterEncoding("utf-8");
             response.setContentType("text/plain");
             resp.setStatus(RespConsts.CODE_UNAUTHORIZED);
