@@ -11,11 +11,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.web.AuthenticationEntryPoint;
-import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -32,7 +29,7 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         // 这个设置不拦截静态资源
         web.ignoring().antMatchers(Consts.loginUrl); // 处理发送登录信息的地址在http那的loginProcessingUrl()方法
-                                            // 这个是没有登录时报错时要访问的地址 需要放行
+                                            // 这个是没有登录时报错时要访问的地址 需要放行 这个地址还没有走到默认的拦截就被自定义的给拦截到了 放行这里起不了作用
 //        web.ignoring().antMatchers(accDeniedUrl);
     }
 
@@ -54,8 +51,6 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
 
         http.csrf().disable();
 
-//        http.authenticationProvider().
-
         http.sessionManagement().sessionAuthenticationFailureHandler((request, response, exception) -> {
             exception.printStackTrace();
         });
@@ -66,7 +61,6 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
 
         http.addFilterBefore(reqFilter, UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(filter(), FilterSecurityInterceptor.class);
-        http.addFilterAt(exTransFilter(), ExceptionTranslationFilter.class);
     }
 
     //配置跨域访问资源
@@ -111,21 +105,6 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
         filter.setAccessDecisionManager(accDeciManager);
         filter.setAuthenticationManager(authenticationManagerBean());
         return filter;
-    }
-
-    @Bean
-    public ExceptionTranslationFilter exTransFilter() {
-        ExceptionTranslationFilter exceptionTranslationFilter = new ExceptionTranslationFilter(((request, response, authException) -> {
-            System.out.println("11111111111111111111111111111111111111111111");
-        }));
-        return exceptionTranslationFilter;
-    }
-
-    public SecurityContextPersistenceFilter contextFilter() {
-        SecurityContextPersistenceFilter contextFilter = new SecurityContextPersistenceFilter();
-//        contextFilter.
-
-        return null;
     }
 
 }

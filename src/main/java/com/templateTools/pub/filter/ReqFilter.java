@@ -1,17 +1,12 @@
 package com.templateTools.pub.filter;
 
 import com.alibaba.fastjson.JSONObject;
-import com.sun.deploy.net.HttpResponse;
 import com.templateTools.base.entity.FailResp;
 import com.templateTools.pub.common.Consts;
 import com.templateTools.pub.common.RespConsts;
-import com.templateTools.utils.BuildUtil;
 import com.templateTools.utils.ThreadLocalUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.stereotype.Component;
-
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -37,6 +32,7 @@ public class ReqFilter implements Filter {
         }
 
         ThreadLocalUtil.getRequestThreadLocal().set(req);
+
         chain.doFilter(request, response);
     }
 
