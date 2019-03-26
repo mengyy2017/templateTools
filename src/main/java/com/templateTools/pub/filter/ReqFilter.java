@@ -1,8 +1,11 @@
 package com.templateTools.pub.filter;
 
+import com.alibaba.fastjson.JSONObject;
 import com.sun.deploy.net.HttpResponse;
+import com.templateTools.base.entity.FailResp;
 import com.templateTools.pub.common.Consts;
 import com.templateTools.pub.common.RespConsts;
+import com.templateTools.utils.BuildUtil;
 import com.templateTools.utils.ThreadLocalUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,12 +31,11 @@ public class ReqFilter implements Filter {
         HttpServletResponse resp = (HttpServletResponse) response;
 
         if (SecurityContextHolder.getContext().getAuthentication() == null && !Consts.LOGIN_CHEK_URL.equals(req.getRequestURI())){
-            resp.setCharacterEncoding("utf-8");
-            response.setContentType("text/plain");
-            resp.setStatus(RespConsts.CODE_UNAUTHORIZED);
-            resp.getWriter().print("未登陆！");
+            resp.setCharacterEncoding("utf-8"); response.setContentType("json/application"); resp.setStatus(RespConsts.CODE_UNAUTHORIZED);
+            resp.getWriter().print(JSONObject.toJSON(new FailResp("未认证").setCode(RespConsts.CODE_UNAUTHORIZED)));
             return;
         }
+
         ThreadLocalUtil.getRequestThreadLocal().set(req);
         chain.doFilter(request, response);
     }
