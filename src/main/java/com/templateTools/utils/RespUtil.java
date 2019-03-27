@@ -1,8 +1,13 @@
 package com.templateTools.utils;
 
+import com.alibaba.fastjson.JSONObject;
 import com.templateTools.base.entity.FailResp;
 import com.templateTools.base.entity.Resp;
 import com.templateTools.base.entity.SuccResp;
+import com.templateTools.pub.common.RespConsts;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 public class RespUtil extends ThreadLocal<Resp> {
 
@@ -26,6 +31,14 @@ public class RespUtil extends ThreadLocal<Resp> {
         FailResp failResp = new FailResp(msg);
         this.set(failResp);
         return failResp;
+    }
+
+    public static HttpServletResponse printFailResponse(String errorMessage, int code, HttpServletResponse resp) throws IOException {
+        resp.setCharacterEncoding("utf-8");
+        resp.setContentType("json/application");
+        resp.setStatus(code);
+        resp.getWriter().print(JSONObject.toJSON(new FailResp(errorMessage).setCode(code)));
+        return resp;
     }
 
 }

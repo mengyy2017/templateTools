@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.templateTools.base.entity.FailResp;
 import com.templateTools.pub.common.Consts;
 import com.templateTools.pub.common.RespConsts;
+import com.templateTools.utils.RespUtil;
 import com.templateTools.utils.ThreadLocalUtil;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -26,8 +27,7 @@ public class ReqFilter implements Filter {
         HttpServletResponse resp = (HttpServletResponse) response;
 
         if (SecurityContextHolder.getContext().getAuthentication() == null && !Consts.LOGIN_CHEK_URL.equals(req.getRequestURI())){
-            resp.setCharacterEncoding("utf-8"); response.setContentType("json/application"); resp.setStatus(RespConsts.CODE_UNAUTHORIZED);
-            resp.getWriter().print(JSONObject.toJSON(new FailResp("未认证").setCode(RespConsts.CODE_UNAUTHORIZED)));
+            RespUtil.printFailResponse("未认证", RespConsts.CODE_UNAUTHORIZED, resp);
             return;
         }
 

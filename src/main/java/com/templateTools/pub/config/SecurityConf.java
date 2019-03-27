@@ -1,8 +1,10 @@
 package com.templateTools.pub.config;
 
 import com.templateTools.pub.common.Consts;
+import com.templateTools.pub.common.RespConsts;
 import com.templateTools.pub.config.confModel.*;
 import com.templateTools.pub.filter.ReqFilter;
+import com.templateTools.utils.RespUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -44,6 +46,7 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
         http.formLogin().loginProcessingUrl(Consts.LOGIN_CHEK_URL)
                 .loginPage(Consts.loginUrl).usernameParameter("username").passwordParameter("password")
                 .successForwardUrl(indexUrl).failureHandler((request, response, exception) -> {
+                    RespUtil.printFailResponse(exception.getMessage(), RespConsts.CODE_UNAUTHORIZED, response);
                     exception.printStackTrace();
                 });
 
@@ -52,10 +55,12 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
 
         http.sessionManagement().sessionAuthenticationFailureHandler((request, response, exception) -> {
+            RespUtil.printFailResponse(exception.getMessage(), RespConsts.CODE_UNAUTHORIZED, response);
             exception.printStackTrace();
         });
 
         http.exceptionHandling().accessDeniedHandler((request, response, accessDeniedException) -> {
+            RespUtil.printFailResponse(accessDeniedException.getMessage(), RespConsts.CODE_UNAUTHORIZED, response);
             accessDeniedException.printStackTrace();
         });
 
