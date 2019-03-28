@@ -5,8 +5,9 @@ import com.templateTools.base.mapper.CommonMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import tk.mybatis.mapper.entity.Example;
 import java.util.List;
+import java.util.UUID;
 
-public abstract class CommonService<T extends BaseEntity> {
+public abstract class CommonService<T> {
 
     @Autowired
     protected CommonMapper<T> commonMapper;
@@ -76,9 +77,10 @@ public abstract class CommonService<T extends BaseEntity> {
     }
 
     public int updateOrSaveSelective(T t) {
-        if (t.getId() == null)
+        if (t instanceof BaseEntity && ((BaseEntity)t).getId() == null) {
+            ((BaseEntity) t).setId(UUID.randomUUID().toString().replace("-", ""));
             return insert(t);
-        else
+        } else
             return updateByPrimaryKeySelective(t);
     }
 

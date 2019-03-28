@@ -37,22 +37,20 @@ public class AccountDetailsService extends BuildUtil implements UserDetailsServi
         UserSecurity userSecurity = new UserSecurity(userEntity.getUsername(), userEntity.getPassword()
                                         , userEntity.getRoleEntityList().stream().map(RoleEntity::getRoleCode).map(SimpleGrantedAuthority::new).collect(Collectors.toList()));
 
-        setUrlPermission();
+        if (MetadataSource.sysMenuPerMap == null)
+            refreshPrivilege();
 
         return userSecurity;
     }
 
-    private void setUrlPermission() {
+    public void refreshPrivilege() {
+        List<MenuEntity> sysMenuList = menuService.selectAll();
 
-        if (MetadataSource.sysMenuPerMap == null) {
-            List<MenuEntity> sysMenuList = menuService.selectAll();
+        LinkedList<String> linkedList = sysMenuList.parallelStream().collect(LinkedList::new, (l, e) ->
+        { l.add(e.getUrl()); l.add(e.getPermission()); }, (l1, l2) -> l1.addAll(l2));
 
-            LinkedList<String> linkedList = sysMenuList.parallelStream().collect(LinkedList::new, (l, e) ->
-            { l.add(e.getUrl()); l.add(e.getPermission()); }, (l1, l2) -> l1.addAll(l2));
+        MetadataSource.sysMenuPerMap = putsValsLoop(new HashMap<>(), HashMap<String, String>::put, linkedList);
 
-            MetadataSource.sysMenuPerMap = putsValsLoop(new HashMap<>(), HashMap<String, String>::put, linkedList);
-
-        }
     }
 
 

@@ -5,9 +5,17 @@ import javax.persistence.Id;
 public class BaseEntity {
 
     @Id
-    private String id;
+    public String id;
 
     public Integer isdel;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public Integer getIsdel() {
         return isdel;
@@ -17,11 +25,4 @@ public class BaseEntity {
         this.isdel = isdel;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 }

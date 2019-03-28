@@ -20,7 +20,7 @@ public class RoleEntity extends BaseEntity implements Serializable {
 
 	private String roleName; // 
 
-	/**  */
+    /**  */
 	public String getRoleCode() {
 		return roleCode;
 	}
