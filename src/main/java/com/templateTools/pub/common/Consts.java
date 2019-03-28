@@ -13,6 +13,12 @@ public class Consts extends BuildUtil {
 
     public static String loginUrl = "/account/login";
 
+    public static String AUTHTOKEN = "authToken";
+
+    public static String SERCURITY_DATABASE_AUTHTOKEN = "SERCURITY_DATABASE_AUTHTOKEN";
+
+    public static String SERCURITY_DATABASE_AUTHTOKEN_STR = "127.0.0.1~mysql~3306~security~noneTableSchema~root~1~noneCodePackage";
+
     public static String JAVA_SUFFIX = ".java", HTML_SUFFIX = ".html", XML_SUFFIX = ".xml";
 
     public static String fileSparator = "/", basePath = "C:" + File.separator + "template";

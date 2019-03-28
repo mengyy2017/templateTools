@@ -6,6 +6,7 @@ import com.templateTools.entity.ColumnEntity;
 import com.templateTools.entity.model.CreateInfo;
 import com.templateTools.entity.TableEntity;
 import com.templateTools.entity.model.TableColsInfo;
+import com.templateTools.pub.common.Consts;
 import com.templateTools.service.ColumnService;
 import com.templateTools.service.TableService;
 import com.templateTools.utils.FreeMarkerUtil;
@@ -35,7 +36,7 @@ public class DatabaseController extends BaseController {
     public Resp<List<TableEntity>> setCreateInfo(@RequestBody CreateInfo createInfo, HttpServletResponse response){
 
         ThreadLocalUtil.getCreateInfoThreadLocal().set(createInfo);
-        response.addCookie(new Cookie("authToken", createInfo.toString()));
+        response.addCookie(new Cookie(Consts.AUTHTOKEN, createInfo.toString()));
 
         Example example = new Example(TableEntity.class);
         example.createCriteria().andEqualTo("tableSchema", createInfo.getTableSchema());
