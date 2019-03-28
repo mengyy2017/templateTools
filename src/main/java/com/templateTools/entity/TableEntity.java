@@ -1,12 +1,14 @@
 package com.templateTools.entity;
 
+import com.templateTools.base.entity.BaseEntity;
+
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 @Table(name = "tables")
-public class TableEntity {
+public class TableEntity extends BaseEntity {
 
     @Id
     @Column(name = "table_name")

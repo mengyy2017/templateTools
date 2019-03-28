@@ -29,6 +29,7 @@ public class ConnAspect {
 
     @Before("execution(* com.templateTools.controller.MenuController.*(..))")
     public void beforeMenuController(JoinPoint joinPoint){
+//        joinPoint.get
         HttpServletRequest req = (HttpServletRequest) joinPoint.getArgs()[0];
         req.setAttribute(Consts.AUTHTOKEN, Consts.SERCURITY_DATABASE_AUTHTOKEN);
     }

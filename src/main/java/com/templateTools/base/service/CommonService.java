@@ -1,11 +1,12 @@
 package com.templateTools.base.service;
 
+import com.templateTools.base.entity.BaseEntity;
 import com.templateTools.base.mapper.CommonMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import tk.mybatis.mapper.entity.Example;
 import java.util.List;
 
-public abstract class CommonService<T> {
+public abstract class CommonService<T extends BaseEntity> {
 
     @Autowired
     protected CommonMapper<T> commonMapper;
@@ -72,6 +73,13 @@ public abstract class CommonService<T> {
 
     public int delete(Example example){
         return commonMapper.deleteByExample(example);
+    }
+
+    public int updateOrSaveSelective(T t) {
+        if (t.getId() == null)
+            return insert(t);
+        else
+            return updateByPrimaryKeySelective(t);
     }
 
 }
