@@ -5,7 +5,6 @@ import com.templateTools.base.entity.Resp;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
@@ -32,7 +31,7 @@ public class AccountController extends BaseController {
     public String accDenied(HttpServletRequest request) {
         String a = request.getParameter("firstName");
         String aa = request.getParameter("username");
-        return "message: access denied!";
+        return "msg: access denied!";
     }
 
     @RequestMapping("/error")
@@ -40,7 +39,7 @@ public class AccountController extends BaseController {
     public String error(HttpServletRequest request) {
         String a = request.getParameter("firstName");
         String aa = request.getParameter("username");
-        return "message: 服务器出错！";
+        return "msg: 服务器出错！";
     }
 
 }
