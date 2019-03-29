@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class AccountDetailsService extends BuildUtil implements UserDetailsService {
+public class AccountDetailsService implements UserDetailsService {
 
     @Autowired
     private UserService userService;
@@ -31,7 +31,7 @@ public class AccountDetailsService extends BuildUtil implements UserDetailsServi
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        UserEntity userEntity = userService.selectUserAndRole(newAndSet(UserEntity::new, getVAndF(username, UserEntity::setUsername)));
+        UserEntity userEntity = userService.selectUserAndRole(BuildUtil.newAndSet(UserEntity::new, BuildUtil.getVAndF(username, UserEntity::setUsername)));
 //        UserEntity userEntity = userService.selectOne(newAndSet(UserEntity::new, getVAndF(username, UserEntity::setUsername)));
 
         UserSecurity userSecurity = new UserSecurity(userEntity.getUsername(), userEntity.getPassword()
@@ -49,7 +49,7 @@ public class AccountDetailsService extends BuildUtil implements UserDetailsServi
         LinkedList<String> linkedList = sysMenuList.parallelStream().collect(LinkedList::new, (l, e) ->
         { l.add(e.getUrl()); l.add(e.getPermission()); }, (l1, l2) -> l1.addAll(l2));
 
-        MetadataSource.sysMenuPerMap = putsValsLoop(new HashMap<>(), HashMap<String, String>::put, linkedList);
+        MetadataSource.sysMenuPerMap = BuildUtil.putsValsLoop(new HashMap<>(), HashMap<String, String>::put, linkedList);
 
     }
 
