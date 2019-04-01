@@ -14,6 +14,5 @@ repositories {
 }
 
 dependencies {
-    compile group: 'org.springframework.security.oauth', name: 'spring-security-oauth2', version: '2.1.0.RELEASE'
 
 }

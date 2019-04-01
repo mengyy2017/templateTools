@@ -1,7 +1,7 @@
 package com.templateTools.pub.config;
 
 import com.templateTools.pub.common.Consts;
-import com.templateTools.pub.config.confModel.AccountDetailsService;
+// import com.templateTools.pub.config.confModel.AccountDetailsService;
 import com.templateTools.utils.ThreadLocalUtil;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.After;
@@ -15,8 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 @Component
 public class ConnAspect {
 
-    @Autowired
-    AccountDetailsService accountDetailsService;
+    // @Autowired
+    // AccountDetailsService accountDetailsService;
 
     @Before("execution(* java.sql.Connection.*())")
     public void beforeConnectionClose(JoinPoint joinPoint) {
@@ -38,10 +38,10 @@ public class ConnAspect {
         req.setAttribute(Consts.AUTHTOKEN, Consts.SERCURITY_DATABASE_AUTHTOKEN);
     }
 
-    @After("execution(* com.templateTools.controller.MenuController.updateOrSave(..))")
-    public void afterMenuController(JoinPoint joinPoint){
-        accountDetailsService.refreshPrivilege();
-    }
+    // @After("execution(* com.templateTools.controller.MenuController.updateOrSave(..))")
+    // public void afterMenuController(JoinPoint joinPoint){
+    //     accountDetailsService.refreshPrivilege();
+    // }
 
 //     起作用了 得是spring管理的类 才可以拦截
 //    @Before("execution(* com.templateTools.service.TableService.*(..))")

@@ -1,10 +1,10 @@
-#spring:
-#  datasource:
-#    driver-class-name: com.mysql.jdbc.Driver
-#    url: jdbc:mysql://192.168.1.128:3306/information_schema?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/security?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8
 #    url:jdbc:oracle:thin:@192.168.1.128:1521:orcl
-#    password: 123456
-#    username: root
+    username: root
+    password: 1
 
 mybatis:
   mapper-locations: classpath:mapper/**/*.xml
@@ -18,5 +18,5 @@ mapper:
   identity: MYSQL
 
 server:
-  port: 8098
+  port: 8060
 

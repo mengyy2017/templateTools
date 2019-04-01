@@ -1,8 +1,8 @@
 package com.authorization.pub.config;
 
 import com.authorization.pub.common.Consts;
-import com.authorization.pub.confModel.AccountDetailsService;
-import com.authorization.pub.confModel.RawEncoder;
+import com.authorization.pub.config.confModel.AccountDetailsService;
+import com.authorization.pub.config.confModel.RawEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,19 +25,18 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        // 这个设置不拦截静态资源
-        web.ignoring().antMatchers(Consts.loginUrl); // 处理发送登录信息的地址在http那的loginProcessingUrl()方法
-                                            // 这个是没有登录时报错时要访问的地址 需要放行 这个地址还没有走到默认的拦截就被自定义的给拦截到了 放行这里起不了作用
-//        web.ignoring().antMatchers(accDeniedUrl);
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http.cors().configurationSource(CorsConfigurationSource());
-
-        http.formLogin().loginProcessingUrl(Consts.LOGIN_CHEK_URL)
-                .loginPage(Consts.loginUrl).usernameParameter("username").passwordParameter("password")
+        http.authorizeRequests()//定义哪些url需要被保护  哪些不需要保护
+                .antMatchers("/oauth/token" , "oauth/check_token").permitAll()//定义这两个链接不需要登录可访问
+                .antMatchers("/**").permitAll()
+                .anyRequest().authenticated()
+                .and().formLogin()
+                // .loginProcessingUrl(Consts.LOGIN_CHEK_URL)
+                .loginPage(Consts.loginUrl).usernameParameter("username").passwordParameter("password").permitAll()
                 .successForwardUrl(indexUrl).failureHandler((request, response, exception) -> {
                     exception.printStackTrace();
                 });
@@ -56,20 +55,8 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
 
     }
 
-    //配置跨域访问资源
-    private CorsConfigurationSource CorsConfigurationSource() {
-        CorsConfigurationSource source =   new UrlBasedCorsConfigurationSource();
-        CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.addAllowedOrigin("*");	//同源配置，*表示任何请求都视为同源，若需指定ip和端口可以改为如“localhost：8080”，多个以“，”分隔；
-        corsConfiguration.addAllowedHeader("*");//header，允许哪些header，本案中使用的是token，此处可将*替换为token；
-        corsConfiguration.addAllowedMethod("*");	//允许的请求方法，PSOT、GET等
-        corsConfiguration.setAllowCredentials(true);
-        ((UrlBasedCorsConfigurationSource) source).registerCorsConfiguration("/**",corsConfiguration); //配置允许跨域访问的url
-        return source;
-    }
-
-    @Override
     @Bean
+    @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
@@ -79,13 +66,9 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        // 自定义UserDetailsService,设置加密算法
         auth.userDetailsService(accountDetailsService).passwordEncoder(new RawEncoder());
-//                .passwordEncoder(passwordEncoder())
         //不删除凭据，以便记住用户
 //        auth.eraseCredentials(false);
     }
-
-
 
 }

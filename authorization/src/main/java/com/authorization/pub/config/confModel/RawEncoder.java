@@ -1,4 +1,4 @@
-package com.templateTools.pub.config.confModel;
+package com.authorization.pub.config.confModel;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -6,7 +6,7 @@ public class RawEncoder implements PasswordEncoder {
     @Override
     public String encode(CharSequence rawPassword) {
         //不做任何加密处理
-        return rawPassword.toString();
+        return "{noop}" + rawPassword.toString();
     }
 
     @Override
