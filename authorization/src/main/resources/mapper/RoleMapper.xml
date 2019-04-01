@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<!-- 
+         符号转义说明
+    &lt;          < 
+    &gt;          >  
+    &lt;&gt;     <>
+    &amp;        & 
+    &apos;       '
+    &quot;       "
+  <![CDATA[ 这里写你的SQL或者符号 ]]> 
+ -->
+<!-- 		 -->
+<!--  -->
+<mapper namespace="com.authorization.dao.RoleMapper" >
+  	<!-- 添加,插入记录   -->
+	<insert id="insertRole" parameterType="com.authorization.entity.RoleEntity" >
+	    insert into sys_role (<include refid="com.authorization.dao.field.roleFieldMapper.insertRoleColumns"/>) values(<include refid="com.authorization.dao.field.roleFieldMapper.insertRoleParams"/>)
+	</insert>
+	
+	<!-- 删除,主键删除   -->
+	<delete id="deleteRoleByPrimaryKey" parameterType="com.authorization.entity.RoleEntity">
+	    delete from sys_role where 1=1 <include refid="com.authorization.dao.field.roleFieldMapper.noPrefixKeyRole"/>
+	</delete>
+	
+	<!-- 删除,实体删除   -->
+	<delete id="deleteRoleByEntity" parameterType="com.authorization.entity.RoleEntity">
+	    delete from sys_role where 1=1 <include refid="com.authorization.dao.field.roleFieldMapper.deleteAllRole"/>
+	</delete>
+	
+	<!-- 修改,主键更新  -->
+	<update id="updateRoleByPrimaryKey" parameterType="com.authorization.entity.RoleEntity" >
+		update sys_role
+			<set><include refid="com.authorization.dao.field.roleFieldMapper.updateRoleParams"/></set>
+			where 1=1 <include refid="com.authorization.dao.field.roleFieldMapper.noPrefixKeyRole"/>
+	</update>
+	
+	<!-- 查询,实体查询   -->
+	<select id="selectRoleByEntry" resultMap="com.authorization.dao.field.roleFieldMapper.roleResultMap" parameterType="com.authorization.entity.RoleEntity">
+		select <include refid="com.authorization.dao.field.roleFieldMapper.roleColumns"/>
+		from sys_role sys_role 
+		where 1=1 and sys_role.isdel=0 <include refid="com.authorization.dao.field.roleFieldMapper.andAllRole"/>
+	</select>
+	
+	<!-- 查询,ID查询   -->
+	<select id="selectRoleById" resultMap="com.authorization.dao.field.roleFieldMapper.roleResultMap" parameterType="java.lang.String">
+		select <include refid="com.authorization.dao.field.roleFieldMapper.roleColumns"/>
+		from sys_role sys_role 
+		where 1=1 and sys_role.isdel=0 <include refid="com.authorization.dao.field.roleFieldMapper.primaryKeyRole"/>
+	</select>
+	
+  	<!-- 批量插入 mysql -->
+  	<insert id="insertRoleBatch_mysql" parameterType="java.util.List">
+  		insert into sys_role (<include refid="com.authorization.dao.field.roleFieldMapper.insertRoleBatchColumns"/>)
+  		values
+  		<foreach collection="list" item="item" index="index" separator=",">
+  			(<include refid="com.authorization.dao.field.roleFieldMapper.insertRoleBatchParams"/>)
+  		</foreach>
+  	</insert>
+  	<!-- 批量插入 oracle -->
+  	<insert id="insertRoleBatch_oracle" parameterType="java.util.List" useGeneratedKeys="false">
+  		insert all
+  		<foreach collection="list" item="item" index="index">
+  		into sys_role (<include refid="com.authorization.dao.field.roleFieldMapper.insertRoleBatchColumns"/>)
+  		values 
+  			(<include refid="com.authorization.dao.field.roleFieldMapper.insertRoleBatchParams"/>)
+  		</foreach>
+  		select 1 from dual
+  	</insert>
+  	<!-- 批量删除 -->
+  	<delete id="deleteRoleBatch" parameterType="java.util.List">
+  		delete from sys_role where
+		id in 	<!--  -->
+  		<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+  			#{item}
+  		</foreach>
+  	</delete>
+  	
+  	<!-- 逻辑删除  -->
+	<update id="logicRoleDelete" parameterType="com.authorization.entity.RoleEntity" >
+		update sys_role
+			set isdelete = 1 	<!-- 逻辑删除 -->
+		where 1=1 <include refid="com.authorization.dao.field.roleFieldMapper.noPrefixKeyRole"/>
+	</update>
+	
+  	<!-- 批量逻辑删除 -->
+  	<update id="logicRoleDeleteBatch" parameterType="java.util.List" >
+		update sys_role
+			set isdelete = 1 	<!-- 逻辑删除 -->
+		where 
+			id in 	<!--  -->
+	  		<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+	  			#{item}
+	  		</foreach>
+	</update>
+</mapper>
