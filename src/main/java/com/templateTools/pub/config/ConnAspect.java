@@ -8,8 +8,13 @@ import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
+import org.springframework.util.LinkedMultiValueMap;
+
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Aspect
 @Component
@@ -37,6 +42,15 @@ public class ConnAspect {
         HttpServletRequest req = (HttpServletRequest) joinPoint.getArgs()[0];
         req.setAttribute(Consts.AUTHTOKEN, Consts.SERCURITY_DATABASE_AUTHTOKEN);
     }
+
+    // @Before("execution(* org.springframework.web.client.RestTemplate.*(..))")
+    // public void beforeTempalteExecute(JoinPoint joinPoint){
+    //     Object[] params = joinPoint.getArgs();
+    //     HttpEntity httpEntity = ((HttpEntity)params[2]);
+    //     String accessToken = ((LinkedMultiValueMap) httpEntity.getBody()).get("access_token").get(0).toString();
+    //     httpEntity.getHeaders().add("access_token", accessToken);
+    //
+    // }
 
     // @After("execution(* com.templateTools.controller.MenuController.updateOrSave(..))")
     // public void afterMenuController(JoinPoint joinPoint){
