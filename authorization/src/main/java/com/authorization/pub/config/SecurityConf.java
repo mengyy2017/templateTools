@@ -18,7 +18,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 public class SecurityConf extends WebSecurityConfigurerAdapter {
 
-
     private static String indexUrl = "/account/index";
     private static String logoutUrl = "/account/logout";
     private static String accDeniedUrl = "/account/accDenied";
@@ -29,17 +28,17 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
-        http.authorizeRequests()//定义哪些url需要被保护  哪些不需要保护
-                .antMatchers("/oauth/token" , "oauth/check_token").permitAll()//定义这两个链接不需要登录可访问
-                .antMatchers("/**").permitAll()
-                .anyRequest().authenticated()
-                .and().formLogin()
-                // .loginProcessingUrl(Consts.LOGIN_CHEK_URL)
+        http.formLogin()
+                .loginProcessingUrl(Consts.LOGIN_CHEK_URL)
                 .loginPage(Consts.loginUrl).usernameParameter("username").passwordParameter("password").permitAll()
                 .successForwardUrl(indexUrl).failureHandler((request, response, exception) -> {
-                    exception.printStackTrace();
-                });
+                        exception.printStackTrace();
+                    })
+                .and().authorizeRequests()//定义哪些url需要被保护  哪些不需要保护
+                .antMatchers("/oauth/token" , "/oauth/check_token", "/oauth/authorize").permitAll()//定义这两个链接不需要登录可访问
+                .antMatchers("/**").permitAll()
+//                .anyRequest().authenticated()
+                ;
 
         http.logout().logoutUrl(logoutUrl).logoutSuccessUrl(logoutUrl).invalidateHttpSession(false);
 
@@ -52,7 +51,6 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
         http.exceptionHandling().accessDeniedHandler((request, response, accessDeniedException) -> {
             accessDeniedException.printStackTrace();
         });
-
     }
 
     @Bean

@@ -1,7 +1,10 @@
 package com.authorization;
 
+import com.authorization.pub.config.filter.ReqFilter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
 import tk.mybatis.spring.annotation.MapperScan;
 
 @SpringBootApplication
@@ -12,11 +15,12 @@ public class AuthorizationApplication {
         SpringApplication.run(AuthorizationApplication.class);
     }
 
-//    @Bean
-//    public FilterRegistrationBean accessControlFilterFactory(){
-//        FilterRegistrationBean accessControlFilter = new FilterRegistrationBean(new AccessControlFilter());
-//        accessControlFilter.addUrlPatterns("/*");
-//        accessControlFilter.setName("accessControlFilter");
-//        return accessControlFilter;
-//    }
+    @Bean
+    public FilterRegistrationBean accessControlFilterFactory(){
+        FilterRegistrationBean reqFilter = new FilterRegistrationBean(new ReqFilter());
+        reqFilter.addUrlPatterns("/*");
+        reqFilter.setName("reqFilter");
+        return reqFilter;
+    }
+
 }

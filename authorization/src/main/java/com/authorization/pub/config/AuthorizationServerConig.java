@@ -31,19 +31,19 @@ public class AuthorizationServerConig extends AuthorizationServerConfigurerAdapt
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory()
+                .withClient("createCode")
+//                .resourceIds("createCode")
+                .authorizedGrantTypes("password", "refresh_token")
+                .scopes("select")
+//                .authorities("ROLE_ADMIN")
+                .secret(new RawEncoder().encode("secret"));
+                // .and()
                 // .withClient("createCodeClient")
                 // .resourceIds("createCode")
                 // .authorizedGrantTypes("client_credentials", "refresh_token")
                 // .scopes("select")
                 // .authorities("client")
                 // .secret("123456")
-                // .and()
-                .withClient("createCode")
-                .resourceIds("createCode")
-                .authorizedGrantTypes("password", "refresh_token")
-                .scopes("select")
-                .authorities("ROLE_ADMIN")
-                .secret(new RawEncoder().encode("secret"));
     }
 
     @Override

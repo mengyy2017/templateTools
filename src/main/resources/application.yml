@@ -20,14 +20,22 @@ mapper:
 server:
   port: 8099
 
-security:
-  oauth2:     #token检查的授权端url
-    authorization:
-      check-token-access: http://127.0.0.1:8060/oauth/check_token     #对应的注册码与注册密码
-    client:
-      id: createCodeClient
-      client-secret: secret
-      authentication-scheme: form     #获得授权端的当前用户信息url
-    resource:
-      id: createCode
-      user-info-uri: http://127.0.01:8060/user/me
+spring:
+  security:
+    oauth2:     #token检查的授权端url
+      client:
+        clientId: createCodeClient
+        client-secret: secret
+        userAuthorizationUri: http://127.0.0.1:8060/oauth/authorize
+        grant-type: password
+        scope: select
+        access-token-uri: http://127.0.0.1:8060/oauth/token
+  #      authentication-scheme: form     #获得授权端的当前用户信息url
+      resource:
+  #      id: createCode
+        user-info-uri: http://127.0.01:8060/user/me
+        filter-order: 3
+        tokenInfoUri: http://127.0.0.1:8060/oauth/check_token
+        preferTokenInfo: true
+      authorization:
+        check-token-access: http://127.0.0.1:8060/oauth/check_token     #对应的注册码与注册密码
