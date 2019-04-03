@@ -1,12 +1,11 @@
 package com.template.pub.filter;
 
-import com.template.pub.common.Consts;
-import com.template.pub.common.RespConsts;
-import com.template.utils.RespUtil;
+import com.common.pub.consts.RespConsts;
+import com.common.util.RespUtil;
+import com.template.pub.consts.Consts;
 import com.template.utils.ThreadLocalUtil;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

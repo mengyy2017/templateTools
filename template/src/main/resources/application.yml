@@ -14,7 +14,8 @@ mybatis:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 mapper:
-  mappers: com.template.base.mapper.CommonMapper
+#  mappers: com.template.pub.baseBussiness.mapper.CommonMapper
+  mappers: com.common.bussiness.mapper.CommonMapper
   identity: MYSQL
 
 server:

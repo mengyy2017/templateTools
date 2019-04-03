@@ -1,6 +1,6 @@
 package com.template.pub.config;
 
-import com.template.pub.common.Consts;
+import com.template.pub.consts.Consts;
 import com.template.utils.ThreadLocalUtil;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -27,12 +27,12 @@ public class ConnAspect {
     }
 
     // 这个拦截不到 没有加spring的注解  TableEntity上的那个注解是java的
-    @Before("execution(* com.template.entity.TableEntity.*(..))")
+    @Before("execution(* com.template.bussiness.entity.TableEntity.*(..))")
     public void beforeTableEntity(JoinPoint joinPoint){
         String bb = "";
     }
 
-    @Before("execution(* com.template.controller.MenuController.*(..))")
+    @Before("execution(* com.template.bussiness.controller.MenuController.*(..))")
     public void beforeMenuController(JoinPoint joinPoint){
         HttpServletRequest req = (HttpServletRequest) joinPoint.getArgs()[0];
         req.setAttribute(Consts.AUTHTOKEN, Consts.SERCURITY_DATABASE_AUTHTOKEN);

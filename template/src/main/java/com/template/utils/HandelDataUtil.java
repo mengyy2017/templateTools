@@ -1,9 +1,9 @@
 package com.template.utils;
 
-import com.template.entity.ColumnEntity;
-import com.template.entity.model.TableColsInfo;
-import com.template.pub.common.Consts;
-
+import com.template.bussiness.entity.ColumnEntity;
+import com.template.bussiness.entity.model.TableColsInfo;
+import com.template.pub.consts.Consts;
+import com.common.util.BuildUtil;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class HandelDataUtil extends BuildUtil{
+public class HandelDataUtil extends BuildUtil {
 
     public static Map convertData(TableColsInfo tableColsInfo){
 

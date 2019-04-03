@@ -1,10 +1,10 @@
 package com.authorization.pub.config.confModel;
 
-import com.authorization.entity.RoleEntity;
-import com.authorization.entity.UserEntity;
-import com.authorization.entity.model.UserSecurity;
-import com.authorization.service.UserService;
-import com.authorization.utils.BuildUtil;
+import com.authorization.bussiness.entity.RoleEntity;
+import com.authorization.bussiness.entity.UserEntity;
+import com.authorization.bussiness.entity.model.UserSecurity;
+import com.authorization.bussiness.service.UserService;
+import com.common.util.BuildUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

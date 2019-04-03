@@ -1,8 +1,8 @@
 package com.template.utils;
 
-import com.template.entity.model.CreateInfo;
-import com.template.pub.commModel.ConnHolder;
-import com.template.pub.common.Consts;
+import com.template.bussiness.entity.model.CreateInfo;
+import com.template.pub.pubBo.ConnHolder;
+import com.template.pub.consts.Consts;
 import org.apache.tomcat.jdbc.pool.DataSource;
 
 import java.lang.reflect.Proxy;

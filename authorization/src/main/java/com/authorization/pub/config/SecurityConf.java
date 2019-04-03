@@ -1,6 +1,6 @@
 package com.authorization.pub.config;
 
-import com.authorization.pub.common.Consts;
+import com.authorization.pub.consts.Consts;
 import com.authorization.pub.config.confModel.AccountDetailsService;
 import com.authorization.pub.config.confModel.RawEncoder;
 import org.springframework.beans.factory.annotation.Autowired;

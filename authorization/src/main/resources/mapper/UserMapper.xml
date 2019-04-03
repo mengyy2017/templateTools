@@ -13,31 +13,31 @@
  -->
 <!-- 		 -->
 <!--  -->
-<mapper namespace="com.authorization.dao.UserMapper" >
+<mapper namespace="com.authorization.bussiness.dao.UserMapper" >
   	<!-- 添加,插入记录   -->
-	<insert id="insertUser" parameterType="com.authorization.entity.UserEntity" >
+	<insert id="insertUser" parameterType="com.authorization.bussiness.entity.UserEntity" >
 	    insert into sys_user (<include refid="com.authorization.dao.field.userFieldMapper.insertUserColumns"/>) values(<include refid="com.authorization.dao.field.userFieldMapper.insertUserParams"/>)
 	</insert>
 	
 	<!-- 删除,主键删除   -->
-	<delete id="deleteUserByPrimaryKey" parameterType="com.authorization.entity.UserEntity">
+	<delete id="deleteUserByPrimaryKey" parameterType="com.authorization.bussiness.entity.UserEntity">
 	    delete from sys_user where 1=1 <include refid="com.authorization.dao.field.userFieldMapper.noPrefixKeyUser"/>
 	</delete>
 	
 	<!-- 删除,实体删除   -->
-	<delete id="deleteUserByEntity" parameterType="com.authorization.entity.UserEntity">
+	<delete id="deleteUserByEntity" parameterType="com.authorization.bussiness.entity.UserEntity">
 	    delete from sys_user where 1=1 <include refid="com.authorization.dao.field.userFieldMapper.deleteAllUser"/>
 	</delete>
 	
 	<!-- 修改,主键更新  -->
-	<update id="updateUserByPrimaryKey" parameterType="com.authorization.entity.UserEntity" >
+	<update id="updateUserByPrimaryKey" parameterType="com.authorization.bussiness.entity.UserEntity" >
 		update sys_user
 			<set><include refid="com.authorization.dao.field.userFieldMapper.updateUserParams"/></set>
 			where 1=1 <include refid="com.authorization.dao.field.userFieldMapper.noPrefixKeyUser"/>
 	</update>
 
 	<!-- 查询,实体查询   -->
-	<select id="selectUserAndRoles" resultMap="com.authorization.dao.field.userFieldMapper.userResultMap" parameterType="com.authorization.entity.UserEntity">
+	<select id="selectUserAndRoles" resultMap="com.authorization.dao.field.userFieldMapper.userResultMap" parameterType="com.authorization.bussiness.entity.UserEntity">
 		select <include refid="com.authorization.dao.field.userFieldMapper.userColumns"/>
 		,r.role_code as role_code
 		,r.role_name as role_name
@@ -48,7 +48,7 @@
 	</select>
 	
 	<!-- 查询,实体查询   -->
-	<select id="selectUserByEntry" resultMap="com.authorization.dao.field.userFieldMapper.userResultMap" parameterType="com.authorization.entity.UserEntity">
+	<select id="selectUserByEntry" resultMap="com.authorization.dao.field.userFieldMapper.userResultMap" parameterType="com.authorization.bussiness.entity.UserEntity">
 		select <include refid="com.authorization.dao.field.userFieldMapper.userColumns"/>
 		from sys_user sys_user 
 		where 1=1 and sys_user.isdel=0 <include refid="com.authorization.dao.field.userFieldMapper.andAllUser"/>
@@ -89,7 +89,7 @@
   	</delete>
   	
   	<!-- 逻辑删除  -->
-	<update id="logicUserDelete" parameterType="com.authorization.entity.UserEntity" >
+	<update id="logicUserDelete" parameterType="com.authorization.bussiness.entity.UserEntity" >
 		update sys_user
 			set isdelete = 1 	<!-- 逻辑删除 -->
 		where 1=1 <include refid="com.authorization.dao.field.userFieldMapper.noPrefixKeyUser"/>

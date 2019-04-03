@@ -1,10 +1,9 @@
 package com.template.pub.interceptor;
 
-import com.template.base.controller.BaseController;
+import com.common.bussiness.controller.BaseController;
 import com.template.utils.ThreadLocalUtil;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 

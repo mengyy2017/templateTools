@@ -56,7 +56,7 @@
 <script src="/lib/swiper.min.js"></script>
 <!--<![endif]-->
 <!--[if IE]>
-<script src="/js/base.js"></script>
+<script src="/js/baseBussiness.js"></script>
 <script src="/lib/jquery-1.9.0.min.js"></script>
 <script src="/lib/idangerous.swiper2.7.6.js"></script>
 <script src="/js/wh.js"></script>

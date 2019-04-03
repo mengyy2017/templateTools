@@ -1,6 +1,6 @@
 package com.template.pub.config;
 
-import com.template.pub.commModel.ConnHolder;
+import com.template.pub.pubBo.ConnHolder;
 import com.template.utils.CreateConnUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;

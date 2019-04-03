@@ -15,12 +15,12 @@
 <!--  -->
 <mapper namespace="com.authorization.dao.field.userFieldMapper" >
 	<!-- Resp Map 数据库映射到实体类  -->
-	<resultMap id="userResultMap" type="com.authorization.entity.UserEntity" >
+	<resultMap id="userResultMap" type="com.authorization.bussiness.entity.UserEntity" >
 		<result column="id" property="id" jdbcType="VARCHAR" javaType="String"/>	<!--  -->
 		<result column="username" property="username" jdbcType="VARCHAR" javaType="String"/>	<!--  -->
 		<result column="password" property="password" jdbcType="VARCHAR" javaType="String"/>	<!--  -->
 		<result column="isdel" property="isdel" jdbcType="INTEGER" javaType="int"/>	<!--  -->
-		<collection property="roleEntityList" ofType="com.authorization.entity.RoleEntity" resultMap="com.authorization.dao.field.roleFieldMapper.roleResultMap"></collection>
+		<collection property="roleEntityList" ofType="com.authorization.bussiness.entity.RoleEntity" resultMap="com.authorization.dao.field.roleFieldMapper.roleResultMap"></collection>
 	</resultMap>
   	
   	<!-- tableColumns  所有列 -->
