@@ -1,7 +1,10 @@
-group 'template'
-version '1.0-SNAPSHOT'
+
 
 allprojects {
+
+    group 'template'
+    version '1.0-SNAPSHOT'
+    
     buildscript {
         ext {
             springBootVersion = '2.1.0.RELEASE'
@@ -15,14 +18,20 @@ allprojects {
         }
     }
 
-    apply plugin: 'java'
-
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
-
     repositories {
         mavenCentral()
     }
+
+}
+
+subprojects {
+    apply plugin: 'java'
+//    plugins {
+//        id 'java'
+//    }
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
 
     tasks.withType(JavaCompile) {
         options.encoding = "UTF-8"
@@ -41,16 +50,7 @@ allprojects {
                 'com.alibaba:fastjson:1.2.54',
                 'org.springframework.security.oauth:spring-security-oauth2:2.1.0.RELEASE'
         )
-
     }
-}
-
-dependencies {
-    compile(
-            'org.springframework.boot:spring-boot-starter-aop:2.1.0.RELEASE',
-            'org.apache.tomcat:tomcat-jdbc:9.0.14',
-            'org.freemarker:freemarker:2.3.9',
-            'commons-codec:commons-codec:1.11'
-    )
+    
 }
 

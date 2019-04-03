@@ -1,0 +1,9 @@
+
+dependencies {
+    compile(
+            'org.springframework.boot:spring-boot-starter-aop:2.1.0.RELEASE',
+            'org.apache.tomcat:tomcat-jdbc:9.0.14',
+            'org.freemarker:freemarker:2.3.9',
+            'commons-codec:commons-codec:1.11'
+    )
+}
