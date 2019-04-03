@@ -2,7 +2,6 @@ package com.authorization.pub.config.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
@@ -10,14 +9,10 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
-import javax.servlet.http.HttpServletRequest;
 
 @Configuration
 @EnableAuthorizationServer
-public class AuthorizationServerConig extends AuthorizationServerConfigurerAdapter {
+public class AuthoriServerConf extends AuthorizationServerConfigurerAdapter {
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -47,21 +42,8 @@ public class AuthorizationServerConig extends AuthorizationServerConfigurerAdapt
 
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
-        CorsConfigurationSource source = new CorsConfigurationSource() {
-            @Override
-            public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
-             CorsConfiguration corsConfiguration = new CorsConfiguration();
-             corsConfiguration.addAllowedHeader("*");
-             corsConfiguration.addAllowedOrigin(request.getHeader(HttpHeaders.ORIGIN));
-             corsConfiguration.addAllowedMethod("*");
-             corsConfiguration.setAllowCredentials(true);
-             corsConfiguration.setMaxAge(3600L);
-             return corsConfiguration;
-            }
-        };
-
         security.tokenKeyAccess("permitAll()").checkTokenAccess("permitAll()")
-                .allowFormAuthenticationForClients().addTokenEndpointAuthenticationFilter(new CorsFilter(source));
+                .allowFormAuthenticationForClients();
     }
 
 }

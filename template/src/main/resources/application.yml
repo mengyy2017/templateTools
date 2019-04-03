@@ -19,6 +19,7 @@ mapper:
   identity: MYSQL
 
 server:
+  uri: http://127.0.0.1:8060
   port: 8099
 
 spring:
@@ -26,17 +27,17 @@ spring:
     oauth2:     #token检查的授权端url
       client:
         clientId: createCodeClient
-        client-secret: secret
-        userAuthorizationUri: http://127.0.0.1:8060/oauth/authorize
-        grant-type: password
+        clientSecret: secret
+        userAuthorizationUri: ${server.uri}/oauth/authorize
+        grantType: password
         scope: select
-        access-token-uri: http://127.0.0.1:8060/oauth/token
+        accessTokenUri: ${server.uri}/oauth/token
   #      authentication-scheme: form     #获得授权端的当前用户信息url
       resource:
   #      id: createCode
-        user-info-uri: http://127.0.01:8060/user/me
-        filter-order: 3
-        tokenInfoUri: http://127.0.0.1:8060/oauth/check_token
+        userInfoUri: ${server.uri}/user/me
+        filterOrder: 3
+#        tokenInfoUri: ${server.uri}/oauth/check_token
         preferTokenInfo: true
       authorization:
-        check-token-access: http://127.0.0.1:8060/oauth/check_token     #对应的注册码与注册密码
+        checkTokenAccess: ${server.uri}/oauth/check_token     #对应的注册码与注册密码

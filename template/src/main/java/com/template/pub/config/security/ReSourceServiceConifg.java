@@ -28,7 +28,8 @@ public class ReSourceServiceConifg extends ResourceServerConfigurerAdapter {
                 .and().anonymous().and().authorizeRequests()
                 .antMatchers("/product/**").permitAll()
                 .antMatchers("/database/**").access("#oauth2.hasScope('select') and hasRole('ROLE_ADMIN')")
-                .antMatchers("/menu/**").authenticated()
+//                .antMatchers("/menu/**").authenticated()
+                .antMatchers("/menu/**").hasAuthority("123456")
                 .and().cors().configurationSource(request -> {
             CorsConfiguration corsConfiguration = new CorsConfiguration();
             corsConfiguration.addAllowedHeader("*");
@@ -43,12 +44,7 @@ public class ReSourceServiceConifg extends ResourceServerConfigurerAdapter {
    @Bean
    @Primary
    public ResourceServerTokenServices tokenServices() {
-       AuthoriTokenService tokenService = new AuthoriTokenService();
-       // tokenService.setTokenName("access_token");
-       tokenService.setCheckTokenEndpointUrl("http://localhost:8060/oauth/check_token");
-       tokenService.setClientId("createCodeClient");
-       tokenService.setClientSecret("secret");
-       return tokenService;
+       return new AuthoriTokenService();
    }
 
     @Override

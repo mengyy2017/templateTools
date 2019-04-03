@@ -2,6 +2,7 @@ package com.template.pub.config.security;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -21,7 +22,6 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
-
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
@@ -32,10 +32,13 @@ public class AuthoriTokenService extends RemoteTokenServices {
 
     private RestOperations restTemplate;
 
+    @Value("${spring.security.oauth2.authorization.checkTokenAccess}")
     private String checkTokenEndpointUrl;
 
+    @Value("${spring.security.oauth2.client.clientId}")
     private String clientId;
 
+    @Value("${spring.security.oauth2.client.clientSecret}")
     private String clientSecret;
 
     private String tokenName = "token";
