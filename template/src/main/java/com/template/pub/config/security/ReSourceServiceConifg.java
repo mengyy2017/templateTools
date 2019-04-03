@@ -1,4 +1,4 @@
-package com.template.pub.config;
+package com.template.pub.config.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,7 +10,6 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
 import org.springframework.web.cors.CorsConfiguration;
-
 import javax.servlet.http.HttpServletResponse;
 
 @Configuration

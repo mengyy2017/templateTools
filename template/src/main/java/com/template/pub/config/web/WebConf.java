@@ -1,6 +1,6 @@
-package com.template.pub.config;
+package com.template.pub.config.web;
 
-import com.template.pub.interceptor.ReqInterceptor;
+import com.template.pub.config.web.interceptor.ReqInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;

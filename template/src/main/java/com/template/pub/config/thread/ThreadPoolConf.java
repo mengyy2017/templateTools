@@ -1,4 +1,4 @@
-package com.template.pub.config;
+package com.template.pub.config.thread;
 
 import com.template.pub.pubBo.ConnHolder;
 import com.template.utils.CreateConnUtil;
@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Iterator;

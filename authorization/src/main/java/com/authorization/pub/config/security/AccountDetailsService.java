@@ -1,4 +1,4 @@
-package com.authorization.pub.config.confModel;
+package com.authorization.pub.config.security;
 
 import com.authorization.bussiness.entity.RoleEntity;
 import com.authorization.bussiness.entity.UserEntity;

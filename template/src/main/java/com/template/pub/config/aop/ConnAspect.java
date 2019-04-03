@@ -1,4 +1,4 @@
-package com.template.pub.config;
+package com.template.pub.config.aop;
 
 import com.template.pub.consts.Consts;
 import com.template.utils.ThreadLocalUtil;
@@ -6,7 +6,6 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
-
 import javax.servlet.http.HttpServletRequest;
 
 // import com.templateTools.pub.config.confModel.AccountDetailsService;

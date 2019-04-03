@@ -1,4 +1,4 @@
-package com.authorization.pub.config.confModel;
+package com.authorization.pub.config.security;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 

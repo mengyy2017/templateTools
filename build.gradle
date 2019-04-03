@@ -2,7 +2,7 @@
 
 allprojects {
 
-    group 'template'
+    group 'templateTools'
     version '1.0-SNAPSHOT'
     
     buildscript {

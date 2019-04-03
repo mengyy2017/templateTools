@@ -1,4 +1,4 @@
-package com.template.pub.config;
+package com.template.pub.config.security;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

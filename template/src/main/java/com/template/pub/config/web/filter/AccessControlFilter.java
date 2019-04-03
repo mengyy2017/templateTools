@@ -1,4 +1,4 @@
-package com.template.pub.filter;
+package com.template.pub.config.web.filter;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;

@@ -1,4 +1,4 @@
-package com.template.pub.interceptor;
+package com.template.pub.config.web.interceptor;
 
 import com.common.bussiness.controller.BaseController;
 import com.template.utils.ThreadLocalUtil;
