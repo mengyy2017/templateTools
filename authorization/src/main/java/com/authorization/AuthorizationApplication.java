@@ -9,7 +9,7 @@ import tk.mybatis.spring.annotation.MapperScan;
 
 @SpringBootApplication
 //@ComponentScan(basePackages = "com.templateTools")  // 这个可以注销掉 默认就是扫描这个目录
-@MapperScan(basePackages = "com.authorization.dao")
+@MapperScan(basePackages = "com.authorization.bussiness.dao")
 public class AuthorizationApplication {
     public static void main(String[] args) {
         SpringApplication.run(AuthorizationApplication.class);

@@ -4,7 +4,6 @@ import com.common.bussiness.entity.BaseEntity;
 import com.common.bussiness.mapper.CommonMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import tk.mybatis.mapper.entity.Example;
-
 import java.util.List;
 import java.util.UUID;
 
