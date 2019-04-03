@@ -1,4 +1,4 @@
-package com.template.utils;
+package com.template.util;
 
 import java.util.ArrayList;
 import java.util.List;

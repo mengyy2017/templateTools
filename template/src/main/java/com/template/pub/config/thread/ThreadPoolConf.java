@@ -1,7 +1,7 @@
 package com.template.pub.config.thread;
 
 import com.template.pub.pubBo.ConnHolder;
-import com.template.utils.CreateConnUtil;
+import com.template.util.CreateConnUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;

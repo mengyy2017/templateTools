@@ -1,6 +1,6 @@
 package com.template.pub.config.database;
 
-import com.template.utils.CreateConnUtil;
+import com.template.util.CreateConnUtil;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;

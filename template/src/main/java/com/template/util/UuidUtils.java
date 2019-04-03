@@ -1,4 +1,4 @@
-package com.template.utils;
+package com.template.util;
 
 import org.apache.commons.codec.binary.Base64;
 

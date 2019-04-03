@@ -1,4 +1,4 @@
-package com.template.utils;
+package com.template.util;
 
 import java.util.List;
 import java.util.function.Function;

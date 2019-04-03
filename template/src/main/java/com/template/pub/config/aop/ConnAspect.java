@@ -1,7 +1,7 @@
 package com.template.pub.config.aop;
 
 import com.template.pub.consts.Consts;
-import com.template.utils.ThreadLocalUtil;
+import com.template.util.ThreadLocalUtil;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;

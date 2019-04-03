@@ -3,7 +3,7 @@ package com.template.pub.config.web.filter;
 import com.common.pub.consts.RespConsts;
 import com.common.util.RespUtil;
 import com.template.pub.consts.Consts;
-import com.template.utils.ThreadLocalUtil;
+import com.template.util.ThreadLocalUtil;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import javax.servlet.*;

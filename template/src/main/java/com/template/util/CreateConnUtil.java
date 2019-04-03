@@ -1,4 +1,4 @@
-package com.template.utils;
+package com.template.util;
 
 import com.template.bussiness.entity.model.CreateInfo;
 import com.template.pub.pubBo.ConnHolder;

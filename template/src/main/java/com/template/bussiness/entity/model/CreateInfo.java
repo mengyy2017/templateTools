@@ -1,6 +1,6 @@
 package com.template.bussiness.entity.model;
 
-import com.template.utils.ThreadLocalUtil;
+import com.template.util.ThreadLocalUtil;
 import com.common.util.BuildUtil;
 import java.util.List;
 

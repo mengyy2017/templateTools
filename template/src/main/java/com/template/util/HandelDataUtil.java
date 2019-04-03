@@ -1,4 +1,4 @@
-package com.template.utils;
+package com.template.util;
 
 import com.template.bussiness.entity.ColumnEntity;
 import com.template.bussiness.entity.model.TableColsInfo;
