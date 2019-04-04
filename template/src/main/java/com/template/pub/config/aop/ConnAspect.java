@@ -1,29 +1,22 @@
 package com.template.pub.config.aop;
 
+import com.template.pub.config.security.ReSourceServiceConifg;
 import com.template.pub.consts.Consts;
-import com.template.util.ThreadLocalUtil;
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletRequest;
-
-// import com.templateTools.pub.config.confModel.AccountDetailsService;
 
 @Aspect
 @Component
 public class ConnAspect {
 
-    // @Autowired
-    // AccountDetailsService accountDetailsService;
-
-    @Before("execution(* java.sql.Connection.*())")
-    public void beforeConnectionClose(JoinPoint joinPoint) {
-        String authToken = ThreadLocalUtil.getAuthToken();
-//        ConcurrentHashMap<String, LinkedList<Connection>> conHM = CreateConnUtil.getDataSourceConHM();
-        Object a = joinPoint.getTarget();
-        String aa = "";
-    }
+     @Autowired
+     ReSourceServiceConifg reSourceServiceConifg;
 
     // 这个拦截不到 没有加spring的注解  TableEntity上的那个注解是java的
     @Before("execution(* com.template.bussiness.entity.TableEntity.*(..))")
@@ -46,10 +39,15 @@ public class ConnAspect {
     //
     // }
 
-    // @After("execution(* com.templateTools.controller.MenuController.updateOrSave(..))")
-    // public void afterMenuController(JoinPoint joinPoint){
-    //     accountDetailsService.refreshPrivilege();
-    // }
+     @After("execution(* com.template.bussiness.controller.MenuController.updateOrSave(..))")
+     public void afterMenuController(JoinPoint joinPoint){
+         try {
+             reSourceServiceConifg.getAntMatchers();
+             reSourceServiceConifg.configure((HttpSecurity) joinPoint.getArgs()[0]);
+         } catch (Exception e) {
+             e.printStackTrace();
+         }
+     }
 
 //     起作用了 得是spring管理的类 才可以拦截
 //    @Before("execution(* com.templateTools.service.TableService.*(..))")

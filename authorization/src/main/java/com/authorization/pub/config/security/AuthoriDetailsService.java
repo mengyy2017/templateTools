@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
@@ -21,11 +22,12 @@ public class AuthoriDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
         UserEntity userEntity = userService.selectUserAndRole(BuildUtil.newAndSet(UserEntity::new, BuildUtil.getVAndF(username, UserEntity::setUsername)));
 
-        UserSecurity userSecurity = new UserSecurity(userEntity.getUsername(), userEntity.getPassword()
-                                        , userEntity.getRoleEntityList().stream().map(RoleEntity::getRoleCode).map(SimpleGrantedAuthority::new).collect(Collectors.toList()));
+        List<SimpleGrantedAuthority> listGrantAuthority = userEntity.getRoleEntityList().stream()
+                .map(RoleEntity::getRoleCode).map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+
+        UserSecurity userSecurity = new UserSecurity(userEntity.getUsername(), userEntity.getPassword(), listGrantAuthority);
 
         return userSecurity;
     }

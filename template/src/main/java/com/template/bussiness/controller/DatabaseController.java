@@ -50,7 +50,7 @@ public class DatabaseController extends BaseController {
         return respResult.get();
     }
 
-    @GetMapping(value = "/getAllTables")
+    @RequestMapping(value = "/getAllTables")
     @ResponseBody
     public Resp<List<TableEntity>> getAllTables(){
 

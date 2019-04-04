@@ -4,7 +4,6 @@ import com.template.bussiness.entity.model.CreateInfo;
 import com.template.pub.pubBo.ConnHolder;
 import com.template.pub.consts.Consts;
 import org.apache.tomcat.jdbc.pool.DataSource;
-
 import java.lang.reflect.Proxy;
 import java.sql.Connection;
 import java.util.LinkedList;
@@ -20,7 +19,7 @@ public class CreateConnUtil extends DataSource {
     public Connection getConnection() {
         try {
             String authToken;
-            if (Consts.LOGIN_CHEK_URL.equals(ThreadLocalUtil.getRequestThreadLocal().get().getRequestURI()))
+            if (ThreadLocalUtil.getRequestThreadLocal().get() == null || Consts.LOGIN_CHEK_URL.equals(ThreadLocalUtil.getRequestThreadLocal().get().getRequestURI()))
                 authToken = Consts.SERCURITY_DATABASE_AUTHTOKEN_STR;
             else
                 authToken = ThreadLocalUtil.getAuthToken() == null ? ThreadLocalUtil.getCreateInfoThreadLocal().get().toString() : ThreadLocalUtil.getAuthToken();
