@@ -23,7 +23,7 @@ import java.util.Map;
 
 @Configuration
 @EnableResourceServer
-public class ReSourceServiceConifg extends ResourceServerConfigurerAdapter {
+public class ResourceServiceConfig extends ResourceServerConfigurerAdapter {
 
     @Autowired
     private MenuService menuService;
@@ -48,6 +48,8 @@ public class ReSourceServiceConifg extends ResourceServerConfigurerAdapter {
         http.csrf().disable();
 
         http.cors().configurationSource(corsConfigurationSource());
+
+        http.authorizeRequests().antMatchers("/account/login").permitAll();
 
         antMatcherMap.forEach((key, value) -> {
             try {

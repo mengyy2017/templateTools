@@ -25,7 +25,7 @@ public class AuthoriServerConf extends AuthorizationServerConfigurerAdapter {
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory()
-                .withClient("createCode")
+                .withClient("createCodeClient")
 //                .resourceIds("createCode")
                 .authorizedGrantTypes("password", "refresh_token")
                 .scopes("select")

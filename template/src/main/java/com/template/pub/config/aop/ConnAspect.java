@@ -1,6 +1,6 @@
 package com.template.pub.config.aop;
 
-import com.template.pub.config.security.ReSourceServiceConifg;
+import com.template.pub.config.security.ResourceServiceConfig;
 import com.template.pub.consts.Consts;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.After;
@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 public class ConnAspect {
 
      @Autowired
-     ReSourceServiceConifg reSourceServiceConifg;
+     ResourceServiceConfig reSourceServiceConfig;
 
     // 这个拦截不到 没有加spring的注解  TableEntity上的那个注解是java的
     @Before("execution(* com.template.bussiness.entity.TableEntity.*(..))")
@@ -42,8 +42,8 @@ public class ConnAspect {
      @After("execution(* com.template.bussiness.controller.MenuController.updateOrSave(..))")
      public void afterMenuController(JoinPoint joinPoint){
          try {
-             reSourceServiceConifg.getAntMatchers();
-             reSourceServiceConifg.configure((HttpSecurity) joinPoint.getArgs()[0]);
+             reSourceServiceConfig.getAntMatchers();
+             reSourceServiceConfig.configure((HttpSecurity) joinPoint.getArgs()[0]);
          } catch (Exception e) {
              e.printStackTrace();
          }
