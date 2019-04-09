@@ -2,7 +2,6 @@ package com.template.util;
 
 import com.template.bussiness.entity.model.CreateInfo;
 import com.template.pub.consts.Consts;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
