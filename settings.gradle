@@ -2,4 +2,5 @@ rootProject.name = 'templateTools'
 include 'authorization'
 include 'template'
 include 'common'
+include 'system'
 

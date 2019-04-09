@@ -1,7 +1,6 @@
 package com.template.bussiness.entity.model;
 
 import com.template.bussiness.entity.ColumnEntity;
-
 import java.util.List;
 
 public class TableColsInfo {

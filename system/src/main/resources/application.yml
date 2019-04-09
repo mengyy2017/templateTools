@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/security?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8
+#    url:jdbc:oracle:thin:@192.168.1.128:1521:orcl
+    username: root
+    password: 1
+
+mybatis:
+  mapper-locations: classpath:mapper/**/*.xml
+  type-aliases-package: com.system.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+mapper:
+#  mappers: com.authorization.pub.baseBussiness.mapper.CommonMapper
+  mappers: com.common.bussiness.mapper.CommonMapper
+  identity: MYSQL
+
+server:
+  port: 8060

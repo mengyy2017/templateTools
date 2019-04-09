@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<!-- 
+         符号转义说明
+    &lt;          < 
+    &gt;          >  
+    &lt;&gt;     <>
+    &amp;        & 
+    &apos;       '
+    &quot;       "
+  <![CDATA[ 这里写你的SQL或者符号 ]]> 
+ -->
+<!-- 		 -->
+<!--  -->
+<mapper namespace="com.system.dao.field.userFieldMapper" >
+	<!-- Resp Map 数据库映射到实体类  -->
+	<resultMap id="userResultMap" type="com.system.bussiness.entity.UserEntity" >
+		<result column="id" property="id" jdbcType="VARCHAR" javaType="String"/>	<!--  -->
+		<result column="username" property="username" jdbcType="VARCHAR" javaType="String"/>	<!--  -->
+		<result column="password" property="password" jdbcType="VARCHAR" javaType="String"/>	<!--  -->
+		<result column="isdel" property="isdel" jdbcType="INTEGER" javaType="int"/>	<!--  -->
+		<collection property="roleEntityList" ofType="com.system.bussiness.entity.RoleEntity" resultMap="com.system.dao.field.roleFieldMapper.roleResultMap"></collection>
+	</resultMap>
+  	
+  	<!-- tableColumns  所有列 -->
+	<sql id="userColumns" >
+		<trim suffix="" suffixOverrides=",">
+			sys_user.id	as	id,	<!--  -->
+			sys_user.username	as	username,	<!--  -->
+			sys_user.password	as	password,	<!--  -->
+			sys_user.isdel	as	isdel,	<!--  -->
+		</trim>
+	</sql>
+	
+	<!-- insertColumns 入库列 -->
+	<sql id="insertUserColumns">
+		<trim suffix="" suffixOverrides=",">
+			<if test="id != null " >
+				id,	<!--  -->
+			</if>
+			<if test="username != null " >
+				username,	<!--  -->
+			</if>
+			<if test="password != null " >
+				password,	<!--  -->
+			</if>
+			<if test="isdel != null " >
+				isdel,	<!--  -->
+			</if>
+	    </trim>
+	</sql>
+	
+	<!-- insertParams  入库值 -->
+	<sql id="insertUserParams">
+		<trim suffix="" suffixOverrides=",">
+			<if test="id != null " >
+				#{id, jdbcType=VARCHAR},	<!--  -->
+			</if>
+			<if test="username != null " >
+				#{username, jdbcType=VARCHAR},	<!--  -->
+			</if>
+			<if test="password != null " >
+				#{password, jdbcType=VARCHAR},	<!--  -->
+			</if>
+			<if test="isdel != null " >
+				#{isdel, jdbcType=INTEGER},	<!--  -->
+			</if>
+	    </trim>
+	</sql>
+	
+	<!-- insertBatchParams  批量入库列 -->
+	<sql id="insertUserBatchColumns">
+		<trim suffix="" suffixOverrides=",">
+			id,	<!--  -->
+			username,	<!--  -->
+			password,	<!--  -->
+			isdel,	<!--  -->
+	    </trim>
+	</sql>
+	
+	<!-- insertBatchParams  批量入库值 -->
+	<sql id="insertUserBatchParams">
+		<trim suffix="" suffixOverrides=",">
+			#{item.id, jdbcType=VARCHAR},	<!--  -->
+			#{item.username, jdbcType=VARCHAR},	<!--  -->
+			#{item.password, jdbcType=VARCHAR},	<!--  -->
+			#{item.isdel, jdbcType=INTEGER},	<!--  -->
+	    </trim>
+	</sql>
+	
+	<!-- updateParams  更新列 -->
+	<sql id="updateUserParams">
+		<trim suffix="" suffixOverrides=",">
+			<if test="username != null " >
+				username = #{username, jdbcType=VARCHAR},	<!--  -->
+			</if>
+			<if test="password != null " >
+				password = #{password, jdbcType=VARCHAR},	<!--  -->
+			</if>
+			<if test="isdel != null " >
+				isdel = #{isdel, jdbcType=INTEGER},	<!--  -->
+			</if>
+	    </trim>
+	</sql>
+	
+  	<!-- 查询条件  包含所有 -->
+	<sql id="andAllUser">
+		<trim  suffixOverrides="," >
+			<if test="id != null " >
+				and sys_user.id = #{id, jdbcType=VARCHAR}	<!--  -->
+			</if>
+			<if test="username != null " >
+				and sys_user.username = #{username, jdbcType=VARCHAR}	<!--  -->
+			</if>
+			<if test="password != null " >
+				and sys_user.password = #{password, jdbcType=VARCHAR}	<!--  -->
+			</if>
+			<if test="isdel != null " >
+				and sys_user.isdel = #{isdel, jdbcType=INTEGER}	<!--  -->
+			</if>
+		</trim>
+	</sql>
+	
+	<!-- 模糊查询判断 -->
+	<sql id="andLikeUser">
+		<trim  suffixOverrides="," >
+			<if test="id != null" >
+				and sys_user.id like CONCAT(CONCAT('%',#{id, jdbcType=VARCHAR}),'%' )	<!--  -->
+		    </if>
+			<if test="username != null" >
+				and sys_user.username like CONCAT(CONCAT('%',#{username, jdbcType=VARCHAR}),'%' )	<!--  -->
+		    </if>
+			<if test="password != null" >
+				and sys_user.password like CONCAT(CONCAT('%',#{password, jdbcType=VARCHAR}),'%' )	<!--  -->
+		    </if>
+			<if test="isdel != null" >
+				and sys_user.isdel like CONCAT(CONCAT('%',#{isdel, jdbcType=INTEGER}),'%' )	<!--  -->
+		    </if>
+		</trim>
+	</sql>
+	
+	<!-- 删除条件  包含所有 -->
+	<sql id="deleteAllUser">
+		<trim  suffixOverrides="," >
+			<if test="id != null " >
+				and id = #{id, jdbcType=VARCHAR}	<!--  -->
+			</if>
+			<if test="username != null " >
+				and username = #{username, jdbcType=VARCHAR}	<!--  -->
+			</if>
+			<if test="password != null " >
+				and password = #{password, jdbcType=VARCHAR}	<!--  -->
+			</if>
+			<if test="isdel != null " >
+				and isdel = #{isdel, jdbcType=INTEGER}	<!--  -->
+			</if>
+		</trim>
+	</sql>
+	
+	<!-- primary key  没有别名的主键 列名称 ,视图获取不到主键 需要设置（用户删除、更新） -->
+	<sql id="noPrefixKeyUser">
+		and id = #{id, jdbcType=VARCHAR}	<!--  -->
+	</sql>
+	
+	<!-- primaryKey  主键 列名称 ,视图获取不到主键 需要设置 -->
+	<sql id="primaryKeyUser">
+		and sys_user.id = #{id, jdbcType=VARCHAR}	<!--  -->
+	</sql>
+</mapper>

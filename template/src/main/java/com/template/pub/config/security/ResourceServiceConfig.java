@@ -1,9 +1,5 @@
 package com.template.pub.config.security;
 
-import com.common.util.BuildUtil;
-import com.template.bussiness.entity.MenuEntity;
-import com.template.bussiness.service.MenuService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -16,29 +12,26 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import javax.annotation.PostConstruct;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 @Configuration
 @EnableResourceServer
 public class ResourceServiceConfig extends ResourceServerConfigurerAdapter {
 
-    @Autowired
-    private MenuService menuService;
+//    @Autowired
+//    private MenuService menuService;
 
     public static Map<String, String> antMatcherMap;
 
     @PostConstruct
     public void getAntMatchers(){
-        List<MenuEntity> sysMenuList = menuService.selectAll();
+//        List<MenuEntity> sysMenuList = menuService.selectAll();
 
-        LinkedList<String> linkedList = sysMenuList.parallelStream().collect(
-                LinkedList::new, (l, e) -> { l.add(e.getUrl()); l.add(e.getPermission()); }, (l1, l2) -> l1.addAll(l2)
-        );
+//        LinkedList<String> linkedList = sysMenuList.parallelStream().collect(
+//                LinkedList::new, (l, e) -> { l.add(e.getUrl()); l.add(e.getPermission()); }, (l1, l2) -> l1.addAll(l2)
+//        );
 
-        antMatcherMap = BuildUtil.putsValsLoop(new HashMap<>(), HashMap<String, String>::put, linkedList);
+//        antMatcherMap = BuildUtil.putsValsLoop(new HashMap<>(), HashMap<String, String>::put, linkedList);
 
     }
 
