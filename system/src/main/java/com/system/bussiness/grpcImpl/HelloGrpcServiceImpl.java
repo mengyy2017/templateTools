@@ -1,13 +1,13 @@
-package com.system.bussiness.service.impl;
+package com.system.bussiness.grpcImpl;
 
+import com.grpc.proto.HelloReply;
+import com.grpc.proto.HelloRequest;
+import com.grpc.service.HelloWorldServiceGrpc;
 import io.grpc.stub.StreamObserver;
-import net.devh.examples.grpc.lib.HelloReply;
-import net.devh.examples.grpc.lib.HelloRequest;
-import net.devh.examples.grpc.lib.SimpleGrpc;
 import net.devh.springboot.autoconfigure.grpc.server.GrpcService;
 
-@GrpcService(SimpleGrpc.class)
-public class HelloGrpcServiceImpl extends SimpleGrpc.SimpleImplBase {
+@GrpcService(HelloWorldServiceGrpc.class)
+public class HelloGrpcServiceImpl extends HelloWorldServiceGrpc.HelloWorldServiceImplBase {
     @Override
     public void sayHello(HelloRequest req, StreamObserver<HelloReply> responseObserver) {
         HelloReply reply = HelloReply.newBuilder().setMessage("Hello =============> " + req.getName()).build();

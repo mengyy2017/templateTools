@@ -1,4 +1,4 @@
-package net.devh.examples.grpc.lib;
+package com.grpc.service;
 
 import static io.grpc.stub.ClientCalls.asyncUnaryCall;
 import static io.grpc.stub.ClientCalls.asyncServerStreamingCall;
@@ -24,44 +24,44 @@ import static io.grpc.stub.ServerCalls.asyncUnimplementedStreamingCall;
 @javax.annotation.Generated(
     value = "by gRPC proto compiler (version 1.0.0-pre2)",
     comments = "Source: helloWorld.proto")
-public class SimpleGrpc {
+public class HelloWorldServiceGrpc {
 
-  private SimpleGrpc() {}
+  private HelloWorldServiceGrpc() {}
 
-  public static final String SERVICE_NAME = "Simple";
+  public static final String SERVICE_NAME = "HelloWorldService";
 
   // Static method descriptors that strictly reflect the proto.
   @io.grpc.ExperimentalApi("https://github.com/grpc/grpc-java/issues/1901")
-  public static final io.grpc.MethodDescriptor<HelloRequest,
-      HelloReply> METHOD_SAY_HELLO =
+  public static final io.grpc.MethodDescriptor<com.grpc.proto.HelloRequest,
+      com.grpc.proto.HelloReply> METHOD_SAY_HELLO =
       io.grpc.MethodDescriptor.create(
           io.grpc.MethodDescriptor.MethodType.UNARY,
           generateFullMethodName(
-              "Simple", "SayHello"),
-          io.grpc.protobuf.ProtoUtils.marshaller(HelloRequest.getDefaultInstance()),
-          io.grpc.protobuf.ProtoUtils.marshaller(HelloReply.getDefaultInstance()));
+              "HelloWorldService", "SayHello"),
+          io.grpc.protobuf.ProtoUtils.marshaller(com.grpc.proto.HelloRequest.getDefaultInstance()),
+          io.grpc.protobuf.ProtoUtils.marshaller(com.grpc.proto.HelloReply.getDefaultInstance()));
 
   /**
    * Creates a new async stub that supports all call types for the service
    */
-  public static SimpleStub newStub(io.grpc.Channel channel) {
-    return new SimpleStub(channel);
+  public static HelloWorldServiceStub newStub(io.grpc.Channel channel) {
+    return new HelloWorldServiceStub(channel);
   }
 
   /**
    * Creates a new blocking-style stub that supports unary and streaming output calls on the service
    */
-  public static SimpleBlockingStub newBlockingStub(
+  public static HelloWorldServiceBlockingStub newBlockingStub(
       io.grpc.Channel channel) {
-    return new SimpleBlockingStub(channel);
+    return new HelloWorldServiceBlockingStub(channel);
   }
 
   /**
    * Creates a new ListenableFuture-style stub that supports unary and streaming output calls on the service
    */
-  public static SimpleFutureStub newFutureStub(
+  public static HelloWorldServiceFutureStub newFutureStub(
       io.grpc.Channel channel) {
-    return new SimpleFutureStub(channel);
+    return new HelloWorldServiceFutureStub(channel);
   }
 
   /**
@@ -70,15 +70,15 @@ public class SimpleGrpc {
    *定义的接口的类，这里会生成一个SimpleGrpc.class，服务端需要来实现的
    * </pre>
    */
-  public static abstract class SimpleImplBase implements io.grpc.BindableService {
+  public static abstract class HelloWorldServiceImplBase implements io.grpc.BindableService {
 
     /**
      * <pre>
      *定义接口方法
      * </pre>
      */
-    public void sayHello(HelloRequest request,
-                         io.grpc.stub.StreamObserver<HelloReply> responseObserver) {
+    public void sayHello(com.grpc.proto.HelloRequest request,
+        io.grpc.stub.StreamObserver<com.grpc.proto.HelloReply> responseObserver) {
       asyncUnimplementedUnaryCall(METHOD_SAY_HELLO, responseObserver);
     }
 
@@ -88,8 +88,8 @@ public class SimpleGrpc {
             METHOD_SAY_HELLO,
             asyncUnaryCall(
               new MethodHandlers<
-                HelloRequest,
-                HelloReply>(
+                com.grpc.proto.HelloRequest,
+                com.grpc.proto.HelloReply>(
                   this, METHODID_SAY_HELLO)))
           .build();
     }
@@ -101,20 +101,20 @@ public class SimpleGrpc {
    *定义的接口的类，这里会生成一个SimpleGrpc.class，服务端需要来实现的
    * </pre>
    */
-  public static final class SimpleStub extends io.grpc.stub.AbstractStub<SimpleStub> {
-    private SimpleStub(io.grpc.Channel channel) {
+  public static final class HelloWorldServiceStub extends io.grpc.stub.AbstractStub<HelloWorldServiceStub> {
+    private HelloWorldServiceStub(io.grpc.Channel channel) {
       super(channel);
     }
 
-    private SimpleStub(io.grpc.Channel channel,
+    private HelloWorldServiceStub(io.grpc.Channel channel,
         io.grpc.CallOptions callOptions) {
       super(channel, callOptions);
     }
 
     @Override
-    protected SimpleStub build(io.grpc.Channel channel,
+    protected HelloWorldServiceStub build(io.grpc.Channel channel,
         io.grpc.CallOptions callOptions) {
-      return new SimpleStub(channel, callOptions);
+      return new HelloWorldServiceStub(channel, callOptions);
     }
 
     /**
@@ -122,8 +122,8 @@ public class SimpleGrpc {
      *定义接口方法
      * </pre>
      */
-    public void sayHello(HelloRequest request,
-                         io.grpc.stub.StreamObserver<HelloReply> responseObserver) {
+    public void sayHello(com.grpc.proto.HelloRequest request,
+        io.grpc.stub.StreamObserver<com.grpc.proto.HelloReply> responseObserver) {
       asyncUnaryCall(
           getChannel().newCall(METHOD_SAY_HELLO, getCallOptions()), request, responseObserver);
     }
@@ -135,20 +135,20 @@ public class SimpleGrpc {
    *定义的接口的类，这里会生成一个SimpleGrpc.class，服务端需要来实现的
    * </pre>
    */
-  public static final class SimpleBlockingStub extends io.grpc.stub.AbstractStub<SimpleBlockingStub> {
-    private SimpleBlockingStub(io.grpc.Channel channel) {
+  public static final class HelloWorldServiceBlockingStub extends io.grpc.stub.AbstractStub<HelloWorldServiceBlockingStub> {
+    private HelloWorldServiceBlockingStub(io.grpc.Channel channel) {
       super(channel);
     }
 
-    private SimpleBlockingStub(io.grpc.Channel channel,
+    private HelloWorldServiceBlockingStub(io.grpc.Channel channel,
         io.grpc.CallOptions callOptions) {
       super(channel, callOptions);
     }
 
     @Override
-    protected SimpleBlockingStub build(io.grpc.Channel channel,
+    protected HelloWorldServiceBlockingStub build(io.grpc.Channel channel,
         io.grpc.CallOptions callOptions) {
-      return new SimpleBlockingStub(channel, callOptions);
+      return new HelloWorldServiceBlockingStub(channel, callOptions);
     }
 
     /**
@@ -156,7 +156,7 @@ public class SimpleGrpc {
      *定义接口方法
      * </pre>
      */
-    public HelloReply sayHello(HelloRequest request) {
+    public com.grpc.proto.HelloReply sayHello(com.grpc.proto.HelloRequest request) {
       return blockingUnaryCall(
           getChannel(), METHOD_SAY_HELLO, getCallOptions(), request);
     }
@@ -168,20 +168,20 @@ public class SimpleGrpc {
    *定义的接口的类，这里会生成一个SimpleGrpc.class，服务端需要来实现的
    * </pre>
    */
-  public static final class SimpleFutureStub extends io.grpc.stub.AbstractStub<SimpleFutureStub> {
-    private SimpleFutureStub(io.grpc.Channel channel) {
+  public static final class HelloWorldServiceFutureStub extends io.grpc.stub.AbstractStub<HelloWorldServiceFutureStub> {
+    private HelloWorldServiceFutureStub(io.grpc.Channel channel) {
       super(channel);
     }
 
-    private SimpleFutureStub(io.grpc.Channel channel,
+    private HelloWorldServiceFutureStub(io.grpc.Channel channel,
         io.grpc.CallOptions callOptions) {
       super(channel, callOptions);
     }
 
     @Override
-    protected SimpleFutureStub build(io.grpc.Channel channel,
+    protected HelloWorldServiceFutureStub build(io.grpc.Channel channel,
         io.grpc.CallOptions callOptions) {
-      return new SimpleFutureStub(channel, callOptions);
+      return new HelloWorldServiceFutureStub(channel, callOptions);
     }
 
     /**
@@ -189,8 +189,8 @@ public class SimpleGrpc {
      *定义接口方法
      * </pre>
      */
-    public com.google.common.util.concurrent.ListenableFuture<HelloReply> sayHello(
-        HelloRequest request) {
+    public com.google.common.util.concurrent.ListenableFuture<com.grpc.proto.HelloReply> sayHello(
+        com.grpc.proto.HelloRequest request) {
       return futureUnaryCall(
           getChannel().newCall(METHOD_SAY_HELLO, getCallOptions()), request);
     }
@@ -203,10 +203,10 @@ public class SimpleGrpc {
       io.grpc.stub.ServerCalls.ServerStreamingMethod<Req, Resp>,
       io.grpc.stub.ServerCalls.ClientStreamingMethod<Req, Resp>,
       io.grpc.stub.ServerCalls.BidiStreamingMethod<Req, Resp> {
-    private final SimpleImplBase serviceImpl;
+    private final HelloWorldServiceImplBase serviceImpl;
     private final int methodId;
 
-    public MethodHandlers(SimpleImplBase serviceImpl, int methodId) {
+    public MethodHandlers(HelloWorldServiceImplBase serviceImpl, int methodId) {
       this.serviceImpl = serviceImpl;
       this.methodId = methodId;
     }
@@ -216,8 +216,8 @@ public class SimpleGrpc {
     public void invoke(Req request, io.grpc.stub.StreamObserver<Resp> responseObserver) {
       switch (methodId) {
         case METHODID_SAY_HELLO:
-          serviceImpl.sayHello((HelloRequest) request,
-              (io.grpc.stub.StreamObserver<HelloReply>) responseObserver);
+          serviceImpl.sayHello((com.grpc.proto.HelloRequest) request,
+              (io.grpc.stub.StreamObserver<com.grpc.proto.HelloReply>) responseObserver);
           break;
         default:
           throw new AssertionError();

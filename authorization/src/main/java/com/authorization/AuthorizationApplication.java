@@ -7,7 +7,7 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import tk.mybatis.spring.annotation.MapperScan;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com")
 //@ComponentScan(basePackages = "com.templateTools")  // 这个可以注销掉 默认就是扫描这个目录
 @MapperScan(basePackages = "com.authorization.bussiness.dao")
 public class AuthorizationApplication {

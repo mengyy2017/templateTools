@@ -1,9 +1,9 @@
-package com.authorization.bussiness.client;
+package com.grpc.client;
 
+import com.grpc.proto.HelloReply;
+import com.grpc.proto.HelloRequest;
+import com.grpc.service.HelloWorldServiceGrpc;
 import io.grpc.Channel;
-import net.devh.examples.grpc.lib.HelloReply;
-import net.devh.examples.grpc.lib.HelloRequest;
-import net.devh.examples.grpc.lib.SimpleGrpc;
 import net.devh.springboot.autoconfigure.grpc.client.GrpcClient;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ public class SystemGrpcClient {
     private Channel systemChannel;
 
     public String sayHello(String name){
-        SimpleGrpc.SimpleBlockingStub stub = SimpleGrpc.newBlockingStub(systemChannel);
+        HelloWorldServiceGrpc.HelloWorldServiceBlockingStub stub = HelloWorldServiceGrpc.newBlockingStub(systemChannel);
         HelloReply resp = stub.sayHello(HelloRequest.newBuilder().setName(name).build());
         return resp.getMessage();
     }

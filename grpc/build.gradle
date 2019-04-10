@@ -6,7 +6,7 @@ dependencies {
     compile "io.grpc:grpc-netty:1.10.0"
     compile "io.grpc:grpc-protobuf:1.10.0"
     compile "io.grpc:grpc-stub:1.10.0"
-
+    compile "net.devh:grpc-client-spring-boot-starter:1.4.0.RELEASE"
 }
 
 protobuf {
