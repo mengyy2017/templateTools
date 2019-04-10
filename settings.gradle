@@ -3,4 +3,5 @@ include 'authorization'
 include 'template'
 include 'common'
 include 'system'
+include 'grpcProto'
 

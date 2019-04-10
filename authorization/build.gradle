@@ -3,5 +3,7 @@
 dependencies {
     compile(
             project(':common'),
+            project(':grpcProto'),
+            "net.devh:grpc-client-spring-boot-starter:1.4.0.RELEASE"
     )
 }

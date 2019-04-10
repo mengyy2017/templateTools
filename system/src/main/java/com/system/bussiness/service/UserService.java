@@ -1,9 +1,9 @@
-package system.bussiness.service;
+package com.system.bussiness.service;
 
 import com.common.bussiness.service.CommonService;
 import org.springframework.stereotype.Service;
-import system.bussiness.dao.UserMapper;
-import system.bussiness.entity.UserEntity;
+import com.system.bussiness.dao.UserMapper;
+import com.system.bussiness.entity.UserEntity;
 
 @Service
 public class UserService extends CommonService<UserEntity> {

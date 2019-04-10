@@ -1,4 +1,6 @@
-#spring:
+spring:
+  application:
+    name: authorization
 #  datasource:
 #    driver-class-name: com.mysql.jdbc.Driver
 #    url: jdbc:mysql://127.0.0.1:3306/security?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8
@@ -20,3 +22,11 @@
 
 server:
   port: 8060
+
+grpc:
+  client:
+    systemGrpcServer:
+      host: 127.0.0.1
+      port: 8010
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true

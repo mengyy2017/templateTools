@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: systemGrpcServer
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/security?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8
@@ -19,4 +21,9 @@ mapper:
   identity: MYSQL
 
 server:
-  port: 8060
+  port: 8061
+
+grpc:
+  server:
+    port: 8010
+

@@ -1,7 +1,7 @@
-package system.bussiness.dao;
+package com.system.bussiness.dao;
 
 import com.common.bussiness.mapper.CommonMapper;
-import system.bussiness.entity.RoleEntity;
+import com.system.bussiness.entity.RoleEntity;
 
 public interface RoleMapper extends CommonMapper<RoleEntity> {
 }

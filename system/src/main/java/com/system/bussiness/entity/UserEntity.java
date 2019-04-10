@@ -1,4 +1,4 @@
-package system.bussiness.entity;
+package com.system.bussiness.entity;
 
 import com.common.bussiness.entity.BaseEntity;
 import javax.persistence.Table;
