@@ -1,12 +1,11 @@
 package com.authorization.pub.config.security;
 
-import com.authorization.bussiness.entity.UserSecurity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
-
 import java.util.Arrays;
 
 @Component
@@ -23,7 +22,7 @@ public class AuthoriDetailsService implements UserDetailsService {
 //                .map(RoleEntity::getRoleCode).map(SimpleGrantedAuthority::new).collect(Collectors.toList());
 
 //        UserSecurity userSecurity = new UserSecurity(userEntity.getUsername(), userEntity.getPassword(), listGrantAuthority);
-        UserSecurity userSecurity = new UserSecurity("admin", "123456", Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN")));
+        User userSecurity = new User("admin", "123456", Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN")));
 
         return userSecurity;
     }
