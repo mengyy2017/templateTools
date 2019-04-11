@@ -1,9 +1,4 @@
 spring:
-#  datasource:
-#    driver-class-name: com.mysql.jdbc.Driver
-#    url: jdbc:mysql://127.0.0.1:3306/security?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8
-#    username: root
-#    password: 1
   security:
     oauth2:     #token检查的授权端url
       client:
@@ -22,7 +17,6 @@ spring:
         preferTokenInfo: true
       authorization:
         checkTokenAccess: ${server.uri}/oauth/check_token     #对应的注册码与注册密码
-
 
 mybatis:
   mapper-locations: classpath:mapper/**/*.xml
