@@ -24,11 +24,11 @@ public class ConnAspect {
         String bb = "";
     }
 
-    @Before("execution(* com.template.bussiness.controller.MenuController.*(..))")
-    public void beforeMenuController(JoinPoint joinPoint){
-        HttpServletRequest req = (HttpServletRequest) joinPoint.getArgs()[0];
-        req.setAttribute(Consts.AUTHTOKEN, Consts.SERCURITY_DATABASE_AUTHTOKEN);
-    }
+//    @Before("execution(* com.template.bussiness.controller.MenuController.*(..))")
+//    public void beforeMenuController(JoinPoint joinPoint){
+//        HttpServletRequest req = (HttpServletRequest) joinPoint.getArgs()[0];
+//        req.setAttribute(Consts.AUTHTOKEN, Consts.SERCURITY_DATABASE_AUTHTOKEN);
+//    }
 
     // @Before("execution(* org.springframework.web.client.RestTemplate.*(..))")
     // public void beforeTempalteExecute(JoinPoint joinPoint){
@@ -39,15 +39,15 @@ public class ConnAspect {
     //
     // }
 
-     @After("execution(* com.template.bussiness.controller.MenuController.updateOrSave(..))")
-     public void afterMenuController(JoinPoint joinPoint){
-         try {
-             reSourceServiceConfig.getAntMatchers();
-             reSourceServiceConfig.configure((HttpSecurity) joinPoint.getArgs()[0]);
-         } catch (Exception e) {
-             e.printStackTrace();
-         }
-     }
+//     @After("execution(* com.template.bussiness.controller.MenuController.updateOrSave(..))")
+//     public void afterMenuController(JoinPoint joinPoint){
+//         try {
+//             reSourceServiceConfig.getAntMatchers();
+//             reSourceServiceConfig.configure((HttpSecurity) joinPoint.getArgs()[0]);
+//         } catch (Exception e) {
+//             e.printStackTrace();
+//         }
+//     }
 
 //     起作用了 得是spring管理的类 才可以拦截
 //    @Before("execution(* com.templateTools.service.TableService.*(..))")

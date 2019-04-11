@@ -1,0 +1,38 @@
+//syntax = "proto3";
+//
+//option java_multiple_files = true;
+//
+//option java_package = "com.grpc.proto.user";
+//
+//option java_outer_classname = "UserProto";
+//
+//service UserService {
+//    rpc GetUser(UserRoleMsg) returns (UserRoleMsg){}
+//}
+//
+//message UserRoleMsg {
+//    string id = 1;
+//    string username = 2;
+//    string password = 3;
+//    repeated RoleMsg RoleMsgList = 4;
+//}
+//
+//message RoleMsg {
+//    string id = 1;
+//    string code = 2;
+//    string name = 3;
+//}
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//

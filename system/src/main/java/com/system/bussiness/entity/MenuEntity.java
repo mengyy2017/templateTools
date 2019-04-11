@@ -10,6 +10,8 @@ public class MenuEntity extends BaseEntity {
 
     private String permission;
 
+    private String module;
+
     public String getUrl() {
         return url;
     }
@@ -24,5 +26,13 @@ public class MenuEntity extends BaseEntity {
 
     public void setPermission(String permission) {
         this.permission = permission;
+    }
+
+    public String getModule() {
+        return module;
+    }
+
+    public void setModule(String module) {
+        this.module = module;
     }
 }

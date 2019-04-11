@@ -39,3 +39,11 @@ mapper:
 server:
   uri: http://127.0.0.1:8060
   port: 8099
+
+grpc:
+  client:
+    systemGrpcServer:
+      host: 127.0.0.1
+      port: 8010
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true

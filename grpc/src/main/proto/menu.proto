@@ -1,0 +1,32 @@
+//syntax = "proto3";
+//
+//option java_multiple_files = true;
+//
+//option java_package = "com.grpc.proto.menu";
+//
+//option java_outer_classname = "MenuProto";
+//
+//service MenuService {
+//    rpc GetAllMenu(MenuMsg) returns (stream MenuMsg){}
+//}
+//
+//message MenuMsg {
+//    string id = 1;
+//    string url = 2;
+//    string permission = 3;
+//    string module = 4;
+//}
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//

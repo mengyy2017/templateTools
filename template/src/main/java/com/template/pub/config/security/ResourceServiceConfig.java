@@ -1,5 +1,9 @@
 package com.template.pub.config.security;
 
+import com.common.util.BuildUtil;
+import com.grpc.client.SystemGrpcClient;
+import com.grpc.proto.menu.MenuMsg;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -12,26 +16,30 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import javax.annotation.PostConstruct;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 @Configuration
 @EnableResourceServer
 public class ResourceServiceConfig extends ResourceServerConfigurerAdapter {
 
-//    @Autowired
-//    private MenuService menuService;
+    @Autowired
+    private SystemGrpcClient systemGrpcClient;
 
     public static Map<String, String> antMatcherMap;
 
     @PostConstruct
     public void getAntMatchers(){
-//        List<MenuEntity> sysMenuList = menuService.selectAll();
 
-//        LinkedList<String> linkedList = sysMenuList.parallelStream().collect(
-//                LinkedList::new, (l, e) -> { l.add(e.getUrl()); l.add(e.getPermission()); }, (l1, l2) -> l1.addAll(l2)
-//        );
+        List<MenuMsg> menuMsgList = systemGrpcClient.getAllMenu(MenuMsg.newBuilder().setModule("template").build());
 
-//        antMatcherMap = BuildUtil.putsValsLoop(new HashMap<>(), HashMap<String, String>::put, linkedList);
+        LinkedList<String> linkedList = menuMsgList.parallelStream().collect(
+                LinkedList::new, (l, e) -> { l.add(e.getUrl()); l.add(e.getPermission()); }, (l1, l2) -> l1.addAll(l2)
+        );
+
+        antMatcherMap = BuildUtil.putsValsLoop(new HashMap<>(), HashMap<String, String>::put, linkedList);
 
     }
 
