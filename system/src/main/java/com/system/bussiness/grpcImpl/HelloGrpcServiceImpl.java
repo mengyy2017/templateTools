@@ -1,7 +1,7 @@
 package com.system.bussiness.grpcImpl;
 
-import com.grpc.proto.HelloReply;
-import com.grpc.proto.HelloRequest;
+import com.grpc.proto.hello.HelloReply;
+import com.grpc.proto.hello.HelloRequest;
 import com.grpc.service.HelloWorldServiceGrpc;
 import io.grpc.stub.StreamObserver;
 import net.devh.springboot.autoconfigure.grpc.server.GrpcService;
