@@ -20,7 +20,7 @@ public class SwaggerConf {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.templateTools.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.template.bussiness.controller"))
                 .paths(PathSelectors.any())
                 .build();
     }

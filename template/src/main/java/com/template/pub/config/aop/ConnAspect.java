@@ -15,8 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 @Component
 public class ConnAspect {
 
-     @Autowired
-     ResourceServiceConfig reSourceServiceConfig;
+     // @Autowired
+     // ResourceServiceConfig reSourceServiceConfig;
 
     // 这个拦截不到 没有加spring的注解  TableEntity上的那个注解是java的
     @Before("execution(* com.template.bussiness.entity.TableEntity.*(..))")
@@ -50,7 +50,7 @@ public class ConnAspect {
 //     }
 
 //     起作用了 得是spring管理的类 才可以拦截
-//    @Before("execution(* com.templateTools.service.TableService.*(..))")
+//    @Before("execution(* com.template.service.TableService.*(..))")
 //    public void aaaaa(JoinPoint joinPoint){
 //        Object a = joinPoint.getTarget();
 //        System.out.println("代理TableService的方法");
