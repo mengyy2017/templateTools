@@ -3,12 +3,12 @@ spring:
     name: authorization
 
 server:
-  port: 8060
+  port: 8040
 
 grpc:
   client:
     systemGrpcServer:
       host: 127.0.0.1
-      port: 8010
+      port: 8060
       enableKeepAlive: true
       keepAliveWithoutCalls: true

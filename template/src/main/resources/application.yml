@@ -31,13 +31,13 @@ mapper:
   identity: MYSQL
 
 server:
-  uri: http://127.0.0.1:8060
-  port: 8099
+  uri: http://127.0.0.1:8040
+  port: 8042
 
 grpc:
   client:
     systemGrpcServer:
       host: 127.0.0.1
-      port: 8010
+      port: 8060
       enableKeepAlive: true
       keepAliveWithoutCalls: true

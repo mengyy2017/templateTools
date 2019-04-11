@@ -27,6 +27,7 @@ public class AuthoriDetailsService implements UserDetailsService {
                 .stream().map(RoleMsg::getCode).map(SimpleGrantedAuthority::new).collect(Collectors.toList());
 
         User userSecurity = new User(userRoleMsg.getUsername(), userRoleMsg.getPassword(), grantedAuthorityList);
+
         return userSecurity;
     }
 

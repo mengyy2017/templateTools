@@ -21,9 +21,9 @@ mapper:
   identity: MYSQL
 
 server:
-  port: 8061
+  port: 8041
 
 grpc:
   server:
-    port: 8010
+    port: 8060
 
