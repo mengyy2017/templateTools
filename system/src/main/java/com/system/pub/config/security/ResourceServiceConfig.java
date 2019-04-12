@@ -1,5 +1,6 @@
 package com.system.pub.config.security;
 
+import com.common.pub.config.security.AuthoriTokenService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;

@@ -1,9 +1,6 @@
 package com.authorization.pub.consts;
 
-
-import com.common.util.BuildUtil;
-
-public class Consts extends BuildUtil {
+public class Consts {
 
     public static String LOGIN_CHEK_URL = "/j_logi";
 

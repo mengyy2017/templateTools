@@ -1,4 +1,4 @@
-package com.template.pub.config.security;
+package com.common.pub.config.security;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -22,6 +22,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Map;

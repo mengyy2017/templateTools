@@ -1,5 +1,6 @@
 package com.template.pub.config.security;
 
+import com.common.pub.config.security.AuthoriTokenService;
 import com.common.util.BuildUtil;
 import com.grpc.client.SystemGrpcClient;
 import com.grpc.proto.menu.MenuMsg;
