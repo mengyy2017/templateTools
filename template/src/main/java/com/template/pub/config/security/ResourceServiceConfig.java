@@ -51,8 +51,6 @@ public class ResourceServiceConfig extends ResourceServerConfigurerAdapter {
 
         http.cors().configurationSource(corsConfigurationSource());
 
-        http.authorizeRequests().antMatchers("/account/login").permitAll();
-
         antMatcherMap.forEach((key, value) -> {
             try {
                 http.authorizeRequests().antMatchers(key).hasAuthority(value);
