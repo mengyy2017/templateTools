@@ -1,4 +1,4 @@
-package com.template.pub.config.security;
+package com.system.pub.config.security;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

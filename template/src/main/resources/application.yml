@@ -1,3 +1,15 @@
+server:
+  port: 8042
+  uri: http://127.0.0.1:8040
+
+grpc:
+  client:
+    systemGrpcServer:
+      host: 127.0.0.1
+      port: 8060
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+
 spring:
   security:
     oauth2:     #token检查的授权端url
@@ -29,15 +41,3 @@ mapper:
 #  mappers: com.template.pub.baseBussiness.mapper.CommonMapper
   mappers: com.common.bussiness.mapper.CommonMapper
   identity: MYSQL
-
-server:
-  uri: http://127.0.0.1:8040
-  port: 8042
-
-grpc:
-  client:
-    systemGrpcServer:
-      host: 127.0.0.1
-      port: 8060
-      enableKeepAlive: true
-      keepAliveWithoutCalls: true

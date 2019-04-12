@@ -1,8 +1,8 @@
-package com.template.bussiness.controller;
+package com.system.bussiness.controller;
 
 import com.common.bussiness.controller.BaseController;
 import com.common.pub.pubBo.Resp;
-import com.template.bussiness.entity.UserEntity;
+import com.system.bussiness.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.token.grant.password.ResourceOwnerPasswordResourceDetails;

@@ -49,6 +49,4 @@ public class MenuController extends BaseController {
         return respResult.get();
     }
 
-
-
 }

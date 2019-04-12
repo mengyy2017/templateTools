@@ -1,12 +1,38 @@
+server:
+  port: 8041
+  uri: http://127.0.0.1:8040
+
+grpc:
+  server:
+    port: 8060
+
 spring:
   application:
     name: systemGrpcServer
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/security?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8
-#    url:jdbc:oracle:thin:@192.168.1.128:1521:orcl
+    #    url:jdbc:oracle:thin:@192.168.1.128:1521:orcl
     username: root
     password: 1
+  security:
+    oauth2:     #token检查的授权端url
+      client:
+        clientId: createCodeClient
+        clientSecret: secret
+        userAuthorizationUri: ${server.uri}/oauth/authorize
+        grantType: password
+        scope: select
+        accessTokenUri: ${server.uri}/oauth/token
+      #      authentication-scheme: form     #获得授权端的当前用户信息url
+      resource:
+        #      id: createCode
+        userInfoUri: ${server.uri}/user/me
+        filterOrder: 3
+        #        tokenInfoUri: ${server.uri}/oauth/check_token
+        preferTokenInfo: true
+      authorization:
+        checkTokenAccess: ${server.uri}/oauth/check_token     #对应的注册码与注册密码
 
 mybatis:
   mapper-locations: classpath:mapper/**/*.xml
@@ -19,11 +45,3 @@ mapper:
 #  mappers: com.authorization.pub.baseBussiness.mapper.CommonMapper
   mappers: com.common.bussiness.mapper.CommonMapper
   identity: MYSQL
-
-server:
-  port: 8041
-
-grpc:
-  server:
-    port: 8060
-
