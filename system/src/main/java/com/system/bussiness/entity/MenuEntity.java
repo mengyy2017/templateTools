@@ -1,10 +1,12 @@
 package com.system.bussiness.entity;
 
 import com.common.bussiness.entity.BaseEntity;
+import com.common.pub.pubBo.MenuFunInter;
+
 import javax.persistence.Table;
 
 @Table(name = "sys_menu")
-public class MenuEntity extends BaseEntity {
+public class MenuEntity extends BaseEntity implements MenuFunInter {
 
     private String url;
 

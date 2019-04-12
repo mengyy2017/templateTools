@@ -2,6 +2,7 @@
 // source: menu.proto
 
 package com.grpc.proto.menu;
+import com.common.pub.pubBo.MenuFunInter;
 
 /**
  * Protobuf type {@code MenuMsg}
@@ -9,7 +10,7 @@ package com.grpc.proto.menu;
 public  final class MenuMsg extends
     com.google.protobuf.GeneratedMessageV3 implements
     // @@protoc_insertion_point(message_implements:MenuMsg)
-    MenuMsgOrBuilder {
+    MenuMsgOrBuilder, MenuFunInter {
   // Use MenuMsg.newBuilder() to construct.
   private MenuMsg(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);

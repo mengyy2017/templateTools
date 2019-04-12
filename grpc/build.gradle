@@ -3,6 +3,7 @@ apply plugin: 'com.google.protobuf'
 
 
 dependencies {
+    project(':common')
     compile "io.grpc:grpc-netty:1.10.0"
     compile "io.grpc:grpc-protobuf:1.10.0"
     compile "io.grpc:grpc-stub:1.10.0"
