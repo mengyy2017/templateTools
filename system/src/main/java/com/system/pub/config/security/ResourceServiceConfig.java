@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
+import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -50,9 +51,9 @@ public class ResourceServiceConfig extends ResourceServerConfigurerAdapter {
        return new AuthoriTokenService();
    }
 
-//    @Override
-//    public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
-//        resources.resourceId("createCode").stateless(true);
-//    }
+    @Override
+    public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
+        resources.resourceId("createCode").stateless(true);
+    }
 
 }
