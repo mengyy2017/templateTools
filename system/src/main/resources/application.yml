@@ -10,7 +10,7 @@ spring:
   application:
     name: systemGrpcServer
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
+    driverClassName: com.mysql.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/security?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8
     #    url:jdbc:oracle:thin:@192.168.1.128:1521:orcl
     username: root
