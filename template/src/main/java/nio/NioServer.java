@@ -47,6 +47,9 @@ public class NioServer implements Runnable {
 			this.pendingChanges.add(new ChangeRequest(socket, ChangeRequest.CHANGEOPS, SelectionKey.OP_WRITE));
 
 			// And queue the data we want written
+            // 这里 他把hashMap给锁住了 防止在判断后和put之前这一段时间可能发生的线程问题 就是防止拿到键的值后又有其他线程把键的值给修改了
+            // 这时候用拿到的键的值修改后再放回去就可能出错了 所以他锁住了 而在netty的ConstantPool类的getOrCreate方法里
+            // 就并没有把他的那个Map(实际类型是ConcurrentMap)锁住 像这个感觉可以用computeIfAbsent 避免锁this.pendingData
 			synchronized (this.pendingData) {
 				List queue = (List) this.pendingData.get(socket);
 				if (queue == null) {
@@ -65,11 +68,28 @@ public class NioServer implements Runnable {
 		while (true) {
 			try {
 				// Process any pending changes
+                // 第一次循环没有数据 会直接走过去这段代码 然后在下面的select处阻塞
+                // 阻塞住之后 就会等待客户端的连接 连接之后 阻塞的select方法就胡返回 然后进入accpt方法
+                // accpt和以往一样 把socketChannel注册READ 感知客户端的输入 方法执行完结束 然后又会走循环 下面的这段
+                // 代码还是没数据 直接走过去 然后又在下面的select方法阻塞住 等到客户端有数据输入了 阻塞方法返回
+                // 再走read方法 read方法会自己先读取数据 然后调用handler去具体处理数据 由于handler是个线程 所以可以认为
+                // read方法到调用handler的时候就已经结束了 然后又循环到这里 跳过 阻塞到select 等handler处理完
+                // handler会再调用这个类（Server或者叫BossGroup）里面的send方法 send方法会初始化pendingChanges和pendingData
+                // 初始化的change是write 初始化完他会调用this.selector.wakeup(); 然后下面阻塞着的方法就会往下走 不过
+                // selectionKey没有进入任何方法 然后又循环到此处 这次 这里pendingChanges就有数据了 而且是write
+                // 他就会注册write键 然后再到select 没有对socketChannel的输出 会阻塞住 虽然键是write 但没有触发条件
+                //
 				synchronized (this.pendingChanges) {
 					Iterator changes = this.pendingChanges.iterator();
 					while (changes.hasNext()) {
 						ChangeRequest change = (ChangeRequest) changes.next();
 						switch (change.type) {
+                        // 这段代码的意思好像是 收到请求 然后取出关联的socket 然后把socket之前注册的键拿出来
+                        // 然后更改注册的键的感兴趣事件 之前都是socketChannel.register(selector, SelectionKey.OP_READ);
+                        // 而且前面这个代码是在判断如果键是isAcceptable后使用
+                        // 就是通道注册到selector上 然后给一个数字SelectionKey.OP_READ 让selector知道通道感兴趣的事件
+                        // 这样selector就会生成一个关联的键 并且感兴趣的事件是那个给定的数字SelectionKey.OP_READ
+                        // 他这种可能是另外一种写法 而且也没有判断键是isAcceptable还是isReadable就把键感兴趣的事件给改了
 						case ChangeRequest.CHANGEOPS:
 							SelectionKey key = change.socket.keyFor(this.selector);
 							key.interestOps(change.ops);
@@ -199,6 +219,14 @@ public class NioServer implements Runnable {
 		try {
 			EchoWorker worker = new EchoWorker();
 			new Thread(worker).start();
+
+			// NioServer就相当于是BossGroup 他会监听连接的到来 也只有是连接的时候 他才会自己处理
+            // 像读取客户端数据再处理这种操作 他不是完全自己做的 读数据这个他自己做 但是处理数据这个他交给了EchoWorker去处理
+            // 这也就是说EchoWorker相当于了workerGroup EchoWorker这个线程可以升级为线程池 不升级线程池的话就相当于是一个线程去处理BossGroup交给的任务了
+            // 当EchoWorker没有数据处理的时候 他就会wait 当有数据需要处理的时候 他也不会自己处理 他把数据封装了一下就交给了ServerDataEvent去处理
+            // 这个ServerDataEvent就 相当于是注册到wokerGroup的handler了 这个ServerDataEvent会真正的去处理数据
+            // 这个例子中ServerDataEvent又调用了Server中的方法 就是又调用了BossGroup中的方法了
+
 			new Thread(new NioServer(InetAddress.getLocalHost(), 9090, worker)).start();
 		} catch (IOException e) {
 			e.printStackTrace();

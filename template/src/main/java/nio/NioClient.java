@@ -61,6 +61,50 @@ public class NioClient implements Runnable {
 		while (true) {
 			try {
 				// Process any pending changes
+                // 客户端先启动了 所以下面的代码会先运行 先运行的时候 this.pendingChanges是没有数据的 所以下面的这段代码
+                // 会直接走过去 走到下面的this.selector.select() 然后就阻塞住了
+                // 接着运行客户端的send方法 send方法会先初始化连接 初始化连接的时候才会初始化pendingchanges
+                // 而且send方法会把要发送的数据初始化到pendingData中 等待都初始化过后 send方法调用了this.selector.wakeup();
+                // 刚才走到this.selector.select()阻塞的地方就会返回 但是是没有selectionKey操作的 所以阻塞下面的代码也是直接
+                // 就运行过去了 然后就又到了这里 这次到这的时候 pendingChanges是有数据的 初始化的是REGISTER 所以走REGISTER那块
+                // 然后ops初始化的是CONNECTION的KEY 所以 这里就会先注册连接的键
+                    // 之前的教程都是在上面的这个while循环外直接写注册连接的键 就是下面的代码
+                    // SocketChannel socketChannel = SocketChannel.open();
+                    // socketChannel.configureBlocking(false);
+                    //
+                    // Selector selector = Selector.open();
+                    // socketChannel.register(selector, SelectionKey.OP_CONNECT);  -- 这里  会在这里直接写连接 然后才会去循环
+                    // socketChannel.connect(new InetSocketAddress("127.0.0.1", 8899));
+                    //
+                    // while (true) {
+                    //     selector.select();
+                    //     Set<SelectionKey> keySet = selector.selectedKeys();
+                    //     然后循环键判断
+                    // }
+
+                    // 但是他这个不是 他是直接写到了循环里面
+
+                // 注册完键之后往下走到select 而且注册完connect键之后发现之前是连接过的
+                // 所以走到select方法时不阻塞 会接着走finishConnection的方法 他的finishConnection之后
+                // 注册的键是write方法 感觉他这个是合理的 他不需要监听自己的输入(read)嘛
+                    // 不需要自己输入(read)完数据再对数据操作打印什么的嘛
+                    // 自己的输入(read)是在server端监听的 他那里监听输入
+                    // 然后对输入数据处理就可以了 张龙完成连接后注册的是read（输入） 没啥意思
+
+                    // 是注册完write键select就会返回吗 跟read键不太一样吗 readble的键注册完后需要有输入select方法才会返回
+                    // 而write的键注册完 也是需要等到socketChannel有针对他的输出 select方法才会返回
+
+                // 但是服务端那里是没有主动对socketChannel的输出的 select怎么返回？ 那就阻塞不返回
+                // 就是说他调用了this.selector.wakeup()后 select这时还没有注册键 select后的代码会空走一遍
+                // 然后再循环回来注册write键 注册完之后再到select 没有对socketChannel输出的触发条件 会再次阻塞
+
+                    // 跟这里的REGISTER注册connction差不多的  在注册connect键之前 有主动去连接的代码 可能真的连接上了
+                    // 但是这时没有任何键注册 所以select方法不会返回 他怎么会触发select方法返回呢
+                    // 就是他调用了this.selector.wakeup(); 然后select方法返回的键是空的 select之后的代码就会空走一遍
+                    // 又走到这里 这次就会注册connect键了 而且注册完connect键之后发现之前是连接过的
+                    // 这个是有触发的条件的 这个之前连接会触发select的返回
+                    // 所以再走到select的时候 就不会阻塞 就直接返回connect了 就走finishConnect方法了
+
 				synchronized (this.pendingChanges) {
 					Iterator changes = this.pendingChanges.iterator();
 					while (changes.hasNext()) {
