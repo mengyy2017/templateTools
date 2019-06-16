@@ -101,10 +101,10 @@ public class NioClient implements Runnable {
                 // 就会立刻触发另一方的read事件 这里write完又注册了read事件 然后又循环到这里 跳过pendingChanges
                         // 客户端中获取socketChannel写 那么服务端的select返回read事件
                         // 服务端获取socketChannel写 那么客户端的select返回read事件
+                        // 如果客户单这边的socketChannel关闭 没有写 也是会触发服务端那边的read事件的
                 // 然后阻塞到select方法处 等待服务器端再write回来 触发read事件 客户端的read方法调用RspHandler去处理具体数据
                         // RespHandler也是个两个同步方法 但他不是线程
-
-
+                // RspHandler处理完会把socketChannel关闭 会再触发服务器端那边的read
 
 				synchronized (this.pendingChanges) {
 					Iterator changes = this.pendingChanges.iterator();

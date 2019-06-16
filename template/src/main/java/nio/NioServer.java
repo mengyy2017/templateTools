@@ -82,11 +82,11 @@ public class NioServer implements Runnable {
                 // 然后到select 发现是write 就往下走write方法
 
                 // 先获取socketChannel然后执行write 这时客户端刚才注册的read键就会立刻感知到 然后走客户端的read方法
-                // 客户端read里调用RspHandler去处理具体数据 同时这里 write方法还没有执行完
-                // 在获取socketChannel执行write方法后 又注册了一个read键 等write方法执行完返回的时候selectedKey集合已经为空了
+                // 客户端read里调用RspHandler去处理具体数据 同时这里 在获取socketChannel执行write方法后
+                // 又注册了一个read键 等isWritable里的write方法执行完返回的时候selectedKey集合已经为空了
                 // 因为新注册的那个read键需要再重新调用获取selectedKey才能获取到 所以就会跳回开始重新执行 在到select的时候
-                // 发现是read 而且刚才write了 所以这里不会阻塞 接着再走read方法
-                // 只不过这次走read读取到的是-1 然后接直接return了
+                // 发现是read 就阻塞住了 注意 这里是阻塞住了 然后等客户端RspHandler处理数据 RspHandler处理完 是把socketChannel关了！！！
+                // 客户端那边已关闭 这边阻塞的select方法立马返回read 然后走read方法 只不过这次走read读取到的是-1 然后接直接return了
 
 
                 //
