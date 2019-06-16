@@ -70,14 +70,25 @@ public class NioServer implements Runnable {
 				// Process any pending changes
                 // 第一次循环没有数据 会直接走过去这段代码 然后在下面的select处阻塞
                 // 阻塞住之后 就会等待客户端的连接 连接之后 阻塞的select方法就胡返回 然后进入accpt方法
-                // accpt和以往一样 把socketChannel注册READ 感知客户端的输入 方法执行完结束 然后又会走循环 下面的这段
-                // 代码还是没数据 直接走过去 然后又在下面的select方法阻塞住 等到客户端有数据输入了 阻塞方法返回
+                // accpt和以往一样 把socketChannel注册READ 感知客户端的输入 其实也是感知对方端获取socketChannel的write
+                // 方法执行完结束 然后又会走循环 下面的这段 代码还是没数据 直接走过去 然后又在下面的select方法阻塞住
+                // 等到客户端有数据输入了 阻塞方法返回 客户端获取socketChannel然后write 这里就感知read事件了
+
                 // 再走read方法 read方法会自己先读取数据 然后调用handler去具体处理数据 由于handler是个线程 所以可以认为
-                // read方法到调用handler的时候就已经结束了 然后又循环到这里 跳过 阻塞到select 等handler处理完
-                // handler会再调用这个类（Server或者叫BossGroup）里面的send方法 send方法会初始化pendingChanges和pendingData
-                // 初始化的change是write 初始化完他会调用this.selector.wakeup(); 然后下面阻塞着的方法就会往下走 不过
-                // selectionKey没有进入任何方法 然后又循环到此处 这次 这里pendingChanges就有数据了 而且是write
-                // 他就会注册write键 然后再到select 没有对socketChannel的输出 会阻塞住 虽然键是write 但没有触发条件
+                // read方法走到调用handler的时候就已经结束了 handler是个线程 他用另一个线程去初始化pendingChanges和pendingData里的数据
+                // 所以当read结束再走到这的时候pendignChanges里已经有数据了 有数据他就拿数据去注册 数据是write他就注册write
+                // 正在注册的时候 这时handler就开始调用wakeup了 所以这里还没有注册完write 下面的select就要响应wakeup了
+                // select往下 但是键没有注册完 所以下面while判断没有键 就又返回这了 这次键也注册完了 这个while会跳过去
+                // 然后到select 发现是write 就往下走write方法
+
+                // 先获取socketChannel然后执行write 这时客户端刚才注册的read键就会立刻感知到 然后走客户端的read方法
+                // 客户端read里调用RspHandler去处理具体数据 同时这里 write方法还没有执行完
+                // 在获取socketChannel执行write方法后 又注册了一个read键 等write方法执行完返回的时候selectedKey集合已经为空了
+                // 因为新注册的那个read键需要再重新调用获取selectedKey才能获取到 所以就会跳回开始重新执行 在到select的时候
+                // 发现是read 而且刚才write了 所以这里不会阻塞 接着再走read方法
+                // 只不过这次走read读取到的是-1 然后接直接return了
+
+
                 //
 				synchronized (this.pendingChanges) {
 					Iterator changes = this.pendingChanges.iterator();

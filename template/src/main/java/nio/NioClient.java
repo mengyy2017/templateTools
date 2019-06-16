@@ -68,42 +68,43 @@ public class NioClient implements Runnable {
                 // 刚才走到this.selector.select()阻塞的地方就会返回 但是是没有selectionKey操作的 所以阻塞下面的代码也是直接
                 // 就运行过去了 然后就又到了这里 这次到这的时候 pendingChanges是有数据的 初始化的是REGISTER 所以走REGISTER那块
                 // 然后ops初始化的是CONNECTION的KEY 所以 这里就会先注册连接的键
-                    // 之前的教程都是在上面的这个while循环外直接写注册连接的键 就是下面的代码
-                    // SocketChannel socketChannel = SocketChannel.open();
-                    // socketChannel.configureBlocking(false);
-                    //
-                    // Selector selector = Selector.open();
-                    // socketChannel.register(selector, SelectionKey.OP_CONNECT);  -- 这里  会在这里直接写连接 然后才会去循环
-                    // socketChannel.connect(new InetSocketAddress("127.0.0.1", 8899));
-                    //
-                    // while (true) {
-                    //     selector.select();
-                    //     Set<SelectionKey> keySet = selector.selectedKeys();
-                    //     然后循环键判断
-                    // }
+                        // 之前的教程都是在上面的这个while循环外直接写注册连接的键 就是下面的代码
+                        // SocketChannel socketChannel = SocketChannel.open();
+                        // socketChannel.configureBlocking(false);
+                        //
+                        // Selector selector = Selector.open();
+                        // socketChannel.register(selector, SelectionKey.OP_CONNECT);  -- 这里  会在这里直接写连接 然后才会去循环
+                        // socketChannel.connect(new InetSocketAddress("127.0.0.1", 8899));
+                        //
+                        // while (true) {
+                        //     selector.select();
+                        //     Set<SelectionKey> keySet = selector.selectedKeys();
+                        //     然后循环键判断
+                        // }
 
-                    // 但是他这个不是 他是直接写到了循环里面
+                        // 但是他这个不是 他是直接写到了循环里面
 
                 // 注册完键之后往下走到select 而且注册完connect键之后发现之前是连接过的
-                // 所以走到select方法时不阻塞 会接着走finishConnection的方法 他的finishConnection之后
+                // 所以走到select方法时不阻塞 会接着走finishConnection的方法 他的finishConnection里面
                 // 注册的键是write方法 感觉他这个是合理的 他不需要监听自己的输入(read)嘛
-                    // 不需要自己输入(read)完数据再对数据操作打印什么的嘛
-                    // 自己的输入(read)是在server端监听的 他那里监听输入
-                    // 然后对输入数据处理就可以了 张龙完成连接后注册的是read（输入） 没啥意思
+                        // 不需要自己输入(read)完数据再对数据操作打印什么的嘛
+                        // 自己的输入(read)是在server端监听的 他那里监听输入
+                        // 然后对输入数据处理就可以了 张龙完成连接后注册的是read（输入） 没啥意思
 
-                    // 是注册完write键select就会返回吗 跟read键不太一样吗 readble的键注册完后需要有输入select方法才会返回
-                    // 而write的键注册完 也是需要等到socketChannel有针对他的输出 select方法才会返回
+                        // 是注册完write键select就会返回吗 跟read键不太一样吗 readble的键注册完后需要有输入select方法才会返回
+                        // 而write的键注册完 也是需要等到socketChannel有针对他的输出 select方法才会返回
 
-                // 但是服务端那里是没有主动对socketChannel的输出的 select怎么返回？ 那就阻塞不返回
-                // 就是说他调用了this.selector.wakeup()后 select这时还没有注册键 select后的代码会空走一遍
-                // 然后再循环回来注册write键 注册完之后再到select 没有对socketChannel输出的触发条件 会再次阻塞
+                // 然后finishConnection运行完就会再运行到这里 pendingChanges里没数据 会直接走过去 然后走到select
+                // 但是服务端那里是没有主动对socketChannel的输出的 select怎么返回？ 对于注册write键的时候
+                // 只要Socket可写,网络不出现阻塞情况下,一直是可以写的 所以注册write键运行到select的时候发现是write键
+                // 不会阻塞 直接返回 接着走下面的write方法 write方法里面只要有client.write()代码 这里是socketChannel.write(buf);
+                // 就会立刻触发另一方的read事件 这里write完又注册了read事件 然后又循环到这里 跳过pendingChanges
+                        // 客户端中获取socketChannel写 那么服务端的select返回read事件
+                        // 服务端获取socketChannel写 那么客户端的select返回read事件
+                // 然后阻塞到select方法处 等待服务器端再write回来 触发read事件 客户端的read方法调用RspHandler去处理具体数据
+                        // RespHandler也是个两个同步方法 但他不是线程
 
-                    // 跟这里的REGISTER注册connction差不多的  在注册connect键之前 有主动去连接的代码 可能真的连接上了
-                    // 但是这时没有任何键注册 所以select方法不会返回 他怎么会触发select方法返回呢
-                    // 就是他调用了this.selector.wakeup(); 然后select方法返回的键是空的 select之后的代码就会空走一遍
-                    // 又走到这里 这次就会注册connect键了 而且注册完connect键之后发现之前是连接过的
-                    // 这个是有触发的条件的 这个之前连接会触发select的返回
-                    // 所以再走到select的时候 就不会阻塞 就直接返回connect了 就走finishConnect方法了
+
 
 				synchronized (this.pendingChanges) {
 					Iterator changes = this.pendingChanges.iterator();
@@ -272,7 +273,7 @@ public class NioClient implements Runnable {
 			NioClient client = new NioClient(InetAddress.getLocalHost(), 9090);
 			
 			Thread t = new Thread(client);
-			t.setDaemon(true);
+			// t.setDaemon(true);
 			t.start();
 			Thread.sleep(1000);
 			RspHandler handler = new RspHandler();
