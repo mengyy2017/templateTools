@@ -5,4 +5,8 @@ dependencies {
             project(':common'),
             project(':grpc'),
     )
+//    compile group: 'org.elasticsearch.client', name: 'transport', version: '7.2.0'
+    compile group: 'org.elasticsearch.client', name: 'elasticsearch-rest-high-level-client', version: '7.2.0'
+    compile group: 'org.elasticsearch', name: 'elasticsearch', version: '7.2.0'
+
 }

@@ -30,6 +30,11 @@ spring:
       authorization:
         checkTokenAccess: ${server.uri}/oauth/check_token     #对应的注册码与注册密码
 
+elasticsearch:
+  cluster:
+    name: my-application
+  address: 127.0.0.1:9200
+
 mybatis:
   mapper-locations: classpath:mapper/**/*.xml
   type-aliases-package: com.spider.bussiness.entity

@@ -49,6 +49,8 @@ subprojects {
                 'io.springfox:springfox-swagger-ui:2.9.2',
                 'com.alibaba:fastjson:1.2.54',
                 'org.springframework.security.oauth:spring-security-oauth2:2.1.0.RELEASE',
+                'org.apache.commons:commons-lang3:3.9',
+
         )
     }
     
