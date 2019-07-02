@@ -58,30 +58,30 @@ import java.util.*;
  * @date 2018/09/17 11:12:08
  */
 public class ElasticClient implements Closeable {
-    
+
     private static final String INDEX_KEY = "index";
-    private static final String TYPE_KEY = "type";   
+    private static final String TYPE_KEY = "type";
     private static final String INDEX = "spider";
     private static final String TYPE = "doc";
     private static final String TIMESTAMP = "timestamp";
-    
+
     private static final Logger LOGGER = LoggerFactory.getLogger(ElasticClient.class);
-    
+
     private String[] hosts;
-    
+
     protected RestHighLevelClient client;
-    
+
     public ElasticClient(String[] hosts) {
         this.hosts = hosts;
     }
- 
+
     @Override
     public void close() throws IOException {
         if (Objects.nonNull(client)) {
             client.close();
         }
     }
-    
+
     /**
      * 初始化配置
      */
@@ -93,10 +93,10 @@ public class ElasticClient implements Closeable {
             int port = Integer.parseInt(hostParts[1]);
 //            return new HttpHost(hostName, port, Const.SCHEMA);
             return null;
-        }).filter(Objects::nonNull).toArray(HttpHost[]::new);       
+        }).filter(Objects::nonNull).toArray(HttpHost[]::new);
         client = new RestHighLevelClient(RestClient.builder(httpHosts));
     }
-    
+
     /**
      * 创建索引(默认分片数为5和副本数为1)
      * @param indexName
@@ -108,7 +108,7 @@ public class ElasticClient implements Closeable {
             return;
         }
         CreateIndexRequest request = new CreateIndexRequest(indexName);
-        request.mapping(TYPE, generateBuilder());        
+        request.mapping(TYPE, generateBuilder());
         CreateIndexResponse response = client.indices().create(request, RequestOptions.DEFAULT);
         // 指示是否所有节点都已确认请求
         boolean acknowledged = response.isAcknowledged();
@@ -118,7 +118,7 @@ public class ElasticClient implements Closeable {
             LOGGER.info("创建索引成功！索引名称为{}", indexName);
         }
     }
-    
+
     /**
      * 创建索引(指定 index 和 type)
      * @param index
@@ -131,7 +131,7 @@ public class ElasticClient implements Closeable {
             return;
         }
         CreateIndexRequest request = new CreateIndexRequest(index);
-        request.mapping(type, generateBuilder());        
+        request.mapping(type, generateBuilder());
         CreateIndexResponse response = client.indices().create(request, RequestOptions.DEFAULT);
         boolean acknowledged = response.isAcknowledged();
         boolean shardsAcknowledged = response.isShardsAcknowledged();
@@ -139,7 +139,7 @@ public class ElasticClient implements Closeable {
             LOGGER.info("索引创建成功！索引名称为{}", index);
         }
     }
-    
+
     /**
      * 创建索引(传入参数：分片数、副本数)
      * @param indexName
@@ -160,7 +160,7 @@ public class ElasticClient implements Closeable {
             LOGGER.info("创建索引成功！索引名称为{}", indexName);
         }
     }
-    
+
     /**
      * 删除索引
      * @param indexName
@@ -179,7 +179,7 @@ public class ElasticClient implements Closeable {
             LOGGER.error("删除失败！");
         }
     }
-    
+
     /**
      * 判断索引是否存在
      * @param indexName
@@ -195,7 +195,7 @@ public class ElasticClient implements Closeable {
         }
         return false;
     }
-    
+
     /**
      * 开启索引
      * @param indexName
@@ -212,7 +212,7 @@ public class ElasticClient implements Closeable {
             LOGGER.info("{} 索引开启成功！", indexName);
         }
     }
-    
+
     /**
      * 关闭索引
      * @param indexName
@@ -229,7 +229,7 @@ public class ElasticClient implements Closeable {
             LOGGER.info("{} 索引已关闭！", indexName);
         }
     }
-    
+
     /**
      * 设置文档的静态映射(主要是为 message字段 设置ik分词器)
      * @param index
@@ -251,22 +251,22 @@ public class ElasticClient implements Closeable {
     private XContentBuilder generateBuilder() throws IOException {
         XContentBuilder builder = XContentFactory.jsonBuilder();
         builder.startObject();
-            builder.startObject("properties");           
-                builder.startObject("message");               
+            builder.startObject("properties");
+                builder.startObject("message");
                     builder.field("type", "text");
                     // 为message字段，设置分词器为 ik_smart(最粗粒度)
-                    builder.field("analyzer", "ik_smart");                
+                    builder.field("analyzer", "ik_smart");
                 builder.endObject();
-                builder.startObject(TIMESTAMP);               
+                builder.startObject(TIMESTAMP);
                     builder.field("type", "date");
                     // 设置 日志时间的格式为  毫秒数的long类型
-                    builder.field("format", "epoch_millis");                
+                    builder.field("format", "epoch_millis");
                 builder.endObject();
-            builder.endObject();        
-        builder.endObject();        
+            builder.endObject();
+        builder.endObject();
         return builder;
     }
-   
+
     /**
      * 增加文档
      * @param indexName
@@ -281,14 +281,14 @@ public class ElasticClient implements Closeable {
 //        }
         if (!checkIndexExists(indexName)) {
             createIndex(indexName, typeName);
-        }       
+        }
         IndexRequest request = new IndexRequest(indexName, typeName, id).source(jsonString, XContentType.JSON);
         // request的opType默认是INDEX(传入相同id会覆盖原document，CREATE则会将旧的删除)
         // request.opType(DocWriteRequest.OpType.CREATE)
         IndexResponse response = null;
         try {
             response = client.index(request, RequestOptions.DEFAULT);
-            
+
             String index = response.getIndex();
             String type = response.getType();
             String documentId = response.getId();
@@ -300,12 +300,12 @@ public class ElasticClient implements Closeable {
             // 分片处理信息
             ReplicationResponse.ShardInfo shardInfo = response.getShardInfo();
             if (shardInfo.getTotal() != shardInfo.getSuccessful()) {
-               LOGGER.error("文档未写入全部分片副本！"); 
+               LOGGER.error("文档未写入全部分片副本！");
             }
             // 如果有分片副本失败，可以获得失败原因信息
             if (shardInfo.getFailed() > 0) {
                 for (ReplicationResponse.ShardInfo.Failure failure : shardInfo.getFailures()) {
-                    String reason = failure.reason(); 
+                    String reason = failure.reason();
                     LOGGER.error("副本失败原因：{}", reason);
                 }
             }
@@ -316,7 +316,7 @@ public class ElasticClient implements Closeable {
             LOGGER.error("文档新增失败！");
         }
     }
-    
+
     /**
      * 查找文档
      * @param index
@@ -332,7 +332,7 @@ public class ElasticClient implements Closeable {
         request.realtime(false);
         // 检索之前执行刷新(是)
         request.refresh(true);
-        
+
         GetResponse response = null;
         try {
             response = client.get(request, RequestOptions.DEFAULT);
@@ -345,10 +345,10 @@ public class ElasticClient implements Closeable {
             }
             LOGGER.error("查找失败！");
         }
-        
+
         if(Objects.nonNull(response)) {
-            if (response.isExists()) { // 文档存在      
-                resultMap = response.getSourceAsMap();                               
+            if (response.isExists()) { // 文档存在
+                resultMap = response.getSourceAsMap();
             } else {
                 // 处理未找到文档的方案。 请注意，虽然返回的响应具有404状态代码，但仍返回有效的GetResponse而不是抛出异常。
                 // 此时此类响应不持有任何源文档，并且其isExists方法返回false。
@@ -357,7 +357,7 @@ public class ElasticClient implements Closeable {
         }
         return resultMap;
     }
-    
+
     /**
      * 删除文档
      * @param index
@@ -393,7 +393,7 @@ public class ElasticClient implements Closeable {
             }
         }
     }
-    
+
     /**
      * 通过一个脚本语句(如："ctx._source.posttime=\"2018-09-18\"")更新文档
      * @param index
@@ -413,7 +413,7 @@ public class ElasticClient implements Closeable {
             } else if(response.getResult() == DocWriteResponse.Result.NOOP) {
                 LOGGER.error("操作没有被执行！");
             }
-            
+
             ReplicationResponse.ShardInfo shardInfo = response.getShardInfo();
             if (shardInfo.getTotal() != shardInfo.getSuccessful()) {
                 LOGGER.error("部分分片副本未处理");
@@ -433,7 +433,7 @@ public class ElasticClient implements Closeable {
             LOGGER.error("更新失败！");
         }
     }
-    
+
     /**
      * 通过一个JSON字符串更新文档(如果该文档不存在，则根据参数创建这个文档)
      * @param index
@@ -450,11 +450,11 @@ public class ElasticClient implements Closeable {
         if (!checkIndexExists(index)) {
             createIndex(index, type);
         }
-        UpdateRequest request = new UpdateRequest(index, type, id);       
+        UpdateRequest request = new UpdateRequest(index, type, id);
         request.doc(jsonString, XContentType.JSON);
         // 如果要更新的文档不存在，则根据传入的参数新建一个文档
         request.docAsUpsert(true);
-        try {            
+        try {
             UpdateResponse response = client.update(request, RequestOptions.DEFAULT);
             String indexName = response.getIndex();
             String typeName = response.getType();
@@ -468,7 +468,7 @@ public class ElasticClient implements Closeable {
             } else if (response.getResult() == DocWriteResponse.Result.NOOP) {
                 LOGGER.error("操作没有被执行！");
             }
-            
+
             ReplicationResponse.ShardInfo shardInfo = response.getShardInfo();
             if (shardInfo.getTotal() != shardInfo.getSuccessful()) {
                 LOGGER.error("分片副本未全部处理");
@@ -488,7 +488,7 @@ public class ElasticClient implements Closeable {
             LOGGER.error("更新失败！");
         }
     }
-    
+
     /**
      * 批量增加文档
      * @param params
@@ -505,17 +505,17 @@ public class ElasticClient implements Closeable {
             if (StringUtils.isNotBlank(id)) {
                 IndexRequest request = new IndexRequest(index, type, id).source(jsonString, XContentType.JSON);
                 bulkRequest.add(request);
-            }            
+            }
         }
         // 超时时间(2分钟)
         bulkRequest.timeout(TimeValue.timeValueMinutes(2L));
         // 刷新策略
         bulkRequest.setRefreshPolicy(WriteRequest.RefreshPolicy.WAIT_UNTIL);
-        
-        if (bulkRequest.numberOfActions() == 0) {           
+
+        if (bulkRequest.numberOfActions() == 0) {
             LOGGER.error("参数错误，批量增加操作失败！");
             return;
-        } 
+        }
         BulkResponse bulkResponse = client.bulk(bulkRequest, RequestOptions.DEFAULT);
         // 全部操作成功
         if (!bulkResponse.hasFailures()) {
@@ -523,16 +523,16 @@ public class ElasticClient implements Closeable {
         } else {
             for (BulkItemResponse bulkItemResponse : bulkResponse) {
                 if (bulkItemResponse.isFailed()) {
-                    BulkItemResponse.Failure failure = bulkItemResponse.getFailure();                   
+                    BulkItemResponse.Failure failure = bulkItemResponse.getFailure();
                     LOGGER.error("\"index={}, type={}, id={}\"的文档增加失败！", failure.getIndex(), failure.getType(), failure.getId());
                     LOGGER.error("增加失败详情: {}", failure.getMessage());
                 } else {
-                    LOGGER.info("\"index={}, type={}, id={}\"的文档增加成功！", bulkItemResponse.getIndex(), bulkItemResponse.getType(), bulkItemResponse.getId()); 
+                    LOGGER.info("\"index={}, type={}, id={}\"的文档增加成功！", bulkItemResponse.getIndex(), bulkItemResponse.getType(), bulkItemResponse.getId());
                 }
             }
         }
     }
-    
+
     /**
      * 批量更新文档
      * @param params
@@ -550,30 +550,30 @@ public class ElasticClient implements Closeable {
                 UpdateRequest request = new UpdateRequest(index, type, id).doc(jsonString, XContentType.JSON);
                 request.docAsUpsert(true);
                 bulkRequest.add(request);
-            }           
+            }
         }
-        if (bulkRequest.numberOfActions() == 0) {           
+        if (bulkRequest.numberOfActions() == 0) {
             LOGGER.error("参数错误，批量更新操作失败！");
             return;
         }
         bulkRequest.timeout(TimeValue.timeValueMinutes(2L));
-        bulkRequest.setRefreshPolicy(WriteRequest.RefreshPolicy.WAIT_UNTIL);        
+        bulkRequest.setRefreshPolicy(WriteRequest.RefreshPolicy.WAIT_UNTIL);
         BulkResponse bulkResponse = client.bulk(bulkRequest, RequestOptions.DEFAULT);
         if (!bulkResponse.hasFailures()) {
             LOGGER.info("批量更新操作成功！");
         } else {
             for (BulkItemResponse bulkItemResponse : bulkResponse) {
                 if (bulkItemResponse.isFailed()) {
-                    BulkItemResponse.Failure failure = bulkItemResponse.getFailure();                   
+                    BulkItemResponse.Failure failure = bulkItemResponse.getFailure();
                     LOGGER.error("\"index={}, type={}, id={}\"的文档更新失败！", failure.getIndex(), failure.getType(), failure.getId());
                     LOGGER.error("更新失败详情: {}", failure.getMessage());
                 } else {
-                    LOGGER.info("\"index={}, type={}, id={}\"的文档更新成功！", bulkItemResponse.getIndex(), bulkItemResponse.getType(), bulkItemResponse.getId());  
+                    LOGGER.info("\"index={}, type={}, id={}\"的文档更新成功！", bulkItemResponse.getIndex(), bulkItemResponse.getType(), bulkItemResponse.getId());
                 }
             }
         }
     }
-    
+
     /**
      * 批量删除文档
      * @param params
@@ -590,7 +590,7 @@ public class ElasticClient implements Closeable {
                 bulkRequest.add(request);
             }
         }
-        if (bulkRequest.numberOfActions() == 0) {           
+        if (bulkRequest.numberOfActions() == 0) {
             LOGGER.error("操作失败，请检查参数！");
             return;
         }
@@ -602,16 +602,16 @@ public class ElasticClient implements Closeable {
         } else {
             for (BulkItemResponse bulkItemResponse : bulkResponse) {
                 if (bulkItemResponse.isFailed()) {
-                    BulkItemResponse.Failure failure = bulkItemResponse.getFailure();                   
+                    BulkItemResponse.Failure failure = bulkItemResponse.getFailure();
                     LOGGER.error("\"index={}, type={}, id={}\"的文档删除失败！", failure.getIndex(), failure.getType(), failure.getId());
                     LOGGER.error("删除失败详情: {}", failure.getMessage());
                 } else {
-                    LOGGER.info("\"index={}, type={}, id={}\"的文档删除成功！", bulkItemResponse.getIndex(), bulkItemResponse.getType(), bulkItemResponse.getId()); 
+                    LOGGER.info("\"index={}, type={}, id={}\"的文档删除成功！", bulkItemResponse.getIndex(), bulkItemResponse.getType(), bulkItemResponse.getId());
                 }
             }
         }
     }
-    
+
     /**
      * 批量查找文档
      * @param params
@@ -620,7 +620,7 @@ public class ElasticClient implements Closeable {
      */
     public List<Map<String, Object>> multiGet(List<Map<String, String>> params) throws IOException {
         List<Map<String, Object>> resultList = new ArrayList<>();
- 
+
         MultiGetRequest request = new MultiGetRequest();
         for (Map<String, String> dataMap : params) {
             String index = dataMap.getOrDefault(INDEX_KEY, INDEX);
@@ -636,10 +636,10 @@ public class ElasticClient implements Closeable {
         List<Map<String, Object>> list = parseMGetResponse(response);
         if (!list.isEmpty()) {
             resultList.addAll(list);
-        }                      
+        }
         return resultList;
     }
-    private List<Map<String, Object>> parseMGetResponse(MultiGetResponse response) {       
+    private List<Map<String, Object>> parseMGetResponse(MultiGetResponse response) {
         List<Map<String, Object>> list = new ArrayList<>();
         MultiGetItemResponse[] responses = response.getResponses();
         for (MultiGetItemResponse item : responses) {
@@ -648,7 +648,7 @@ public class ElasticClient implements Closeable {
                 if (!getResponse.isExists()) {
                     LOGGER.error("\"index={}, type={}, id={}\"的文档查找失败，请检查参数！", getResponse.getIndex(), getResponse.getType(), getResponse.getId());
                 } else {
-                    list.add(getResponse.getSourceAsMap()); 
+                    list.add(getResponse.getSourceAsMap());
                 }
             } else {
                 MultiGetResponse.Failure failure = item.getFailure();
@@ -658,11 +658,11 @@ public class ElasticClient implements Closeable {
                 } else if (e.status() == RestStatus.CONFLICT) {
                     LOGGER.error("\"index={}, type={}, id={}\"的文档版本冲突！", failure.getIndex(), failure.getType(), failure.getId());
                 }
-            }                                                                                                        
+            }
         }
         return list;
     }
-    
+
     /**
      * 根据条件搜索日志内容(参数level和messageKey不能同时为空)
      * @param level 日志级别，可以为空
@@ -674,24 +674,24 @@ public class ElasticClient implements Closeable {
      * @throws IOException
      */
     public List<Map<String, Object>> queryByConditions(String level, String messageKey, Long startTime, Long endTime, Integer size) throws IOException {
-        List<Map<String, Object>> resultList = new ArrayList<>();        
+        List<Map<String, Object>> resultList = new ArrayList<>();
         if (StringUtils.isBlank(level) && StringUtils.isBlank(messageKey)) {
             LOGGER.error("参数level(日志级别)和messageKey(日志信息关键字)不能同时为空！");
             return resultList;
         }
-        
+
         QueryBuilder query = generateQuery(level, messageKey, startTime, endTime);
         FieldSortBuilder order = SortBuilders.fieldSort(TIMESTAMP).order(SortOrder.DESC);
         SearchSourceBuilder searchBuilder = new SearchSourceBuilder();
         searchBuilder.timeout(TimeValue.timeValueMinutes(2L));
         searchBuilder.query(query);
-        searchBuilder.sort(order);        
+        searchBuilder.sort(order);
         if (Objects.nonNull(size)) {
             searchBuilder.size(size);
         }
-        
+
         SearchRequest request = new SearchRequest(INDEX).types(TYPE);
-        request.source(searchBuilder);       
+        request.source(searchBuilder);
         SearchResponse response = client.search(request, RequestOptions.DEFAULT);
         int failedShards = response.getFailedShards();
         if (failedShards > 0) {
@@ -755,7 +755,7 @@ public class ElasticClient implements Closeable {
         }
         return resultList;
     }
-    
+
     /**
      * 根据条件，搜索全部符合的记录(参数level和messageKey不能同时为空)
      * @param level 日志级别，可以为空
@@ -765,23 +765,23 @@ public class ElasticClient implements Closeable {
      * @return
      */
     public List<Map<String, Object>> queryAllByConditions(String level, String messageKey, Long startTime, Long endTime) throws IOException {
-        List<Map<String, Object>> resultList = new ArrayList<>();        
+        List<Map<String, Object>> resultList = new ArrayList<>();
         if (StringUtils.isBlank(level) && StringUtils.isBlank(messageKey)) {
             LOGGER.error("参数level(日志级别)和messageKey(日志信息关键字)不能同时为空！");
             return resultList;
         }
-        
+
         QueryBuilder query = generateQuery(level, messageKey, startTime, endTime);
         FieldSortBuilder order = SortBuilders.fieldSort(TIMESTAMP).order(SortOrder.DESC);
         SearchSourceBuilder searchBuilder = new SearchSourceBuilder();
         searchBuilder.query(query).sort(order);
         searchBuilder.size(500);
-        
+
         // 初始化 scroll 上下文
         SearchRequest request = new SearchRequest(INDEX).types(TYPE);
         final Scroll scroll = new Scroll(TimeValue.timeValueMinutes(1L));
         request.source(searchBuilder).scroll(scroll);
-        SearchResponse response = client.search(request, RequestOptions.DEFAULT); 
+        SearchResponse response = client.search(request, RequestOptions.DEFAULT);
         String scrollId = response.getScrollId();
         SearchHit[] searchHits = response.getHits().getHits();
         // 把第一次scroll的数据添加到结果List中
@@ -789,7 +789,7 @@ public class ElasticClient implements Closeable {
             resultList.add(searchHit.getSourceAsMap());
         }
         // 通过传递scrollId循环取出所有相关文档
-        while (searchHits != null && searchHits.length > 0) { 
+        while (searchHits != null && searchHits.length > 0) {
             SearchScrollRequest scrollRequest = new SearchScrollRequest(scrollId);
             scrollRequest.scroll(scroll);
             response = client.scroll(scrollRequest, RequestOptions.DEFAULT);
@@ -806,7 +806,7 @@ public class ElasticClient implements Closeable {
         client.clearScroll(clearScrollRequest, RequestOptions.DEFAULT);
         return resultList;
     }
-    
+
     /**
      * 根据条件做分页查询(参数level和messageKey不能同时为空)
      * @param level 日志级别，可以为空
@@ -824,23 +824,23 @@ public class ElasticClient implements Closeable {
             LOGGER.error("参数level(日志级别)、messageKey(日志信息关键字)不能同时为空！");
 //            return null;
         }
-        
+
         if (Objects.isNull(pageNum)) {
             pageNum = 1;
         }
         if (Objects.isNull(pageSize)) {
             pageSize = 10;
-        }       
+        }
         QueryBuilder query = generateQuery(level, messageKey, startTime, endTime);
-        FieldSortBuilder order = SortBuilders.fieldSort(TIMESTAMP).order(SortOrder.DESC);        
+        FieldSortBuilder order = SortBuilders.fieldSort(TIMESTAMP).order(SortOrder.DESC);
         SearchSourceBuilder searchBuilder = new SearchSourceBuilder();
-        searchBuilder.timeout(TimeValue.timeValueMinutes(2L));        
+        searchBuilder.timeout(TimeValue.timeValueMinutes(2L));
         searchBuilder.query(query);
         searchBuilder.sort(order);
         searchBuilder.from(pageNum - 1).size(pageSize);
-        
+
         SearchRequest request = new SearchRequest(INDEX).types(TYPE);
-        request.source(searchBuilder);       
+        request.source(searchBuilder);
         SearchResponse response = client.search(request, RequestOptions.DEFAULT);
         SearchHits hits = response.getHits();
 //        int totalRecord = (int) hits.getTotalHits();
@@ -849,7 +849,7 @@ public class ElasticClient implements Closeable {
         for (SearchHit hit : hits.getHits()) {
             results.add(hit.getSourceAsMap());
         }
-        
+
 //        Page<Map<String, Object>> page = new Page<>();
 //        page.setPageNum(pageNum);
 //        page.setPageSize(pageSize);
