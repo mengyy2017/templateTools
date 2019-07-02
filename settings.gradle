@@ -4,4 +4,5 @@ include 'template'
 include 'common'
 include 'system'
 include 'grpc'
+include 'spider'
 
