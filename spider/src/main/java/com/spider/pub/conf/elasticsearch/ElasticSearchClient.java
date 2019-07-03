@@ -47,6 +47,8 @@ import org.elasticsearch.search.sort.SortBuilders;
 import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.*;
@@ -57,7 +59,13 @@ import java.util.*;
  * @version 1.0
  * @date 2018/09/17 11:12:08
  */
-public class ElasticClient implements Closeable {
+public class ElasticSearchClient implements Closeable {
+
+    @Value("${elasticsearch.cluster.name}")
+    private String clusterName;
+
+    @Value("${elasticsearch.address}")
+    private String address;
 
     private static final String INDEX_KEY = "index";
     private static final String TYPE_KEY = "type";
@@ -65,13 +73,13 @@ public class ElasticClient implements Closeable {
     private static final String TYPE = "doc";
     private static final String TIMESTAMP = "timestamp";
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ElasticClient.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ElasticSearchClient.class);
 
     private String[] hosts;
 
     protected RestHighLevelClient client;
 
-    public ElasticClient(String[] hosts) {
+    public ElasticSearchClient(String[] hosts) {
         this.hosts = hosts;
     }
 
