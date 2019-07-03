@@ -59,7 +59,7 @@ import java.util.*;
  * @version 1.0
  * @date 2018/09/17 11:12:08
  */
-public class ElasticSearchClient implements Closeable {
+public class EsClient implements Closeable {
 
     @Value("${elasticsearch.cluster.name}")
     private String clusterName;
@@ -73,13 +73,13 @@ public class ElasticSearchClient implements Closeable {
     private static final String TYPE = "doc";
     private static final String TIMESTAMP = "timestamp";
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ElasticSearchClient.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(EsClient.class);
 
     private String[] hosts;
 
     protected RestHighLevelClient client;
 
-    public ElasticSearchClient(String[] hosts) {
+    public EsClient(String[] hosts) {
         this.hosts = hosts;
     }
 
@@ -195,7 +195,8 @@ public class ElasticSearchClient implements Closeable {
      * @throws IOException
      */
     public boolean checkIndexExists(String indexName) {
-        GetIndexRequest request = new GetIndexRequest().indices(indexName);
+        GetIndexRequest request = new GetIndexRequest().indices(indexName); // 用这个GetIndexRequest会导致下面的exists过时
+//        GetIndexRequest request = new GetIndexRequest(indexName);        // 两个GetIndexRequest包不一样
         try {
             return client.indices().exists(request, RequestOptions.DEFAULT);
         } catch (IOException e) {
