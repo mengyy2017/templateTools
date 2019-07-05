@@ -1,6 +1,6 @@
 server:
   port: 8041
-  uri: http://127.0.0.1:8040
+  authUri: http://127.0.0.1:8040
 
 grpc:
   server:
@@ -20,19 +20,19 @@ spring:
       client:
         clientId: createCodeClient
         clientSecret: secret
-        userAuthorizationUri: ${server.uri}/oauth/authorize
+        userAuthorizationUri: ${server.authUri}/oauth/authorize
         grantType: password
         scope: select
-        accessTokenUri: ${server.uri}/oauth/token
+        accessTokenUri: ${server.authUri}/oauth/token
       #      authentication-scheme: form     #获得授权端的当前用户信息url
       resource:
         #      id: createCode
-        userInfoUri: ${server.uri}/user/me
+        userInfoUri: ${server.authUri}/user/me
         filterOrder: 3
-        #        tokenInfoUri: ${server.uri}/oauth/check_token
+        #        tokenInfoUri: ${server.authUri}/oauth/check_token
         preferTokenInfo: true
       authorization:
-        checkTokenAccess: ${server.uri}/oauth/check_token     #对应的注册码与注册密码
+        checkTokenAccess: ${server.authUri}/oauth/check_token     #对应的注册码与注册密码
 
 mybatis:
   mapper-locations: classpath:mapper/**/*.xml

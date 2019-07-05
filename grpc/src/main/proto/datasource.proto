@@ -1,33 +1,33 @@
-syntax = "proto3";
-
-option java_multiple_files = true;
-
-option java_package = "com.grpc.proto.datasource";
-
-option java_outer_classname = "DatasourceProto";
-
-service DatasourceService {
-    rpc GetDatasource(DatasourceMsg) returns (DatasourceMsg){}
-}
-
-message DatasourceMsg {
-    string url = 1;
-    string driverClassName = 2;
-    string username = 3;
-    string password = 4;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//syntax = "proto3";
+//
+//option java_multiple_files = true;
+//
+//option java_package = "com.grpc.proto.datasource";
+//
+//option java_outer_classname = "DatasourceProto";
+//
+//service DatasourceService {
+//    rpc GetDatasource(DatasourceMsg) returns (DatasourceMsg){}
+//}
+//
+//message DatasourceMsg {
+//    string url = 1;
+//    string driverClassName = 2;
+//    string username = 3;
+//    string password = 4;
+//}
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
