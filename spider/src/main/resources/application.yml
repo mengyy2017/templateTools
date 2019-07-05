@@ -2,15 +2,23 @@ server:
   port: 8043
   uri: http://127.0.0.1:8040
 
-grpc:
-  client:
-    systemGrpcServer:
-      host: 127.0.0.1
-      port: 8060
-      enableKeepAlive: true
-      keepAliveWithoutCalls: true
+#grpc:
+#  client: # 这个表明当前工程是grpc的client
+#    systemGrpcServer: # 表示连接grpcServer工程的名字
+#      host: 127.0.0.1 # 表示连接grpcServer工程的ip
+#      port: 8060 # 表示连接grpcServer工程的端口
+#      enableKeepAlive: true
+#      keepAliveWithoutCalls: true
 
 spring:
+  application:
+    name: spider
+  datasource:
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/spider?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8
+    #    url:jdbc:oracle:thin:@192.168.1.128:1521:orcl
+    username: root
+    password: 1
   security:
     oauth2:     #token检查的授权端url
       client:

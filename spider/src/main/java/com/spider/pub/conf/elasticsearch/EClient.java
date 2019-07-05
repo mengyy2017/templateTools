@@ -1,6 +1,7 @@
 package com.spider.pub.conf.elasticsearch;
 
 import com.common.bussiness.entity.BaseEntity;
+import com.common.util.CheckedUtil;
 import org.apache.http.HttpHost;
 import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.action.DocWriteRequest;
@@ -24,12 +25,10 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class EClient {
+public class EClient extends CheckedUtil {
 
     public static void main(String[] args) {
         EClient eClient = new EClient();
@@ -163,36 +162,6 @@ public class EClient {
         return t != null ? Arrays.stream(t.getDeclaredFields()) : Stream.of();
     }
 
-    public <T> Consumer<T> acceptOrThrow(CheckedConsumer<T> checkedConsumer){
-        return t -> {
-            try {
-                checkedConsumer.accept(t);
-            } catch (Exception e){
-                e.printStackTrace();;
-                throw new RuntimeException(e.getMessage());
-            }
-        };
-    }
-
-    public <T, R> Function<T, R> applyOrThrow(CheckedFuntion<T, R> checkedFuntion){
-        return t -> {
-            try {
-                return checkedFuntion.apply(t);
-            } catch (Exception e) {
-                e.printStackTrace();
-                throw new RuntimeException(e.getMessage());
-            }
-        };
-    }
-
 }
 
-@FunctionalInterface
-interface CheckedConsumer<T>{
-    void accept(T t) throws Exception;
-}
 
-@FunctionalInterface
-interface CheckedFuntion<T, R>{
-    R apply(T t) throws Exception;
-}

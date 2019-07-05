@@ -2,10 +2,10 @@ server:
   port: 8040
 
 grpc:
-  client:
-    systemGrpcServer:
-      host: 127.0.0.1
-      port: 8060
+  client: # 这个表明当前工程是grpc的client
+    systemGrpcServer: # 表示连接grpcServer工程的名字
+      host: 127.0.0.1 # 表示连接grpcServer工程的ip
+      port: 8060 # 表示连接grpcServer工程的端口
       enableKeepAlive: true
       keepAliveWithoutCalls: true
 
