@@ -14,7 +14,7 @@ public class UInfo extends BaseEntity {
 
     private String address;
 
-    private String funsNum;
+    private String fansNum;
 
     private String verify;
 
@@ -64,12 +64,12 @@ public class UInfo extends BaseEntity {
         this.address = address;
     }
 
-    public String getFunsNum() {
-        return funsNum;
+    public String getFansNum() {
+        return fansNum;
     }
 
-    public void setFunsNum(String funsNum) {
-        this.funsNum = funsNum;
+    public void setFansNum(String fansNum) {
+        this.fansNum = fansNum;
     }
 
     public String getVerify() {

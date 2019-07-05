@@ -98,8 +98,10 @@ public class EClient extends CheckedUtil {
 
             XContentBuilder builder = XContentFactory.jsonBuilder();
             builder.startObject();
-            reflectFields.forEach(acceptOrThrow(field ->
-                builder.field(field.getName(), field.get(data))
+            reflectFields.forEach(acceptOrThrow(field ->{
+                    field.setAccessible(Boolean.TRUE);
+                    builder.field(field.getName(), field.get(data));
+                }
             ));
             builder.endObject();
 

@@ -2,9 +2,10 @@ package com.spider;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import tk.mybatis.spring.annotation.MapperScan;
 
-@SpringBootApplication(scanBasePackages = "com")
+@SpringBootApplication(scanBasePackages = "com", exclude = { SecurityAutoConfiguration.class })
 //@ComponentScan(basePackages = "com.spider")  // 这个可以注销掉 默认就是扫描这个目录
 @MapperScan(basePackages = "com.spider.bussiness.dao")
 public class SpiderApplication {

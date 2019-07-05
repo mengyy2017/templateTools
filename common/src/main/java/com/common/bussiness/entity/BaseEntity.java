@@ -7,7 +7,7 @@ public class BaseEntity {
     @Id
     public String id;
 
-    public Integer isdel;
+    public Integer isDel;
 
     public String getId() {
         return id;
@@ -17,12 +17,12 @@ public class BaseEntity {
         this.id = id;
     }
 
-    public Integer getIsdel() {
-        return isdel;
+    public Integer getIsDel() {
+        return isDel;
     }
 
-    public void setIsdel(Integer isdel) {
-        this.isdel = isdel;
+    public void setIsDel(Integer isDel) {
+        this.isDel = isDel;
     }
 
 }
