@@ -21,17 +21,43 @@ public class UInfoController extends BaseController {
     @Autowired
     private EClient eClient;
 
-    @RequestMapping("/test")
+    @RequestMapping("/createIndex")
     @ResponseBody
-    public Resp<String> login() {
+    public Resp<String> createIndex() {
         try {
-            List<UInfo> uInfoList = uInfoService.selectAll();
-            eClient.addDoc("u_info", uInfoList.get(0));
+            eClient.createIndex("u_info", UInfo.class);
             mkSuccResp("123456");
         } catch (Exception e) {
-            mkFailResp(e.getMessage());
+            mkFailResp(e);
         }
         return respResult.get();
     }
+
+    @RequestMapping("/addDoc")
+    @ResponseBody
+    public Resp<String> addDoc() {
+        try {
+            List<UInfo> uInfoList = uInfoService.selectAll();
+            eClient.addDoc("u_info", uInfoList.get(0));
+            mkSuccResp("7890");
+        } catch (Exception e) {
+            mkFailResp(e);
+        }
+        return respResult.get();
+    }
+
+    @RequestMapping("/bulkAdd")
+    @ResponseBody
+    public Resp<String> bulkAdd() {
+        try {
+            List<UInfo> uInfoList = uInfoService.selectAll();
+            eClient.bulkAddDoc("u_info", uInfoList);
+            mkSuccResp("11111");
+        } catch (Exception e) {
+            mkFailResp(e);
+        }
+        return respResult.get();
+    }
+
 
 }

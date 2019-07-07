@@ -5,9 +5,9 @@ import javax.persistence.Id;
 public class BaseEntity {
 
     @Id
-    public String id;
+    protected String id;
 
-    public Integer isDel;
+    protected Integer isDel;
 
     public String getId() {
         return id;

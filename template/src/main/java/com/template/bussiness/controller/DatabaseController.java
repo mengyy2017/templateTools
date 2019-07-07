@@ -44,7 +44,7 @@ public class DatabaseController extends BaseController {
         try {
             return mkSuccResp(tableService.selectByExample(example));
         } catch (Exception e) {
-            mkFailResp(e.getMessage());
+            mkFailResp(e);
         }
 
         return respResult.get();
@@ -61,7 +61,7 @@ public class DatabaseController extends BaseController {
         try {
             return mkSuccResp(tableService.selectByExample(example));
         } catch (Exception e) {
-            mkFailResp(e.getMessage());
+            mkFailResp(e);
         }
 
         return respResult.get();
@@ -73,7 +73,7 @@ public class DatabaseController extends BaseController {
         try{
             return mkSuccResp(columnService.select(columnEntity));
         } catch (Exception e) {
-            mkFailResp(e.getMessage());
+            mkFailResp(e);
         }
         return respResult.get();
     }
@@ -96,7 +96,7 @@ public class DatabaseController extends BaseController {
             try {
                 FreeMarkerUtil.outputFile(HandelDataUtil.convertData(dbModel));
             } catch (Exception e) {
-                mkFailResp(e.getMessage());
+                mkFailResp(e);
             }
         });
         return respResult.get();

@@ -66,7 +66,7 @@ public class EClient extends CheckedUtil {
             // 指示是否在超时之前为索引中的每个分片启动了必需的分片副本数
             boolean shardsAcknowledged = response.isShardsAcknowledged();
             if (acknowledged || shardsAcknowledged)
-                System.out.println("创建索引成功！索引名称为{}" + indexName);
+                throw new RuntimeException("创建索引成功！索引名称为{}" + indexName);
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -79,12 +79,13 @@ public class EClient extends CheckedUtil {
 
             AcknowledgedResponse response = esClient.indices().delete(request, RequestOptions.DEFAULT);
             if (response.isAcknowledged())
-                System.out.println("{} 索引删除成功！" + indexName);
+                throw new RuntimeException("{} 索引删除成功！" + indexName);
 
         } catch (ElasticsearchException ex) {
+            ex.printStackTrace();
             if (ex.status() == RestStatus.NOT_FOUND)
-                System.out.println("{} 索引名不存在" + indexName);
-            System.out.println("删除失败！");
+                throw new RuntimeException("{} 索引名不存在" + indexName);
+            throw new RuntimeException("删除失败！");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -109,14 +110,15 @@ public class EClient extends CheckedUtil {
             IndexResponse response = esClient.index(request, RequestOptions.DEFAULT);
 
             if (response.getResult() == DocWriteResponse.Result.CREATED)
-                System.out.println("新增文档成功！");
+                throw new RuntimeException("新增文档成功！");
             else if (response.getResult() == DocWriteResponse.Result.UPDATED)
-                System.out.println("修改文档成功！");
+                throw new RuntimeException("修改文档成功！");
 
         } catch (ElasticsearchException e) {
+            e.printStackTrace();
             if (e.status() == RestStatus.CONFLICT)
-                System.out.println("版本异常！");
-            System.out.println("文档新增失败！");
+                throw new RuntimeException("版本异常！");
+            throw new RuntimeException("文档新增失败！");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -126,7 +128,7 @@ public class EClient extends CheckedUtil {
         if(dataList == null || dataList.size() < 1)
             throw new Exception("数据不能为空");
 
-        Stream<Field> reflectFields = getReflectFileds(dataList.get(0).getClass());
+        List<Field> reflectFields = getReflectFileds(dataList.get(0).getClass()).collect(Collectors.toList());
 
         BulkRequest bulkRequest = new BulkRequest();
 
@@ -135,8 +137,10 @@ public class EClient extends CheckedUtil {
 
             XContentBuilder builder = XContentFactory.jsonBuilder();
             builder.startObject();
-            reflectFields.forEach(acceptOrThrow(field ->
-                builder.field(field.getName(), field.get(data))
+            reflectFields.stream().forEach(acceptOrThrow(field -> {
+                    field.setAccessible(Boolean.TRUE);
+                    builder.field(field.getName(), field.get(data));
+                }
             ));
             builder.endObject();
 
@@ -154,8 +158,9 @@ public class EClient extends CheckedUtil {
             for (BulkItemResponse bulkItemResponse : response) {
                 if (bulkItemResponse.isFailed()) {
                     BulkItemResponse.Failure failure = bulkItemResponse.getFailure();
-                    System.out.println("\"index={}, type={}, id={}\"的文档增加失败！" + failure.getIndex() + failure.getType() + failure.getId());
-                    System.out.println("增加失败详情: {}" + failure.getMessage());
+                    throw new RuntimeException("\"index={}, type={}, id={}\"的文档增加失败！"
+                            + failure.getIndex() + failure.getType() + failure.getId()
+                            + "增加失败详情: {}" + failure.getMessage());
                 } else
                     System.out.println("\"index={}, type={}, id={}\"的文档增加成功！" + bulkItemResponse.getIndex() + bulkItemResponse.getType() + bulkItemResponse.getId());
             }

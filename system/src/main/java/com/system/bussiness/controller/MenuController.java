@@ -24,7 +24,7 @@ public class MenuController extends BaseController {
         try {
             return mkSuccResp(menuService.selectAll());
         } catch (Exception e) {
-            mkFailResp(e.getMessage());
+            mkFailResp(e);
         }
         return respResult.get();
     }
@@ -34,7 +34,7 @@ public class MenuController extends BaseController {
         try {
             return mkSuccResp(menuService.selectOne(menuEntity));
         } catch (Exception e) {
-            mkFailResp(e.getMessage());
+            mkFailResp(e);
         }
         return respResult.get();
     }
@@ -44,7 +44,7 @@ public class MenuController extends BaseController {
         try {
             return mkSuccResp(menuService.updateOrSaveSelective(menuEntity));
         } catch (Exception e) {
-            mkFailResp(e.getMessage());
+            mkFailResp(e);
         }
         return respResult.get();
     }

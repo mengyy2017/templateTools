@@ -20,13 +20,14 @@ public class BaseController extends BuildUtil {
 
     }
 
-    public Resp mkFailResp(String msg) {
+    public Resp mkFailResp(Exception e) {
+        e.printStackTrace();
         Resp failResp = respResult.get();
 
         if (failResp instanceof SuccResp)
-            return respResult.mkFailSuccResp(msg);
+            return respResult.mkFailSuccResp(e.getMessage());
         else
-            return failResp.setMsg(msg);
+            return failResp.setMsg(e.getMessage());
 
     }
 

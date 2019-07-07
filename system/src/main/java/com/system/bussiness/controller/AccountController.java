@@ -31,7 +31,7 @@ public class AccountController extends BaseController {
                     , getVAndF(userEntity.getPassword(), ResourceOwnerPasswordResourceDetails::setPassword));
             mkSuccResp(oAuth2RestTemplate.getAccessToken().getValue());
         } catch (Exception e) {
-            mkFailResp(e.getMessage());
+            mkFailResp(e);
         }
         return respResult.get();
     }
