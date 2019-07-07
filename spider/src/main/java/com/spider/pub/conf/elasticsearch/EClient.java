@@ -10,9 +10,12 @@ import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.bulk.BulkItemResponse;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
+import org.elasticsearch.action.delete.DeleteRequest;
+import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.support.master.AcknowledgedResponse;
+import org.elasticsearch.action.support.replication.ReplicationResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
@@ -69,6 +72,7 @@ public class EClient extends CheckedUtil {
                 throw new RuntimeException("创建索引成功！索引名称为{}" + indexName);
         } catch (Exception e){
             e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
         }
 
     }
@@ -88,6 +92,7 @@ public class EClient extends CheckedUtil {
             throw new RuntimeException("删除失败！");
         } catch (IOException e) {
             e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -121,6 +126,7 @@ public class EClient extends CheckedUtil {
             throw new RuntimeException("文档新增失败！");
         } catch (IOException e) {
             e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -163,6 +169,60 @@ public class EClient extends CheckedUtil {
                             + "增加失败详情: {}" + failure.getMessage());
                 } else
                     System.out.println("\"index={}, type={}, id={}\"的文档增加成功！" + bulkItemResponse.getIndex() + bulkItemResponse.getType() + bulkItemResponse.getId());
+            }
+        }
+    }
+
+    public void deleteDoc(String indexName, String id){
+        DeleteRequest request = new DeleteRequest(indexName, id);
+        try {
+            DeleteResponse response = esClient.delete(request, RequestOptions.DEFAULT);
+
+            ReplicationResponse.ShardInfo shardInfo = response.getShardInfo();
+            // if (shardInfo.getTotal() != shardInfo.getSuccessful()) {
+            //     throw new RuntimeException("分片未全部删除成功!");
+            // }
+            if (shardInfo.getFailed() > 0) {
+                for (ReplicationResponse.ShardInfo.Failure failure : shardInfo.getFailures())
+                    throw new RuntimeException(failure.reason());
+            }
+
+            if (response.getResult() == DocWriteResponse.Result.NOT_FOUND)
+                throw new RuntimeException("文档未找到，删除失败！");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+
+    }
+
+    public <T extends BaseEntity> void bulkDeleteDoc(String indexName, List<T> dataList) throws Exception {
+        if(dataList == null || dataList.size() < 1)
+            throw new Exception("数据不能为空");
+
+        BulkRequest bulkRequest = new BulkRequest();
+
+        List<DocWriteRequest<?>> deleteRequstList = dataList.stream().map(applyOrThrow(data -> {
+            DeleteRequest deleteRequest = new DeleteRequest(indexName, data.getId());
+            return deleteRequest;
+        })).collect(Collectors.toList());
+
+        bulkRequest.add(deleteRequstList);
+        BulkResponse response = esClient.bulk(bulkRequest, RequestOptions.DEFAULT);
+
+        // 全部操作成功
+        if (!response.hasFailures())
+            System.out.println("批量删除操作成功！");
+        else {
+            for (BulkItemResponse bulkItemResponse : response) {
+                if (bulkItemResponse.isFailed()) {
+                    BulkItemResponse.Failure failure = bulkItemResponse.getFailure();
+                    throw new RuntimeException("\"index={}, type={}, id={}\"的文档删除失败！"
+                            + failure.getIndex() + failure.getType() + failure.getId()
+                            + "删除失败详情: {}" + failure.getMessage());
+                } else
+                    System.out.println("\"index={}, type={}, id={}\"的文档删除成功！" + bulkItemResponse.getIndex() + bulkItemResponse.getType() + bulkItemResponse.getId());
             }
         }
     }

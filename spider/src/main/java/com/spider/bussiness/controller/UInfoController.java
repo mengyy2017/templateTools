@@ -59,5 +59,31 @@ public class UInfoController extends BaseController {
         return respResult.get();
     }
 
+    @RequestMapping("/deleteDoc")
+    @ResponseBody
+    public Resp<String> deleteDoc() {
+        try {
+            List<UInfo> uInfoList = uInfoService.selectAll();
+            eClient.deleteDoc("u_info", uInfoList.get(5).getId());
+            mkSuccResp("7890");
+        } catch (Exception e) {
+            mkFailResp(e);
+        }
+        return respResult.get();
+    }
+
+    @RequestMapping("/bulkDelete")
+    @ResponseBody
+    public Resp<String> bulkDelete() {
+        try {
+            List<UInfo> uInfoList = uInfoService.selectAll();
+            eClient.bulkDeleteDoc("u_info", uInfoList);
+            mkSuccResp("11111");
+        } catch (Exception e) {
+            mkFailResp(e);
+        }
+        return respResult.get();
+    }
+
 
 }
