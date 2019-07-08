@@ -85,9 +85,9 @@ public class EClient extends CheckedUtil {
             if (response.isAcknowledged())
                 throw new RuntimeException("{} 索引删除成功！" + indexName);
 
-        } catch (ElasticsearchException ex) {
-            ex.printStackTrace();
-            if (ex.status() == RestStatus.NOT_FOUND)
+        } catch (ElasticsearchException e) {
+            e.printStackTrace();
+            if (e.status() == RestStatus.NOT_FOUND)
                 throw new RuntimeException("{} 索引名不存在" + indexName);
             throw new RuntimeException("删除失败！");
         } catch (IOException e) {
