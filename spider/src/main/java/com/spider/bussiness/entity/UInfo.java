@@ -2,6 +2,7 @@ package com.spider.bussiness.entity;
 
 import com.common.bussiness.entity.BaseEntity;
 import javax.persistence.Table;
+import java.util.List;
 
 @Table(name = "u_info")
 public class UInfo extends BaseEntity {
@@ -31,6 +32,8 @@ public class UInfo extends BaseEntity {
     private String professional;
 
     private String extractStr;
+
+    private List<WbInfo> wbInfoList;
 
     public String getuId() {
         return uId;
@@ -134,5 +137,13 @@ public class UInfo extends BaseEntity {
 
     public void setExtractStr(String extractStr) {
         this.extractStr = extractStr;
+    }
+
+    public List<WbInfo> getWbInfoList() {
+        return wbInfoList;
+    }
+
+    public void setWbInfoList(List<WbInfo> wbInfoList) {
+        this.wbInfoList = wbInfoList;
     }
 }

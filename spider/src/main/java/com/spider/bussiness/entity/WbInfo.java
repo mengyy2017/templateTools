@@ -2,6 +2,7 @@ package com.spider.bussiness.entity;
 
 import com.common.bussiness.entity.BaseEntity;
 import javax.persistence.Table;
+import java.util.List;
 
 @Table(name = "wb_info")
 public class WbInfo extends BaseEntity {
@@ -49,6 +50,8 @@ public class WbInfo extends BaseEntity {
     private String wbRefPraised;
 
     private String wbRefPraisedHtml;
+
+    private List<CommentInfo> commentInfoList;
 
     public String getmId() {
         return mId;
@@ -224,5 +227,13 @@ public class WbInfo extends BaseEntity {
 
     public void setWbRefPraisedHtml(String wbRefPraisedHtml) {
         this.wbRefPraisedHtml = wbRefPraisedHtml;
+    }
+
+    public List<CommentInfo> getCommentInfoList() {
+        return commentInfoList;
+    }
+
+    public void setCommentInfoList(List<CommentInfo> commentInfoList) {
+        this.commentInfoList = commentInfoList;
     }
 }
