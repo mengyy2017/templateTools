@@ -1,6 +1,7 @@
 package com.spider.bussiness.entity;
 
 import com.common.bussiness.entity.BaseEntity;
+import com.common.pub.pubInter.ChildAnnotation;
 import javax.persistence.Table;
 import java.util.List;
 
@@ -33,6 +34,7 @@ public class UInfo extends BaseEntity {
 
     private String extractStr;
 
+    @ChildAnnotation(name = "wb_info")
     private List<WbInfo> wbInfoList;
 
     public String getuId() {

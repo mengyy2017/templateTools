@@ -1,6 +1,7 @@
 package com.spider.bussiness.entity;
 
 import com.common.bussiness.entity.BaseEntity;
+import com.common.pub.pubInter.ChildAnnotation;
 import javax.persistence.Table;
 import java.util.List;
 
@@ -51,6 +52,7 @@ public class WbInfo extends BaseEntity {
 
     private String wbRefPraisedHtml;
 
+    @ChildAnnotation(name = "comment_info")
     private List<CommentInfo> commentInfoList;
 
     public String getmId() {

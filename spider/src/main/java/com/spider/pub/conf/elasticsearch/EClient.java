@@ -1,6 +1,7 @@
 package com.spider.pub.conf.elasticsearch;
 
 import com.common.bussiness.entity.BaseEntity;
+import com.common.pub.pubInter.ChildAnnotation;
 import com.common.util.CheckedUtil;
 import org.apache.http.HttpHost;
 import org.elasticsearch.ElasticsearchException;
@@ -25,9 +26,12 @@ import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.rest.RestStatus;
 import org.springframework.stereotype.Component;
+
+import javax.persistence.Table;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -49,16 +53,27 @@ public class EClient extends CheckedUtil {
 
     public void createIndex(String indexName, Class t) {
         CreateIndexRequest request = new CreateIndexRequest(indexName);
-        Stream<Field> reflectFields = getReflectFileds(t);
+        List<Field> reflectFields = getReflectFileds(t).collect(Collectors.toList());
         try {
             XContentBuilder builder = XContentFactory.jsonBuilder();
+            String parentName = ((Table)t.getAnnotation(Table.class)).name();
+            Stream<Field> childAnnoField = reflectFields.stream().filter(f -> f.isAnnotationPresent(ChildAnnotation.class));
             builder.startObject();
             builder.startObject("properties");
-            reflectFields.forEach(acceptOrThrow(field -> {
-                builder.startObject(field.getName());
-                builder.field("type", "text");
+                builder.startObject("join_field");
+                    builder.field("type", "join");
+                    builder.startObject("relations");
+                        childAnnoField.forEach(acceptOrThrow(f -> {
+                            builder.field(parentName, f.getAnnotation(ChildAnnotation.class).name());
+                        }));
+                    builder.endObject();
                 builder.endObject();
-            }));
+            reflectFields.stream().filter(f -> !f.isAnnotationPresent(ChildAnnotation.class))
+                .forEach(acceptOrThrow(field -> {
+                    builder.startObject(field.getName());
+                    builder.field("type", "text");
+                    builder.endObject();
+                }));
             builder.endObject();
             builder.endObject();
 
@@ -69,7 +84,7 @@ public class EClient extends CheckedUtil {
             // 指示是否在超时之前为索引中的每个分片启动了必需的分片副本数
             boolean shardsAcknowledged = response.isShardsAcknowledged();
             if (acknowledged || shardsAcknowledged)
-                throw new RuntimeException("创建索引成功！索引名称为{}" + indexName);
+                System.out.println("创建索引成功！索引名称为{}" + indexName);
         } catch (Exception e){
             e.printStackTrace();
             throw new RuntimeException(e.getMessage());
@@ -83,7 +98,7 @@ public class EClient extends CheckedUtil {
 
             AcknowledgedResponse response = esClient.indices().delete(request, RequestOptions.DEFAULT);
             if (response.isAcknowledged())
-                throw new RuntimeException("{} 索引删除成功！" + indexName);
+                System.out.println("{} 索引删除成功！" + indexName);
 
         } catch (ElasticsearchException e) {
             e.printStackTrace();
@@ -115,9 +130,9 @@ public class EClient extends CheckedUtil {
             IndexResponse response = esClient.index(request, RequestOptions.DEFAULT);
 
             if (response.getResult() == DocWriteResponse.Result.CREATED)
-                throw new RuntimeException("新增文档成功！");
+                System.out.println("新增文档成功！");
             else if (response.getResult() == DocWriteResponse.Result.UPDATED)
-                throw new RuntimeException("修改文档成功！");
+                System.out.println("修改文档成功！");
 
         } catch (ElasticsearchException e) {
             e.printStackTrace();
@@ -229,6 +244,10 @@ public class EClient extends CheckedUtil {
 
     private static Stream<Field> getReflectFileds(Class t){
         return t != null ? Arrays.stream(t.getDeclaredFields()) : Stream.of();
+    }
+
+    private static int getFiledSort(Field field){
+        return field.isAnnotationPresent(ChildAnnotation.class) ? 0 : 1;
     }
 
 }
