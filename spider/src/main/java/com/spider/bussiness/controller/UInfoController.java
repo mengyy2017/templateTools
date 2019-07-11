@@ -25,7 +25,7 @@ public class UInfoController extends BaseController {
     @ResponseBody
     public Resp<String> createIndex() {
         try {
-            eClient.createIndex("u_info", UInfo.class);
+            eClient.createIndex("wb", UInfo.class);
             mkSuccResp("123456");
         } catch (Exception e) {
             mkFailResp(e);
