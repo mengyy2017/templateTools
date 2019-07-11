@@ -26,12 +26,12 @@ import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.rest.RestStatus;
 import org.springframework.stereotype.Component;
-
 import javax.persistence.Table;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -51,29 +51,57 @@ public class EClient extends CheckedUtil {
         esClient = new RestHighLevelClient(RestClient.builder(new HttpHost("localhost", 9200, "http")));
     }
 
-    public void createIndex(String indexName, Class t) {
+    public void createIndex(String indexName, Class clazz) {
         CreateIndexRequest request = new CreateIndexRequest(indexName);
-        List<Field> reflectFields = getReflectFileds(t).collect(Collectors.toList());
+        List<Field> reflectFields = getReflectFileds(clazz).collect(Collectors.toList());
         try {
+            String parentName = ((Table)clazz.getAnnotation(Table.class)).name();
+            List<Field> childAnnoFields = reflectFields.stream().filter(f ->
+                    f.isAnnotationPresent(ChildAnnotation.class)
+            ).collect(Collectors.toList());
+
             XContentBuilder builder = XContentFactory.jsonBuilder();
-            String parentName = ((Table)t.getAnnotation(Table.class)).name();
-            Stream<Field> childAnnoField = reflectFields.stream().filter(f -> f.isAnnotationPresent(ChildAnnotation.class));
+
             builder.startObject();
             builder.startObject("properties");
+
                 builder.startObject("join_field");
                     builder.field("type", "join");
                     builder.startObject("relations");
-                        childAnnoField.forEach(acceptOrThrow(f -> {
-                            builder.field(parentName, f.getAnnotation(ChildAnnotation.class).name());
+                        childAnnoFields.forEach(acceptOrThrow(f ->
+                            builder.field(parentName, f.getAnnotation(ChildAnnotation.class).name())
+                        ));
+                    builder.endObject();
+                builder.endObject();
+
+                builder.startObject(parentName);
+                    builder.startObject("properties");
+                        reflectFields.stream().filter(f ->
+                            !f.isAnnotationPresent(ChildAnnotation.class)
+                        ).forEach(acceptOrThrow(field -> {
+                            builder.startObject(field.getName());
+                            builder.field("type", "text");
+                            builder.endObject();
                         }));
                     builder.endObject();
                 builder.endObject();
-            reflectFields.stream().filter(f -> !f.isAnnotationPresent(ChildAnnotation.class))
-                .forEach(acceptOrThrow(field -> {
-                    builder.startObject(field.getName());
-                    builder.field("type", "text");
-                    builder.endObject();
-                }));
+
+                childAnnoFields.forEach(acceptOrThrow(f -> {
+                        builder.startObject(f.getAnnotation(ChildAnnotation.class).name());
+
+                            Class childClazz = (Class) ((ParameterizedType) f.getGenericType()).getActualTypeArguments()[0];
+                            Stream<Field> childReflectFields = getReflectFileds(childClazz);
+                            builder.startObject("properties");
+                                childReflectFields.forEach(acceptOrThrow(field -> {
+                                    builder.startObject(field.getName());
+                                    builder.field("type", "text");
+                                    builder.endObject();
+                                }));
+                            builder.endObject();
+                        builder.endObject();
+                    })
+                );
+
             builder.endObject();
             builder.endObject();
 
@@ -242,8 +270,8 @@ public class EClient extends CheckedUtil {
         }
     }
 
-    private static Stream<Field> getReflectFileds(Class t){
-        return t != null ? Arrays.stream(t.getDeclaredFields()) : Stream.of();
+    private static Stream<Field> getReflectFileds(Class clazz){
+        return clazz != null ? Arrays.stream(clazz.getDeclaredFields()) : Stream.of();
     }
 
     private static int getFiledSort(Field field){
