@@ -281,7 +281,6 @@ public class EClient extends CheckedUtil {
         builder.endObject();
     }
 
-
     private void buildEachFieldType(XContentBuilder builder, Field field) throws IOException {
         builder.startObject(field.getName());
         builder.field("type", "text");
