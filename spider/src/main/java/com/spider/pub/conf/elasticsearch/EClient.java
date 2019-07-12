@@ -30,11 +30,10 @@ import javax.persistence.Table;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Component
 public class EClient extends CheckedUtil {
@@ -52,53 +51,33 @@ public class EClient extends CheckedUtil {
     }
 
     public void createIndex(String indexName, Class clazz) {
+
         CreateIndexRequest request = new CreateIndexRequest(indexName);
-        List<Field> reflectFields = getReflectFileds(clazz).collect(Collectors.toList());
+
+        List<Field> reflectFields = getReflectFileds(clazz);
+
+        String parentName = ((Table)clazz.getAnnotation(Table.class)).name();
+
+        List<Field> parentFieldList = filterField(reflectFields, true);
+
+        List<Field> childAnnoFieldList = filterField(reflectFields, false);
+
         try {
-            String parentName = ((Table)clazz.getAnnotation(Table.class)).name();
-            List<Field> childAnnoFields = reflectFields.stream().filter(f ->
-                    f.isAnnotationPresent(ChildAnnotation.class)
-            ).collect(Collectors.toList());
 
             XContentBuilder builder = XContentFactory.jsonBuilder();
 
             builder.startObject();
             builder.startObject("properties");
 
-                builder.startObject("join_field");
-                    builder.field("type", "join");
-                    builder.startObject("relations");
-                        childAnnoFields.forEach(acceptOrThrow(f ->
-                            builder.field(parentName, f.getAnnotation(ChildAnnotation.class).name())
-                        ));
-                    builder.endObject();
-                builder.endObject();
+                buildRelationship(builder, parentName, childAnnoFieldList); // 构建关系
 
-                builder.startObject(parentName);
-                    builder.startObject("properties");
-                        reflectFields.stream().filter(f ->
-                            !f.isAnnotationPresent(ChildAnnotation.class)
-                        ).forEach(acceptOrThrow(field -> {
-                            builder.startObject(field.getName());
-                            builder.field("type", "text");
-                            builder.endObject();
-                        }));
-                    builder.endObject();
-                builder.endObject();
+                buildObjField(builder, parentName, parentFieldList); // 构建父关系字段
 
-                childAnnoFields.forEach(acceptOrThrow(f -> {
-                        builder.startObject(f.getAnnotation(ChildAnnotation.class).name());
+                childAnnoFieldList.forEach(acceptOrThrow(f -> { // 构建每个子关系字段
+                        Class childClazz = (Class)((ParameterizedType) f.getGenericType()).getActualTypeArguments()[0];
+                        List<Field> childReflectFields = filterField(getReflectFileds(childClazz), true);
 
-                            Class childClazz = (Class) ((ParameterizedType) f.getGenericType()).getActualTypeArguments()[0];
-                            Stream<Field> childReflectFields = getReflectFileds(childClazz);
-                            builder.startObject("properties");
-                                childReflectFields.forEach(acceptOrThrow(field -> {
-                                    builder.startObject(field.getName());
-                                    builder.field("type", "text");
-                                    builder.endObject();
-                                }));
-                            builder.endObject();
-                        builder.endObject();
+                        buildObjField(builder, f.getAnnotation(ChildAnnotation.class).name(), childReflectFields);
                     })
                 );
 
@@ -118,6 +97,40 @@ public class EClient extends CheckedUtil {
             throw new RuntimeException(e.getMessage());
         }
 
+    }
+
+    private List<Field> filterField(List<Field> fieldList, Boolean isFilterChild){
+        return fieldList.stream().filter(f ->
+                isFilterChild ^ f.isAnnotationPresent(ChildAnnotation.class)
+        ).collect(Collectors.toList());
+    }
+
+    private void buildRelationship(XContentBuilder builder, String parentName, List<Field> childAnnoFieldList) throws IOException {
+        builder.startObject("join_field"); // 构建关系
+            builder.field("type", "join");
+            builder.startObject("relations");
+                childAnnoFieldList.forEach(acceptOrThrow(f ->
+                        builder.field(parentName, f.getAnnotation(ChildAnnotation.class).name())
+                ));
+            builder.endObject();
+        builder.endObject();
+    }
+
+    private void buildObjField(XContentBuilder builder, String objName, List<Field> fieldList) throws IOException {
+        builder.startObject(objName);
+            builder.startObject("properties");
+                fieldList.forEach(acceptOrThrow(field ->
+                    buildEachFieldType(builder, field))
+                );
+            builder.endObject();
+        builder.endObject();
+    }
+
+
+    private void buildEachFieldType(XContentBuilder builder, Field field) throws IOException {
+        builder.startObject(field.getName());
+            builder.field("type", "text");
+        builder.endObject();
     }
 
     public void deleteIndex(String indexName) {
@@ -140,7 +153,7 @@ public class EClient extends CheckedUtil {
     }
 
     public <T extends BaseEntity> void addDoc(String indexName, T data) {
-        Stream<Field> reflectFields = getReflectFileds(data.getClass());
+        List<Field> reflectFields = getReflectFileds(data.getClass());
         IndexRequest request = new IndexRequest(indexName);
 
         try {
@@ -177,7 +190,7 @@ public class EClient extends CheckedUtil {
         if(dataList == null || dataList.size() < 1)
             throw new Exception("数据不能为空");
 
-        List<Field> reflectFields = getReflectFileds(dataList.get(0).getClass()).collect(Collectors.toList());
+        List<Field> reflectFields = getReflectFileds(dataList.get(0).getClass());
 
         BulkRequest bulkRequest = new BulkRequest();
 
@@ -270,8 +283,8 @@ public class EClient extends CheckedUtil {
         }
     }
 
-    private static Stream<Field> getReflectFileds(Class clazz){
-        return clazz != null ? Arrays.stream(clazz.getDeclaredFields()) : Stream.of();
+    private static List<Field> getReflectFileds(Class clazz){
+        return clazz != null ? Arrays.stream(clazz.getDeclaredFields()).collect(Collectors.toList()) : Collections.emptyList();
     }
 
     private static int getFiledSort(Field field){
