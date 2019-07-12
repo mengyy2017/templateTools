@@ -100,8 +100,11 @@ public class EClient extends CheckedUtil {
     }
 
     public <T extends BaseEntity> void addDoc(String indexName, T data) {
-        List<Field> reflectFields = getReflectFileds(data.getClass());
         IndexRequest request = new IndexRequest(indexName);
+
+        Class clazz = data.getClass();
+
+        List<Field> reflectFields = getReflectFileds(clazz);
 
         try {
 
@@ -147,9 +150,9 @@ public class EClient extends CheckedUtil {
             XContentBuilder builder = XContentFactory.jsonBuilder();
             builder.startObject();
             reflectFields.stream().forEach(acceptOrThrow(field -> {
-                        field.setAccessible(Boolean.TRUE);
-                        builder.field(field.getName(), field.get(data));
-                    }
+                    field.setAccessible(Boolean.TRUE);
+                    builder.field(field.getName(), field.get(data));
+                }
             ));
             builder.endObject();
 
@@ -263,9 +266,7 @@ public class EClient extends CheckedUtil {
         builder.startObject("join_field"); // 构建关系
         builder.field("type", "join");
         builder.startObject("relations");
-        childAnnoFieldList.forEach(acceptOrThrow(f ->
-            builder.field(parentName, f.getAnnotation(ChildAnnotation.class).name())
-        ));
+        builder.array(parentName, childAnnoFieldList.stream().map(f -> f.getAnnotation(ChildAnnotation.class).name()).toArray());
         builder.endObject();
         builder.endObject();
     }
