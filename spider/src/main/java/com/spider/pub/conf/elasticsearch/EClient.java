@@ -69,10 +69,6 @@ public class EClient extends CheckedUtil {
             builder.startObject();
             builder.startObject("properties");
 
-                buildRelationship(builder, parentName, childAnnoFieldList); // 构建关系
-
-                buildObjField(builder, parentName, parentFieldList); // 构建父关系字段
-
                 childAnnoFieldList.forEach(acceptOrThrow(f -> { // 构建每个子关系字段
                         Class childClazz = (Class)((ParameterizedType) f.getGenericType()).getActualTypeArguments()[0];
                         List<Field> childReflectFields = filterField(getReflectFileds(childClazz), true);
@@ -80,6 +76,10 @@ public class EClient extends CheckedUtil {
                         buildObjField(builder, f.getAnnotation(ChildAnnotation.class).name(), childReflectFields);
                     })
                 );
+
+                buildObjField(builder, parentName, parentFieldList); // 构建父关系字段
+
+                buildRelationship(builder, parentName, childAnnoFieldList); // 构建关系
 
             builder.endObject();
             builder.endObject();
@@ -266,9 +266,15 @@ public class EClient extends CheckedUtil {
         builder.startObject("join_field"); // 构建关系
         builder.field("type", "join");
         builder.startObject("relations");
-        builder.array(parentName, childAnnoFieldList.stream().map(f -> f.getAnnotation(ChildAnnotation.class).name()).toArray());
+        String[] childNameArr = childAnnoFieldList.stream().map(f -> f.getAnnotation(ChildAnnotation.class).name()).toArray(String[]::new);
+        addParentAndChild(builder, parentName, childNameArr);
+//        builder.array(parentName, childAnnoFieldList.stream().map(f -> f.getAnnotation(ChildAnnotation.class).name()).toArray());
         builder.endObject();
         builder.endObject();
+    }
+
+    private void addParentAndChild(XContentBuilder builder, String parentName, String[] childNameArr) throws IOException {
+        builder.array(parentName, childNameArr);
     }
 
     private void buildObjField(XContentBuilder builder, String objName, List<Field> fieldList) throws IOException {
