@@ -30,9 +30,7 @@ import javax.persistence.Table;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -54,13 +52,15 @@ public class EClient extends CheckedUtil {
 
         CreateIndexRequest request = new CreateIndexRequest(indexName);
 
-        List<Field> reflectFields = getReflectFileds(clazz);
+        List<Field> reflectFieldList = getReflectFileds(clazz);
 
         String parentName = ((Table)clazz.getAnnotation(Table.class)).name();
 
-        List<Field> parentFieldList = filterField(reflectFields, true);
+        List<Field> parentFieldList = filterField(reflectFieldList, true);
 
-        List<Field> childAnnoFieldList = filterField(reflectFields, false);
+        List<Field> childAnnoFieldList = filterField(reflectFieldList, false);
+
+        Map<String, String[]> relationshipMap = new HashMap<>();
 
         try {
 
@@ -69,17 +69,11 @@ public class EClient extends CheckedUtil {
             builder.startObject();
             builder.startObject("properties");
 
-                childAnnoFieldList.forEach(acceptOrThrow(f -> { // 构建每个子关系字段
-                        Class childClazz = (Class)((ParameterizedType) f.getGenericType()).getActualTypeArguments()[0];
-                        List<Field> childReflectFields = filterField(getReflectFileds(childClazz), true);
-
-                        buildObjField(builder, f.getAnnotation(ChildAnnotation.class).name(), childReflectFields);
-                    })
-                );
+                buildChildObjField(builder, childAnnoFieldList, parentName, relationshipMap); // 构建每个子关系字段 以及递归构建每个子关系的子关系字段
 
                 buildObjField(builder, parentName, parentFieldList); // 构建父关系字段
 
-                buildRelationship(builder, parentName, childAnnoFieldList); // 构建关系
+                buildRelationship(builder, relationshipMap); // 构建关系
 
             builder.endObject();
             builder.endObject();
@@ -256,25 +250,37 @@ public class EClient extends CheckedUtil {
         return clazz != null ? Arrays.stream(clazz.getDeclaredFields()).collect(Collectors.toList()) : Collections.emptyList();
     }
 
-    private List<Field> filterField(List<Field> fieldList, Boolean isFilterChild){
+    private List<Field> filterField(List<Field> fieldList, Boolean isFilterChildAnno){
         return fieldList.stream().filter(f ->
-            isFilterChild ^ f.isAnnotationPresent(ChildAnnotation.class)
+            isFilterChildAnno ^ f.isAnnotationPresent(ChildAnnotation.class)
         ).collect(Collectors.toList());
     }
 
-    private void buildRelationship(XContentBuilder builder, String parentName, List<Field> childAnnoFieldList) throws IOException {
+    private void buildRelationship(XContentBuilder builder, Map<String, String[]> relationshipMap) throws IOException {
         builder.startObject("join_field"); // 构建关系
         builder.field("type", "join");
         builder.startObject("relations");
-        String[] childNameArr = childAnnoFieldList.stream().map(f -> f.getAnnotation(ChildAnnotation.class).name()).toArray(String[]::new);
-        addParentAndChild(builder, parentName, childNameArr);
-//        builder.array(parentName, childAnnoFieldList.stream().map(f -> f.getAnnotation(ChildAnnotation.class).name()).toArray());
+        relationshipMap.forEach(biAcceptOrThrow((parentName, childNameArr) -> {
+            builder.array(parentName, childNameArr);
+        }));
         builder.endObject();
         builder.endObject();
     }
 
-    private void addParentAndChild(XContentBuilder builder, String parentName, String[] childNameArr) throws IOException {
-        builder.array(parentName, childNameArr);
+    private void buildChildObjField(XContentBuilder builder, List<Field> childAnnoFieldList, String parentName, Map<String, String[]> relationshipMap){
+        String[] relationshipArr = childAnnoFieldList.stream().map(applyOrThrow(f -> { // 构建每个子关系字段
+                Class childClazz = (Class) ((ParameterizedType) f.getGenericType()).getActualTypeArguments()[0];
+                List<Field> childReflectFields = filterField(getReflectFileds(childClazz), true);
+                String childObjName = f.getAnnotation(ChildAnnotation.class).name();
+                buildObjField(builder, childObjName, childReflectFields);
+
+                List<Field> childAnnoFields = filterField(getReflectFileds(childClazz), false);
+                if (childAnnoFields.size() > 0)
+                    buildChildObjField(builder, childAnnoFields, childObjName, relationshipMap);
+                return childObjName;
+            })
+        ).toArray(String[]::new);
+        relationshipMap.put(parentName, relationshipArr);
     }
 
     private void buildObjField(XContentBuilder builder, String objName, List<Field> fieldList) throws IOException {
