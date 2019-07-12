@@ -99,59 +99,6 @@ public class EClient extends CheckedUtil {
 
     }
 
-    private List<Field> filterField(List<Field> fieldList, Boolean isFilterChild){
-        return fieldList.stream().filter(f ->
-                isFilterChild ^ f.isAnnotationPresent(ChildAnnotation.class)
-        ).collect(Collectors.toList());
-    }
-
-    private void buildRelationship(XContentBuilder builder, String parentName, List<Field> childAnnoFieldList) throws IOException {
-        builder.startObject("join_field"); // 构建关系
-            builder.field("type", "join");
-            builder.startObject("relations");
-                childAnnoFieldList.forEach(acceptOrThrow(f ->
-                        builder.field(parentName, f.getAnnotation(ChildAnnotation.class).name())
-                ));
-            builder.endObject();
-        builder.endObject();
-    }
-
-    private void buildObjField(XContentBuilder builder, String objName, List<Field> fieldList) throws IOException {
-        builder.startObject(objName);
-            builder.startObject("properties");
-                fieldList.forEach(acceptOrThrow(field ->
-                    buildEachFieldType(builder, field))
-                );
-            builder.endObject();
-        builder.endObject();
-    }
-
-
-    private void buildEachFieldType(XContentBuilder builder, Field field) throws IOException {
-        builder.startObject(field.getName());
-            builder.field("type", "text");
-        builder.endObject();
-    }
-
-    public void deleteIndex(String indexName) {
-        DeleteIndexRequest request = new DeleteIndexRequest(indexName);
-        try {
-
-            AcknowledgedResponse response = esClient.indices().delete(request, RequestOptions.DEFAULT);
-            if (response.isAcknowledged())
-                System.out.println("{} 索引删除成功！" + indexName);
-
-        } catch (ElasticsearchException e) {
-            e.printStackTrace();
-            if (e.status() == RestStatus.NOT_FOUND)
-                throw new RuntimeException("{} 索引名不存在" + indexName);
-            throw new RuntimeException("删除失败！");
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e.getMessage());
-        }
-    }
-
     public <T extends BaseEntity> void addDoc(String indexName, T data) {
         List<Field> reflectFields = getReflectFileds(data.getClass());
         IndexRequest request = new IndexRequest(indexName);
@@ -200,9 +147,9 @@ public class EClient extends CheckedUtil {
             XContentBuilder builder = XContentFactory.jsonBuilder();
             builder.startObject();
             reflectFields.stream().forEach(acceptOrThrow(field -> {
-                    field.setAccessible(Boolean.TRUE);
-                    builder.field(field.getName(), field.get(data));
-                }
+                        field.setAccessible(Boolean.TRUE);
+                        builder.field(field.getName(), field.get(data));
+                    }
             ));
             builder.endObject();
 
@@ -226,6 +173,25 @@ public class EClient extends CheckedUtil {
                 } else
                     System.out.println("\"index={}, type={}, id={}\"的文档增加成功！" + bulkItemResponse.getIndex() + bulkItemResponse.getType() + bulkItemResponse.getId());
             }
+        }
+    }
+
+    public void deleteIndex(String indexName) {
+        DeleteIndexRequest request = new DeleteIndexRequest(indexName);
+        try {
+
+            AcknowledgedResponse response = esClient.indices().delete(request, RequestOptions.DEFAULT);
+            if (response.isAcknowledged())
+                System.out.println("{} 索引删除成功！" + indexName);
+
+        } catch (ElasticsearchException e) {
+            e.printStackTrace();
+            if (e.status() == RestStatus.NOT_FOUND)
+                throw new RuntimeException("{} 索引名不存在" + indexName);
+            throw new RuntimeException("删除失败！");
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -287,10 +253,39 @@ public class EClient extends CheckedUtil {
         return clazz != null ? Arrays.stream(clazz.getDeclaredFields()).collect(Collectors.toList()) : Collections.emptyList();
     }
 
-    private static int getFiledSort(Field field){
-        return field.isAnnotationPresent(ChildAnnotation.class) ? 0 : 1;
+    private List<Field> filterField(List<Field> fieldList, Boolean isFilterChild){
+        return fieldList.stream().filter(f ->
+            isFilterChild ^ f.isAnnotationPresent(ChildAnnotation.class)
+        ).collect(Collectors.toList());
     }
 
+    private void buildRelationship(XContentBuilder builder, String parentName, List<Field> childAnnoFieldList) throws IOException {
+        builder.startObject("join_field"); // 构建关系
+        builder.field("type", "join");
+        builder.startObject("relations");
+        childAnnoFieldList.forEach(acceptOrThrow(f ->
+            builder.field(parentName, f.getAnnotation(ChildAnnotation.class).name())
+        ));
+        builder.endObject();
+        builder.endObject();
+    }
+
+    private void buildObjField(XContentBuilder builder, String objName, List<Field> fieldList) throws IOException {
+        builder.startObject(objName);
+        builder.startObject("properties");
+        fieldList.forEach(acceptOrThrow(field ->
+            buildEachFieldType(builder, field))
+        );
+        builder.endObject();
+        builder.endObject();
+    }
+
+
+    private void buildEachFieldType(XContentBuilder builder, Field field) throws IOException {
+        builder.startObject(field.getName());
+        builder.field("type", "text");
+        builder.endObject();
+    }
 }
 
 
