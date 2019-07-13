@@ -38,7 +38,20 @@ public class UInfoController extends BaseController {
     public Resp<String> addDoc() {
         try {
             List<UInfo> uInfoList = uInfoService.selectAll();
-            eClient.addDoc("u_info", uInfoList.get(0));
+            eClient.addDoc("wb", uInfoList.get(0));
+            mkSuccResp("7890");
+        } catch (Exception e) {
+            mkFailResp(e);
+        }
+        return respResult.get();
+    }
+
+    @RequestMapping("/addRelationDoc")
+    @ResponseBody
+    public Resp<String> addRelationDoc() {
+        try {
+            List<UInfo> uInfoList = uInfoService.selectAll();
+            eClient.addRelationDoc("wb", uInfoList.get(0), Boolean.FALSE);
             mkSuccResp("7890");
         } catch (Exception e) {
             mkFailResp(e);
@@ -51,7 +64,7 @@ public class UInfoController extends BaseController {
     public Resp<String> bulkAdd() {
         try {
             List<UInfo> uInfoList = uInfoService.selectAll();
-            eClient.bulkAddDoc("u_info", uInfoList);
+            eClient.bulkAddDoc("wb", uInfoList);
             mkSuccResp("11111");
         } catch (Exception e) {
             mkFailResp(e);
@@ -64,7 +77,7 @@ public class UInfoController extends BaseController {
     public Resp<String> deleteDoc() {
         try {
             List<UInfo> uInfoList = uInfoService.selectAll();
-            eClient.deleteDoc("u_info", uInfoList.get(5).getId());
+            eClient.deleteDoc("wb", uInfoList.get(5).getId());
             mkSuccResp("7890");
         } catch (Exception e) {
             mkFailResp(e);
@@ -77,7 +90,7 @@ public class UInfoController extends BaseController {
     public Resp<String> bulkDelete() {
         try {
             List<UInfo> uInfoList = uInfoService.selectAll();
-            eClient.bulkDeleteDoc("u_info", uInfoList);
+            eClient.bulkDeleteDoc("wb", uInfoList);
             mkSuccResp("11111");
         } catch (Exception e) {
             mkFailResp(e);

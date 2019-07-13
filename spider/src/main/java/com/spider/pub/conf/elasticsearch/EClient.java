@@ -1,7 +1,10 @@
 package com.spider.pub.conf.elasticsearch;
 
 import com.common.bussiness.entity.BaseEntity;
+import com.common.pub.pubInter.BiCheckedFunction;
 import com.common.pub.pubInter.ChildAnnotation;
+import com.common.pub.pubInter.ESIdAnnotation;
+import com.common.pub.pubInter.ForeignKeyAnnotation;
 import com.common.util.CheckedUtil;
 import org.apache.http.HttpHost;
 import org.elasticsearch.ElasticsearchException;
@@ -36,6 +39,8 @@ import java.util.stream.Collectors;
 @Component
 public class EClient extends CheckedUtil {
 
+    private static String join_field = "join_field";
+
     public static void main(String[] args) {
         EClient eClient = new EClient();
 //        eClient.createIndex("u_info", UInfo.class);
@@ -56,9 +61,9 @@ public class EClient extends CheckedUtil {
 
         String parentName = ((Table)clazz.getAnnotation(Table.class)).name();
 
-        List<Field> parentFieldList = filterField(reflectFieldList, true);
+        List<Field> parentFieldList = filterField(reflectFieldList, Boolean.TRUE);
 
-        List<Field> childAnnoFieldList = filterField(reflectFieldList, false);
+        List<Field> childAnnoFieldList = filterField(reflectFieldList, Boolean.FALSE);
 
         Map<String, String[]> relationshipMap = new HashMap<>();
 
@@ -94,25 +99,71 @@ public class EClient extends CheckedUtil {
     }
 
     public <T extends BaseEntity> void addDoc(String indexName, T data) {
-        IndexRequest request = new IndexRequest(indexName);
 
-        Class clazz = data.getClass();
+        addDocExecute(indexName, data, (t, u) -> {
+            IndexRequest request = new IndexRequest(t);
 
-        List<Field> reflectFields = getReflectFileds(clazz);
+            Class clazz = u.getClass();
 
-        try {
+            List<Field> reflectFields = getReflectFileds(clazz);
 
             XContentBuilder builder = XContentFactory.jsonBuilder();
             builder.startObject();
-            reflectFields.forEach(acceptOrThrow(field ->{
-                    field.setAccessible(Boolean.TRUE);
-                    builder.field(field.getName(), field.get(data));
-                }
+            reflectFields.forEach(acceptOrThrow(field -> {
+                        field.setAccessible(Boolean.TRUE);
+                        builder.field(field.getName(), field.get(data).toString());
+                    }
             ));
             builder.endObject();
 
             request.id(data.getId()).source(builder);
             IndexResponse response = esClient.index(request, RequestOptions.DEFAULT);
+            return response;
+        });
+
+    }
+
+    public <T extends BaseEntity> void addRelationDoc(String indexName, T data, Boolean isChild) {
+        addDocExecute(indexName, data, (t, u) -> {
+            IndexRequest request = new IndexRequest(t);
+
+            Class clazz = u.getClass();
+
+            String objName = ((Table)clazz.getAnnotation(Table.class)).name();
+            final String[] keyAndForeignKey = {"", ""};
+
+            List<Field> reflectFields = filterField(getReflectFileds(clazz), Boolean.TRUE);
+
+            XContentBuilder builder = XContentFactory.jsonBuilder();
+            builder.startObject();
+            builder.startObject(objName);
+                reflectFields.forEach(acceptOrThrow(field -> {
+                        field.setAccessible(Boolean.TRUE);
+                        builder.field(field.getName(), field.get(data)).toString();
+                        if(field.isAnnotationPresent(ESIdAnnotation.class))
+                            keyAndForeignKey[0] = field.get(data).toString();
+                        if(isChild && field.isAnnotationPresent(ForeignKeyAnnotation.class))
+                            keyAndForeignKey[1] = field.get(data).toString();
+                    }
+                ));
+                builder.startObject(join_field);
+                    builder.field("name", objName);
+                    if(isChild) builder.field("parent", keyAndForeignKey[1]);
+                builder.endObject();
+            builder.endObject();
+            builder.endObject();
+
+            // request.id(data.getId()).source(builder);
+            request.id(keyAndForeignKey[0]).source(builder);
+            IndexResponse response = esClient.index(request, RequestOptions.DEFAULT);
+            return response;
+        });
+    }
+
+    private <U extends BaseEntity, R extends DocWriteResponse> void addDocExecute(String indexName, U data, BiCheckedFunction<String, U, R> biCheckedFunction){
+        try {
+
+            R response = biCheckedFunction.biApply(indexName, data);
 
             if (response.getResult() == DocWriteResponse.Result.CREATED)
                 System.out.println("新增文档成功！");
@@ -124,7 +175,7 @@ public class EClient extends CheckedUtil {
             if (e.status() == RestStatus.CONFLICT)
                 throw new RuntimeException("版本异常！");
             throw new RuntimeException("文档新增失败！");
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e.getMessage());
         }
@@ -145,7 +196,7 @@ public class EClient extends CheckedUtil {
             builder.startObject();
             reflectFields.stream().forEach(acceptOrThrow(field -> {
                     field.setAccessible(Boolean.TRUE);
-                    builder.field(field.getName(), field.get(data));
+                    builder.field(field.getName(), field.get(data).toString());
                 }
             ));
             builder.endObject();
@@ -257,7 +308,7 @@ public class EClient extends CheckedUtil {
     }
 
     private void buildRelationship(XContentBuilder builder, Map<String, String[]> relationshipMap) throws IOException {
-        builder.startObject("join_field"); // 构建关系
+        builder.startObject(join_field); // 构建关系
         builder.field("type", "join");
         builder.startObject("relations");
         relationshipMap.forEach(biAcceptOrThrow((parentName, childNameArr) -> {

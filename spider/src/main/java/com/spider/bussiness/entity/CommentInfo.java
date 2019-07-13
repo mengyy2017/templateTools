@@ -1,14 +1,18 @@
 package com.spider.bussiness.entity;
 
 import com.common.bussiness.entity.BaseEntity;
+import com.common.pub.pubInter.ESIdAnnotation;
+import com.common.pub.pubInter.ForeignKeyAnnotation;
 import javax.persistence.Table;
 
 @Table(name = "comment_info")
 public class CommentInfo extends BaseEntity {
 
-    private String mId;
-
+    @ESIdAnnotation
     private String commentId;
+
+    @ForeignKeyAnnotation
+    private String mId;
 
     private String commentUId;
 

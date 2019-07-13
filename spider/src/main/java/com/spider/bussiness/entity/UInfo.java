@@ -2,12 +2,14 @@ package com.spider.bussiness.entity;
 
 import com.common.bussiness.entity.BaseEntity;
 import com.common.pub.pubInter.ChildAnnotation;
+import com.common.pub.pubInter.ESIdAnnotation;
 import javax.persistence.Table;
 import java.util.List;
 
 @Table(name = "u_info")
 public class UInfo extends BaseEntity {
 
+    @ESIdAnnotation
     private String uId;
 
     private String uHome;

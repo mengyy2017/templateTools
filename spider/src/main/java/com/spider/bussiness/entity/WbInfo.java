@@ -2,14 +2,18 @@ package com.spider.bussiness.entity;
 
 import com.common.bussiness.entity.BaseEntity;
 import com.common.pub.pubInter.ChildAnnotation;
+import com.common.pub.pubInter.ESIdAnnotation;
+import com.common.pub.pubInter.ForeignKeyAnnotation;
 import javax.persistence.Table;
 import java.util.List;
 
 @Table(name = "wb_info")
 public class WbInfo extends BaseEntity {
 
+    @ESIdAnnotation
     private String mId;
 
+    @ForeignKeyAnnotation
     private String uId;
 
     private String wbContent;

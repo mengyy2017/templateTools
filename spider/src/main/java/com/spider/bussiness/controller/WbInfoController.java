@@ -21,11 +21,12 @@ public class WbInfoController extends BaseController {
     @Autowired
     private EClient eClient;
 
-    @RequestMapping("/selectAll")
+    @RequestMapping("/addRelationDoc")
     @ResponseBody
     public Resp<String> createIndex() {
         try {
             List<WbInfo> wbInfoList = wbInfoService.selectAll();
+            eClient.addRelationDoc("wb", wbInfoList.get(0), Boolean.TRUE);
             mkSuccResp(wbInfoList);
         } catch (Exception e) {
             mkFailResp(e);

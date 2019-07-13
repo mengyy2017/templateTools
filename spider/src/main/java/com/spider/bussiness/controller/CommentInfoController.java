@@ -21,11 +21,12 @@ public class CommentInfoController extends BaseController {
     @Autowired
     private EClient eClient;
 
-    @RequestMapping("/selectAll")
+    @RequestMapping("/addRelationDoc")
     @ResponseBody
     public Resp<String> createIndex() {
         try {
             List<CommentInfo> commentInfoList = commentInfoService.selectAll();
+            eClient.addRelationDoc("wb", commentInfoList.get(30), Boolean.TRUE);
             mkSuccResp(commentInfoList);
         } catch (Exception e) {
             mkFailResp(e);
