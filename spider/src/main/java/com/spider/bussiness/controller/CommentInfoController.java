@@ -23,11 +23,24 @@ public class CommentInfoController extends BaseController {
 
     @RequestMapping("/addRelationDoc")
     @ResponseBody
-    public Resp<String> createIndex() {
+    public Resp<String> addRelationDoc() {
         try {
             List<CommentInfo> commentInfoList = commentInfoService.selectAll();
             eClient.addRelationDoc("wb", commentInfoList.get(0), Boolean.TRUE);
-            mkSuccResp(commentInfoList);
+            mkSuccResp("111");
+        } catch (Exception e) {
+            mkFailResp(e);
+        }
+        return respResult.get();
+    }
+
+    @RequestMapping("/bulkAddRelationDoc")
+    @ResponseBody
+    public Resp<String> bulkAddRelationDoc() {
+        try {
+            List<CommentInfo> commentInfoList = commentInfoService.selectAll();
+            eClient.bulkAddRelationDoc("wb", commentInfoList, Boolean.TRUE);
+            mkSuccResp("111");
         } catch (Exception e) {
             mkFailResp(e);
         }

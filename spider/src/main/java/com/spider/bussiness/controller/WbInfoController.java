@@ -23,11 +23,24 @@ public class WbInfoController extends BaseController {
 
     @RequestMapping("/addRelationDoc")
     @ResponseBody
-    public Resp<String> createIndex() {
+    public Resp<String> addRelationDoc() {
         try {
             List<WbInfo> wbInfoList = wbInfoService.selectAll();
             eClient.addRelationDoc("wb", wbInfoList.get(0), Boolean.TRUE);
-            mkSuccResp(wbInfoList);
+            mkSuccResp("111");
+        } catch (Exception e) {
+            mkFailResp(e);
+        }
+        return respResult.get();
+    }
+
+    @RequestMapping("/bulkAddRelationDoc")
+    @ResponseBody
+    public Resp<String> bulkAddRelationDoc() {
+        try {
+            List<WbInfo> wbInfoList = wbInfoService.selectAll();
+            eClient.bulkAddRelationDoc("wb", wbInfoList, Boolean.TRUE);
+            mkSuccResp("111");
         } catch (Exception e) {
             mkFailResp(e);
         }

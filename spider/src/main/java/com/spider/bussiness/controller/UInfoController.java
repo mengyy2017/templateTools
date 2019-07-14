@@ -72,6 +72,19 @@ public class UInfoController extends BaseController {
         return respResult.get();
     }
 
+    @RequestMapping("/bulkAddRelationDoc")
+    @ResponseBody
+    public Resp<String> bulkAddRelationDoc() {
+        try {
+            List<UInfo> uInfoList = uInfoService.selectAll();
+            eClient.bulkAddRelationDoc("wb", uInfoList, Boolean.FALSE);
+            mkSuccResp("11111");
+        } catch (Exception e) {
+            mkFailResp(e);
+        }
+        return respResult.get();
+    }
+
     @RequestMapping("/deleteDoc")
     @ResponseBody
     public Resp<String> deleteDoc() {
