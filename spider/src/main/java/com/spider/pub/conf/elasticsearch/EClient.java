@@ -61,9 +61,9 @@ public class EClient extends CheckedUtil {
 
         String parentName = ((Table)clazz.getAnnotation(Table.class)).name();
 
-        List<Field> parentFieldList = filterField(reflectFieldList, Boolean.TRUE);
+        List<Field> parentFieldList = filterCreateIndexField(reflectFieldList, Boolean.TRUE);
 
-        List<Field> childAnnoFieldList = filterField(reflectFieldList, Boolean.FALSE);
+        List<Field> childAnnoFieldList = filterCreateIndexField(reflectFieldList, Boolean.FALSE);
 
         Map<String, String[]> relationshipMap = new HashMap<>();
 
@@ -136,7 +136,6 @@ public class EClient extends CheckedUtil {
 
             XContentBuilder builder = XContentFactory.jsonBuilder();
             builder.startObject();
-            builder.startObject(objName);
                 reflectFields.forEach(acceptOrThrow(field -> {
                         field.setAccessible(Boolean.TRUE);
                         builder.field(field.getName(), field.get(data)).toString();
@@ -151,10 +150,9 @@ public class EClient extends CheckedUtil {
                     if(isChild) builder.field("parent", keyAndForeignKey[1]);
                 builder.endObject();
             builder.endObject();
-            builder.endObject();
 
-            // request.id(data.getId()).source(builder);
             request.id(keyAndForeignKey[0]).source(builder);
+            if(isChild) request.routing(keyAndForeignKey[1]);
             IndexResponse response = esClient.index(request, RequestOptions.DEFAULT);
             return response;
         });
@@ -303,7 +301,13 @@ public class EClient extends CheckedUtil {
 
     private List<Field> filterField(List<Field> fieldList, Boolean isFilterChildAnno){
         return fieldList.stream().filter(f ->
-            isFilterChildAnno ^ f.isAnnotationPresent(ChildAnnotation.class)
+                isFilterChildAnno ^ f.isAnnotationPresent(ChildAnnotation.class)
+        ).collect(Collectors.toList());
+    }
+
+    private List<Field> filterCreateIndexField(List<Field> fieldList, Boolean isFilterChildAnno){
+        return fieldList.stream().filter(f ->
+                (isFilterChildAnno ^ f.isAnnotationPresent(ChildAnnotation.class)) && !f.isAnnotationPresent(ForeignKeyAnnotation.class)
         ).collect(Collectors.toList());
     }
 
@@ -321,11 +325,11 @@ public class EClient extends CheckedUtil {
     private void buildChildObjField(XContentBuilder builder, List<Field> childAnnoFieldList, String parentName, Map<String, String[]> relationshipMap){
         String[] relationshipArr = childAnnoFieldList.stream().map(applyOrThrow(f -> { // 构建每个子关系字段
                 Class childClazz = (Class) ((ParameterizedType) f.getGenericType()).getActualTypeArguments()[0];
-                List<Field> childReflectFields = filterField(getReflectFileds(childClazz), true);
+                List<Field> childReflectFields = filterCreateIndexField(getReflectFileds(childClazz), true);
                 String childObjName = f.getAnnotation(ChildAnnotation.class).name();
                 buildObjField(builder, childObjName, childReflectFields);
 
-                List<Field> childAnnoFields = filterField(getReflectFileds(childClazz), false);
+                List<Field> childAnnoFields = filterCreateIndexField(getReflectFileds(childClazz), false);
                 if (childAnnoFields.size() > 0)
                     buildChildObjField(builder, childAnnoFields, childObjName, relationshipMap);
                 return childObjName;
@@ -335,13 +339,9 @@ public class EClient extends CheckedUtil {
     }
 
     private void buildObjField(XContentBuilder builder, String objName, List<Field> fieldList) throws IOException {
-        builder.startObject(objName);
-        builder.startObject("properties");
         fieldList.forEach(acceptOrThrow(field ->
             buildEachFieldType(builder, field))
         );
-        builder.endObject();
-        builder.endObject();
     }
 
     private void buildEachFieldType(XContentBuilder builder, Field field) throws IOException {

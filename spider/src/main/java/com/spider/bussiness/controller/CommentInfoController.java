@@ -26,7 +26,7 @@ public class CommentInfoController extends BaseController {
     public Resp<String> createIndex() {
         try {
             List<CommentInfo> commentInfoList = commentInfoService.selectAll();
-            eClient.addRelationDoc("wb", commentInfoList.get(30), Boolean.TRUE);
+            eClient.addRelationDoc("wb", commentInfoList.get(0), Boolean.TRUE);
             mkSuccResp(commentInfoList);
         } catch (Exception e) {
             mkFailResp(e);
