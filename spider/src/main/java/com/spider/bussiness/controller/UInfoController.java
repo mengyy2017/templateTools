@@ -5,6 +5,7 @@ import com.common.pub.pubBo.Resp;
 import com.spider.bussiness.entity.UInfo;
 import com.spider.bussiness.service.UInfoService;
 import com.spider.pub.conf.elasticsearch.EClient;
+import com.spider.pub.consts.Consts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +26,7 @@ public class UInfoController extends BaseController {
     @ResponseBody
     public Resp<String> createIndex() {
         try {
-            eClient.createIndex("wb", UInfo.class);
+            eClient.createIndex(Consts.indexName, UInfo.class);
             mkSuccResp("123456");
         } catch (Exception e) {
             mkFailResp(e);
@@ -38,7 +39,7 @@ public class UInfoController extends BaseController {
     public Resp<String> addDoc() {
         try {
             List<UInfo> uInfoList = uInfoService.selectAll();
-            eClient.addDoc("wb", uInfoList.get(0));
+            eClient.addDoc(Consts.indexName, uInfoList.get(0));
             mkSuccResp("7890");
         } catch (Exception e) {
             mkFailResp(e);
@@ -51,7 +52,7 @@ public class UInfoController extends BaseController {
     public Resp<String> addRelationDoc() {
         try {
             List<UInfo> uInfoList = uInfoService.selectAll();
-            eClient.addRelationDoc("wb", uInfoList.get(0), Boolean.FALSE);
+            eClient.addRelationDoc(Consts.indexName, uInfoList.get(0), Boolean.FALSE);
             mkSuccResp("7890");
         } catch (Exception e) {
             mkFailResp(e);
@@ -64,7 +65,7 @@ public class UInfoController extends BaseController {
     public Resp<String> bulkAdd() {
         try {
             List<UInfo> uInfoList = uInfoService.selectAll();
-            eClient.bulkAddDoc("wb", uInfoList);
+            eClient.bulkAddDoc(Consts.indexName, uInfoList);
             mkSuccResp("11111");
         } catch (Exception e) {
             mkFailResp(e);
@@ -77,7 +78,7 @@ public class UInfoController extends BaseController {
     public Resp<String> bulkAddRelationDoc() {
         try {
             List<UInfo> uInfoList = uInfoService.selectAll();
-            eClient.bulkAddRelationDoc("wb", uInfoList, Boolean.FALSE);
+            eClient.bulkAddRelationDoc(Consts.indexName, uInfoList, Boolean.FALSE);
             mkSuccResp("11111");
         } catch (Exception e) {
             mkFailResp(e);
@@ -90,7 +91,7 @@ public class UInfoController extends BaseController {
     public Resp<String> deleteDoc() {
         try {
             List<UInfo> uInfoList = uInfoService.selectAll();
-            eClient.deleteDoc("wb", uInfoList.get(5).getId());
+            eClient.deleteDoc(Consts.indexName, uInfoList.get(5).getId());
             mkSuccResp("7890");
         } catch (Exception e) {
             mkFailResp(e);
@@ -103,7 +104,7 @@ public class UInfoController extends BaseController {
     public Resp<String> bulkDelete() {
         try {
             List<UInfo> uInfoList = uInfoService.selectAll();
-            eClient.bulkDeleteDoc("wb", uInfoList);
+            eClient.bulkDeleteDoc(Consts.indexName, uInfoList);
             mkSuccResp("11111");
         } catch (Exception e) {
             mkFailResp(e);
