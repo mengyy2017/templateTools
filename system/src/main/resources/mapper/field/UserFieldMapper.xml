@@ -19,7 +19,7 @@
 		<result column="id" property="id" jdbcType="VARCHAR" javaType="String"/>	<!--  -->
 		<result column="username" property="username" jdbcType="VARCHAR" javaType="String"/>	<!--  -->
 		<result column="password" property="password" jdbcType="VARCHAR" javaType="String"/>	<!--  -->
-		<result column="isdel" property="isdel" jdbcType="INTEGER" javaType="int"/>	<!--  -->
+		<result column="is_del" property="isDel" jdbcType="INTEGER" javaType="int"/>	<!--  -->
 		<collection property="roleEntityList" ofType="com.system.bussiness.entity.RoleEntity" resultMap="com.system.dao.field.roleFieldMapper.roleResultMap"></collection>
 	</resultMap>
   	
@@ -29,7 +29,7 @@
 			sys_user.id	as	id,	<!--  -->
 			sys_user.username	as	username,	<!--  -->
 			sys_user.password	as	password,	<!--  -->
-			sys_user.isdel	as	isdel,	<!--  -->
+			sys_user.is_del	as	isDel,	<!--  -->
 		</trim>
 	</sql>
 	
@@ -45,8 +45,8 @@
 			<if test="password != null " >
 				password,	<!--  -->
 			</if>
-			<if test="isdel != null " >
-				isdel,	<!--  -->
+			<if test="isDel != null " >
+				is_del,	<!--  -->
 			</if>
 	    </trim>
 	</sql>
@@ -63,8 +63,8 @@
 			<if test="password != null " >
 				#{password, jdbcType=VARCHAR},	<!--  -->
 			</if>
-			<if test="isdel != null " >
-				#{isdel, jdbcType=INTEGER},	<!--  -->
+			<if test="isDel != null " >
+				#{isDel, jdbcType=INTEGER},	<!--  -->
 			</if>
 	    </trim>
 	</sql>
@@ -75,7 +75,7 @@
 			id,	<!--  -->
 			username,	<!--  -->
 			password,	<!--  -->
-			isdel,	<!--  -->
+			is_del,	<!--  -->
 	    </trim>
 	</sql>
 	
@@ -85,7 +85,7 @@
 			#{item.id, jdbcType=VARCHAR},	<!--  -->
 			#{item.username, jdbcType=VARCHAR},	<!--  -->
 			#{item.password, jdbcType=VARCHAR},	<!--  -->
-			#{item.isdel, jdbcType=INTEGER},	<!--  -->
+			#{item.isDel, jdbcType=INTEGER},	<!--  -->
 	    </trim>
 	</sql>
 	
@@ -98,8 +98,8 @@
 			<if test="password != null " >
 				password = #{password, jdbcType=VARCHAR},	<!--  -->
 			</if>
-			<if test="isdel != null " >
-				isdel = #{isdel, jdbcType=INTEGER},	<!--  -->
+			<if test="isDel != null " >
+				is_del = #{isDel, jdbcType=INTEGER},	<!--  -->
 			</if>
 	    </trim>
 	</sql>
@@ -116,8 +116,8 @@
 			<if test="password != null " >
 				and sys_user.password = #{password, jdbcType=VARCHAR}	<!--  -->
 			</if>
-			<if test="isdel != null " >
-				and sys_user.isdel = #{isdel, jdbcType=INTEGER}	<!--  -->
+			<if test="isDel != null " >
+				and sys_user.is_del = #{isDel, jdbcType=INTEGER}	<!--  -->
 			</if>
 		</trim>
 	</sql>
@@ -134,8 +134,8 @@
 			<if test="password != null" >
 				and sys_user.password like CONCAT(CONCAT('%',#{password, jdbcType=VARCHAR}),'%' )	<!--  -->
 		    </if>
-			<if test="isdel != null" >
-				and sys_user.isdel like CONCAT(CONCAT('%',#{isdel, jdbcType=INTEGER}),'%' )	<!--  -->
+			<if test="isDel != null" >
+				and sys_user.is_del like CONCAT(CONCAT('%',#{isDel, jdbcType=INTEGER}),'%' )	<!--  -->
 		    </if>
 		</trim>
 	</sql>
@@ -152,8 +152,8 @@
 			<if test="password != null " >
 				and password = #{password, jdbcType=VARCHAR}	<!--  -->
 			</if>
-			<if test="isdel != null " >
-				and isdel = #{isdel, jdbcType=INTEGER}	<!--  -->
+			<if test="isDel != null " >
+				and is_del = #{isDel, jdbcType=INTEGER}	<!--  -->
 			</if>
 		</trim>
 	</sql>

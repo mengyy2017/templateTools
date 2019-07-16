@@ -40,14 +40,14 @@
 	<select id="selectRoleByEntry" resultMap="com.system.dao.field.roleFieldMapper.roleResultMap" parameterType="com.system.bussiness.entity.RoleEntity">
 		select <include refid="com.system.dao.field.roleFieldMapper.roleColumns"/>
 		from sys_role sys_role 
-		where 1=1 and sys_role.isdel=0 <include refid="com.system.dao.field.roleFieldMapper.andAllRole"/>
+		where 1=1 and sys_role.is_del=0 <include refid="com.system.dao.field.roleFieldMapper.andAllRole"/>
 	</select>
 	
 	<!-- 查询,ID查询   -->
 	<select id="selectRoleById" resultMap="com.system.dao.field.roleFieldMapper.roleResultMap" parameterType="java.lang.String">
 		select <include refid="com.system.dao.field.roleFieldMapper.roleColumns"/>
 		from sys_role sys_role 
-		where 1=1 and sys_role.isdel=0 <include refid="com.system.dao.field.roleFieldMapper.primaryKeyRole"/>
+		where 1=1 and sys_role.is_del=0 <include refid="com.system.dao.field.roleFieldMapper.primaryKeyRole"/>
 	</select>
 	
   	<!-- 批量插入 mysql -->

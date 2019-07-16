@@ -19,7 +19,7 @@
 		<result column="id" property="id" jdbcType="VARCHAR" javaType="String"/>	<!--  -->
 		<result column="role_code" property="roleCode" jdbcType="VARCHAR" javaType="String"/>	<!--  -->
 		<result column="role_name" property="roleName" jdbcType="VARCHAR" javaType="String"/>	<!--  -->
-		<result column="isdel" property="isdel" jdbcType="INTEGER" javaType="int"/>	<!--  -->
+		<result column="is_del" property="isDel" jdbcType="INTEGER" javaType="int"/>	<!--  -->
 	</resultMap>
   	
   	<!-- tableColumns  所有列 -->
@@ -28,7 +28,7 @@
 			sys_role.id	as	id,	<!--  -->
 			sys_role.role_code		<!--  -->
 			sys_role.role_name		<!--  -->
-			sys_role.isdel	as	isdel,	<!--  -->
+			sys_role.is_del	as	isDel,	<!--  -->
 		</trim>
 	</sql>
 	
@@ -44,8 +44,8 @@
 			<if test="roleName != null " >
 				role_name,	<!--  -->
 			</if>
-			<if test="isdel != null " >
-				isdel,	<!--  -->
+			<if test="isDel != null " >
+				is_del,	<!--  -->
 			</if>
 	    </trim>
 	</sql>
@@ -62,8 +62,8 @@
 			<if test="roleName != null " >
 				#{roleName, jdbcType=VARCHAR},	<!--  -->
 			</if>
-			<if test="isdel != null " >
-				#{isdel, jdbcType=INTEGER},	<!--  -->
+			<if test="isDel != null " >
+				#{isDel, jdbcType=INTEGER},	<!--  -->
 			</if>
 	    </trim>
 	</sql>
@@ -74,7 +74,7 @@
 			id,	<!--  -->
 			role_code,	<!--  -->
 			role_name,	<!--  -->
-			isdel,	<!--  -->
+			is_del,	<!--  -->
 	    </trim>
 	</sql>
 	
@@ -84,7 +84,7 @@
 			#{item.id, jdbcType=VARCHAR},	<!--  -->
 			#{item.roleCode, jdbcType=VARCHAR},	<!--  -->
 			#{item.roleName, jdbcType=VARCHAR},	<!--  -->
-			#{item.isdel, jdbcType=INTEGER},	<!--  -->
+			#{item.isDel, jdbcType=INTEGER},	<!--  -->
 	    </trim>
 	</sql>
 	
@@ -97,8 +97,8 @@
 			<if test="roleName != null " >
 				role_name = #{roleName, jdbcType=VARCHAR},	<!--  -->
 			</if>
-			<if test="isdel != null " >
-				isdel = #{isdel, jdbcType=INTEGER},	<!--  -->
+			<if test="isDel != null " >
+				is_del = #{isDel, jdbcType=INTEGER},	<!--  -->
 			</if>
 	    </trim>
 	</sql>
@@ -115,8 +115,8 @@
 			<if test="roleName != null " >
 				and sys_role.role_name = #{roleName, jdbcType=VARCHAR}	<!--  -->
 			</if>
-			<if test="isdel != null " >
-				and sys_role.isdel = #{isdel, jdbcType=INTEGER}	<!--  -->
+			<if test="isDel != null " >
+				and sys_role.is_del = #{isDel, jdbcType=INTEGER}	<!--  -->
 			</if>
 		</trim>
 	</sql>
@@ -133,8 +133,8 @@
 			<if test="roleName != null" >
 				and sys_role.role_name like CONCAT(CONCAT('%',#{roleName, jdbcType=VARCHAR}),'%' )	<!--  -->
 		    </if>
-			<if test="isdel != null" >
-				and sys_role.isdel like CONCAT(CONCAT('%',#{isdel, jdbcType=INTEGER}),'%' )	<!--  -->
+			<if test="isDel != null" >
+				and sys_role.is_del like CONCAT(CONCAT('%',#{isDel, jdbcType=INTEGER}),'%' )	<!--  -->
 		    </if>
 		</trim>
 	</sql>
@@ -151,8 +151,8 @@
 			<if test="roleName != null " >
 				and role_name = #{roleName, jdbcType=VARCHAR}	<!--  -->
 			</if>
-			<if test="isdel != null " >
-				and isdel = #{isdel, jdbcType=INTEGER}	<!--  -->
+			<if test="isDel != null " >
+				and is_del = #{isDel, jdbcType=INTEGER}	<!--  -->
 			</if>
 		</trim>
 	</sql>
