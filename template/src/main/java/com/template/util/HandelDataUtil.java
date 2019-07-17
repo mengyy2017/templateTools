@@ -1,10 +1,11 @@
 package com.template.util;
 
+import com.common.util.BuildUtil;
 import com.template.bussiness.entity.ColumnEntity;
 import com.template.bussiness.entity.model.TableColsInfo;
 import com.template.pub.consts.Consts;
-import com.common.util.BuildUtil;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -21,7 +22,7 @@ public class HandelDataUtil extends BuildUtil {
         List<ColumnEntity> columnList = tableColsInfo.getColList().stream().map(
                                 columnEntity -> columnEntity2Java(columnEntity)).collect(Collectors.toList());
 
-        Map databaseMap = BuildUtil.newAndPuts(HashMap::new, HashMap::put,
+        Map databaseMap = BuildUtil.newAndPuts(LinkedHashMap::new, LinkedHashMap::put,
 
 //                Consts.UPPER_CAMEL_TABLE_NAME, upperCamelTableName, // 用来做最终输出文件的名字的 这个含有module的名字 需要去掉
                 Consts.UPPER_CAMEL_TABLE_NAME, upperCamelTableName.replace(convert2UpperCamel(moduleName), ""),
@@ -58,23 +59,36 @@ public class HandelDataUtil extends BuildUtil {
 //            case "text":
 //                columnEntity.setJavaType("String");
 //                break;
-            case "integer":
-                javaType = "long";
-                break;
-            case "samllint":
+
+            case "SAMLLINT":
                 javaType = "int";
                 break;
-            case "int":
-                javaType = "int";
+            case "INT":
+                javaType = "Integer";
                 break;
-            case "decimal":
+            case "DECIMAL":
                 javaType = "double";
                 break;
-            case "date":
+            case "DATE":
                 javaType = "Date";
                 break;
-            case "datetime":
+            case "DATETIME":
                 javaType = "Date";
+                break;
+            case "CHAR":
+                javaType = "String";
+                break;
+            case "VARCHAR":
+                javaType = "String";
+                break;
+            case "INTEGER":
+                javaType = "Integer";
+                break;
+            case "TIMESTAMP":
+                javaType = "Date";
+                break;
+            case "TEXT":
+                javaType = "String";
                 break;
             default:
                 break;

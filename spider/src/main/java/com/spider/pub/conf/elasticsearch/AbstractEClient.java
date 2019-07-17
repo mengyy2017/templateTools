@@ -136,7 +136,9 @@ public abstract class AbstractEClient extends CheckedUtil {
     protected void buildEachFieldType(XContentBuilder builder, Field field) throws IOException {
         builder.startObject(field.getName());
         builder.field("type", "text");
+        // TODO
         builder.field("analyzer", "ik_smart");
+
         builder.endObject();
     }
 }

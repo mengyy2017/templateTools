@@ -2,6 +2,7 @@ package com.template.pub.consts;
 
 import com.common.util.BuildUtil;
 import freemarker.template.Configuration;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -62,7 +63,8 @@ public class Consts extends BuildUtil {
                         , mapperClassiPath + "_" + XML_SUFFIX, Arrays.asList("_Mapper.ftl_@@Mapper", "_FieldMapper.ftl_@@FieldMapper")
                         , actionClassiPath + "_" + JAVA_SUFFIX, Arrays.asList("_Action.ftl_@@Controller")
                         , pageClassiPath + "_" + HTML_SUFFIX, Arrays.asList("_ListPage.ftl_list@@", "_NewPage.ftl_new@@",
-                                                        "_AddPage.ftl_add@@", "_EditPage.ftl_edit@@")
+                                                "_AddPage.ftl_add@@", "_EditPage.ftl_edit@@", "_ViewPage.ftl_view@@","_ViewBakPage.ftl_viewBak@@",
+                                                "_ViewApprovePage.ftl_view@@Approve", "_ViewBodyPage.ftl_view@@Body")
 
             );
     }

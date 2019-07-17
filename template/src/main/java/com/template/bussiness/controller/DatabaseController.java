@@ -19,6 +19,7 @@ import tk.mybatis.mapper.entity.Example;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/database")
@@ -91,10 +92,10 @@ public class DatabaseController extends BaseController {
                 setVals(dbModel, getVAndF(columnList, TableColsInfo::setColList));
             }
 
-            HandelDataUtil.convertData(dbModel);
+            Map dataMap = HandelDataUtil.convertData(dbModel);
 
             try {
-                FreeMarkerUtil.outputFile(HandelDataUtil.convertData(dbModel));
+                FreeMarkerUtil.outputFile(dataMap);
             } catch (Exception e) {
                 mkFailResp(e);
             }
