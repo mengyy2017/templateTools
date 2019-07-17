@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 
 @Controller
-@RequestMapping(value = "/AddData")
+@RequestMapping(value = "/addData")
 public class AddDataController extends BaseController {
 
     @Autowired
@@ -64,6 +64,20 @@ public class AddDataController extends BaseController {
         try {
 
             addRelationDoc("wb1");
+
+            mkSuccResp("111");
+        } catch (Exception e) {
+            mkFailResp(e);
+        }
+        return respResult.get();
+    }
+
+    @RequestMapping("/addWb2")
+    @ResponseBody
+    public Resp<String> addWb2() {
+        try {
+
+            addRelationDoc("wb2");
 
             mkSuccResp("111");
         } catch (Exception e) {
