@@ -28,14 +28,14 @@ public class AddDataController extends BaseController {
     @Autowired
     private EClient eClient;
 
-    @RequestMapping("/addWb0")
+    @RequestMapping("/addWb")
     @ResponseBody
-    public Resp<String> addWb0() {
+    public Resp<String> addWb() {
         try {
 
-            eClient.createIndex("wb0", UInfo.class);
+            eClient.createIndex("wb", UInfo.class);
 
-            addRelationDoc("wb0");
+            addRelationDoc("wb");
 
             mkSuccResp("111");
         } catch (Exception e) {
@@ -44,12 +44,12 @@ public class AddDataController extends BaseController {
         return respResult.get();
     }
 
-    @RequestMapping("/addWb")
+    @RequestMapping("/addWb0")
     @ResponseBody
-    public Resp<String> addWb() {
+    public Resp<String> addWb0() {
         try {
 
-            addRelationDoc("wb");
+            addRelationDoc("wb0");
 
             mkSuccResp("111");
         } catch (Exception e) {
