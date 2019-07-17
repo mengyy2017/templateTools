@@ -3,6 +3,8 @@ package com.spider.bussiness.entity;
 import com.common.bussiness.entity.BaseEntity;
 import com.common.pub.pubInter.ESIdAnnotation;
 import com.common.pub.pubInter.ForeignKeyAnnotation;
+import com.common.pub.pubInter.AnalyzerAnnotation;
+
 import javax.persistence.Table;
 
 @Table(name = "comment_info")
@@ -20,6 +22,7 @@ public class CommentInfo extends BaseEntity {
 
     private String createAt;
 
+    @AnalyzerAnnotation
     private String commentText;
 
     private String likeNum;

@@ -1,6 +1,7 @@
 package com.spider.pub.conf.elasticsearch;
 
 import com.common.bussiness.entity.BaseEntity;
+import com.spider.bussiness.entity.NgramAnalyzerInfo;
 import org.apache.http.HttpHost;
 import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.action.DocWriteRequest;
@@ -45,9 +46,9 @@ public class EClient extends AbstractEClient {
         esClient = new RestHighLevelClient(RestClient.builder(new HttpHost("localhost", 9200, "http")));
     }
 
-    public void createIndex(String indexName, Class clazz) {
+    public void createIndex(String indexName, Class clazz, List<NgramAnalyzerInfo> ngramAnalyzerInfoList) {
 
-        CreateIndexRequest request = new CreateIndexRequest(indexName);
+        CreateIndexRequest createIndexRequest = new CreateIndexRequest(indexName);
 
         List<Field> reflectFieldList = getReflectFileds(clazz);
 
@@ -60,6 +61,8 @@ public class EClient extends AbstractEClient {
         Map<String, String[]> relationshipMap = new HashMap<>();
 
         try {
+
+            createNgramInfo(createIndexRequest, ngramAnalyzerInfoList);
 
             XContentBuilder builder = XContentFactory.jsonBuilder();
 
@@ -75,8 +78,8 @@ public class EClient extends AbstractEClient {
             builder.endObject();
             builder.endObject();
 
-            request.mapping(builder);
-            CreateIndexResponse response =  esClient.indices().create(request, RequestOptions.DEFAULT);
+            createIndexRequest.mapping(builder);
+            CreateIndexResponse response =  esClient.indices().create(createIndexRequest, RequestOptions.DEFAULT);
             // 指示是否所有节点都已确认请求
             boolean acknowledged = response.isAcknowledged();
             // 指示是否在超时之前为索引中的每个分片启动了必需的分片副本数

@@ -1,24 +1,24 @@
 package com.spider.bussiness.entity;
 
-public class NgramInfo {
+import com.common.pub.pubInter.AnalyzerAnnotation;
 
-    private String analyzerName;
+public class NgramAnalyzerInfo {
+
+    private AnalyzerAnnotation.AnalyzerName analyzerName;
 
     private String tokenizerName;
 
-    private String ngramName;
+    private String ngramType;
 
-    private String type;
+    private int minGram = 2;
 
-    private int minGram;
+    private int maxGram = 4;
 
-    private int maxGram;
-
-    public String getAnalyzerName() {
+    public AnalyzerAnnotation.AnalyzerName getAnalyzerName() {
         return analyzerName;
     }
 
-    public void setAnalyzerName(String analyzerName) {
+    public void setAnalyzerName(AnalyzerAnnotation.AnalyzerName analyzerName) {
         this.analyzerName = analyzerName;
     }
 
@@ -30,20 +30,12 @@ public class NgramInfo {
         this.tokenizerName = tokenizerName;
     }
 
-    public String getNgramName() {
-        return ngramName;
+    public String getNgramType() {
+        return ngramType;
     }
 
-    public void setNgramName(String ngramName) {
-        this.ngramName = ngramName;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
+    public void setNgramType(String ngramType) {
+        this.ngramType = ngramType;
     }
 
     public int getMinGram() {

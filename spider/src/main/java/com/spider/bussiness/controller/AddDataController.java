@@ -33,7 +33,7 @@ public class AddDataController extends BaseController {
     public Resp<String> addWb() {
         try {
 
-            eClient.createIndex("wb", UInfo.class);
+            eClient.createIndex("wb", UInfo.class, null);
 
             addRelationDoc("wb");
 

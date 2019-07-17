@@ -4,6 +4,7 @@ import com.common.bussiness.entity.BaseEntity;
 import com.common.pub.pubInter.ChildAnnotation;
 import com.common.pub.pubInter.ESIdAnnotation;
 import com.common.pub.pubInter.ForeignKeyAnnotation;
+import com.common.pub.pubInter.AnalyzerAnnotation;
 import javax.persistence.Table;
 import java.util.List;
 
@@ -16,6 +17,7 @@ public class WbInfo extends BaseEntity {
     @ForeignKeyAnnotation
     private String uId;
 
+    @AnalyzerAnnotation
     private String wbContent;
 
     private String wbContentHtml;

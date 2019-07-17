@@ -6,9 +6,11 @@ import com.common.pub.pubInter.ChildAnnotation;
 import com.common.pub.pubInter.ESIdAnnotation;
 import com.common.pub.pubInter.ForeignKeyAnnotation;
 import com.common.util.CheckedUtil;
+import com.spider.bussiness.entity.NgramAnalyzerInfo;
 import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.action.DocWriteResponse;
 import org.elasticsearch.action.index.IndexRequest;
+import org.elasticsearch.client.indices.CreateIndexRequest;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.rest.RestStatus;
@@ -140,5 +142,33 @@ public abstract class AbstractEClient extends CheckedUtil {
         builder.field("analyzer", "ik_smart");
 
         builder.endObject();
+    }
+
+    protected void createNgramInfo(CreateIndexRequest createIndexRequest, List<NgramAnalyzerInfo> ngramAnalyzerInfoList) throws IOException {
+        if(ngramAnalyzerInfoList != null && ngramAnalyzerInfoList.size() > 0){
+
+            XContentBuilder builder = XContentFactory.jsonBuilder();
+            builder.startObject("analysis");
+
+                builder.startObject("analyzer");
+                    ngramAnalyzerInfoList.stream().forEach(acceptOrThrow(ngramAnalyzerInfo -> {
+                        builder.startObject(ngramAnalyzerInfo.getAnalyzerName().toString());
+                            builder.field("tokenizer", ngramAnalyzerInfo.getTokenizerName());
+                        builder.endObject();
+                    }));
+                builder.endObject();
+
+                builder.startObject("tokenizer");
+                    ngramAnalyzerInfoList.stream().forEach(acceptOrThrow(ngramAnalyzerInfo -> {
+                        builder.startObject(ngramAnalyzerInfo.getTokenizerName());
+                            builder.field("type", ngramAnalyzerInfo.getNgramType());
+                            builder.field("min_gram", ngramAnalyzerInfo.getMinGram());
+                            builder.field("max_gram", ngramAnalyzerInfo.getMaxGram());
+                        builder.endObject();
+                    }));
+                builder.endObject();
+
+            builder.endObject();
+        }
     }
 }

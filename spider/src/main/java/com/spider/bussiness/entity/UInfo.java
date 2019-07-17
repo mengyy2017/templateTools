@@ -3,6 +3,7 @@ package com.spider.bussiness.entity;
 import com.common.bussiness.entity.BaseEntity;
 import com.common.pub.pubInter.ChildAnnotation;
 import com.common.pub.pubInter.ESIdAnnotation;
+import com.common.pub.pubInter.AnalyzerAnnotation;
 import javax.persistence.Table;
 import java.util.List;
 
@@ -14,24 +15,31 @@ public class UInfo extends BaseEntity {
 
     private String uHome;
 
+    @AnalyzerAnnotation
     private String summarize;
 
+    @AnalyzerAnnotation(analyzerName = AnalyzerAnnotation.AnalyzerName.edgeNgramAnalyzer)
     private String address;
 
     private String fansNum;
 
+    @AnalyzerAnnotation
     private String verify;
 
     private String profileNum;
 
     private String followNum;
 
+    @AnalyzerAnnotation(analyzerName = AnalyzerAnnotation.AnalyzerName.edgeNgramAnalyzer)
     private String uName;
 
+    @AnalyzerAnnotation
     private String tag;
 
+    @AnalyzerAnnotation(analyzerName = AnalyzerAnnotation.AnalyzerName.edgeNgramAnalyzer)
     private String school;
 
+    @AnalyzerAnnotation
     private String professional;
 
     private String extractStr;
