@@ -10,9 +10,9 @@ public class NgramAnalyzerInfo {
 
     private String ngramType;
 
-    private int minGram = 2;
+    private int minGram = 1;
 
-    private int maxGram = 4;
+    private int maxGram = 2;
 
     public AnalyzerAnnotation.AnalyzerName getAnalyzerName() {
         return analyzerName;

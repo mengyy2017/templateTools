@@ -18,6 +18,7 @@ public class CommentInfo extends BaseEntity {
 
     private String commentUId;
 
+    @AnalyzerAnnotation(analyzerName = AnalyzerAnnotation.AnalyzerName.edgeNgramAnalyzer)
     private String commentUName;
 
     private String createAt;

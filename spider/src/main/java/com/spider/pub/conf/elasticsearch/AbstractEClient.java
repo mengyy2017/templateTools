@@ -1,26 +1,23 @@
 package com.spider.pub.conf.elasticsearch;
 
 import com.common.bussiness.entity.BaseEntity;
-import com.common.pub.pubInter.BiCheckedFunction;
-import com.common.pub.pubInter.ChildAnnotation;
-import com.common.pub.pubInter.ESIdAnnotation;
-import com.common.pub.pubInter.ForeignKeyAnnotation;
+import com.common.pub.pubInter.*;
 import com.common.util.CheckedUtil;
 import com.spider.bussiness.entity.NgramAnalyzerInfo;
 import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.action.DocWriteResponse;
 import org.elasticsearch.action.index.IndexRequest;
+import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.indices.CreateIndexRequest;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.rest.RestStatus;
+import org.elasticsearch.search.SearchHit;
+
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public abstract class AbstractEClient extends CheckedUtil {
@@ -138,9 +135,8 @@ public abstract class AbstractEClient extends CheckedUtil {
     protected void buildEachFieldType(XContentBuilder builder, Field field) throws IOException {
         builder.startObject(field.getName());
         builder.field("type", "text");
-        // TODO
-        builder.field("analyzer", "ik_smart");
-
+        if(field.isAnnotationPresent(AnalyzerAnnotation.class))
+            builder.field("analyzer", field.getAnnotation(AnalyzerAnnotation.class).analyzerName().toString());
         builder.endObject();
     }
 
@@ -148,6 +144,7 @@ public abstract class AbstractEClient extends CheckedUtil {
         if(ngramAnalyzerInfoList != null && ngramAnalyzerInfoList.size() > 0){
 
             XContentBuilder builder = XContentFactory.jsonBuilder();
+            builder.startObject();
             builder.startObject("analysis");
 
                 builder.startObject("analyzer");
@@ -169,6 +166,18 @@ public abstract class AbstractEClient extends CheckedUtil {
                 builder.endObject();
 
             builder.endObject();
+            builder.endObject();
+
+            createIndexRequest.settings(builder);
         }
+    }
+
+    protected List<Map<String, Object>> parseSearchResponse(SearchResponse response){
+        List<Map<String, Object>> resultList = new ArrayList<>();
+        SearchHit[] hits = response.getHits().getHits();
+        for (SearchHit hit : hits) {
+            resultList.add(hit.getSourceAsMap());
+        }
+        return resultList;
     }
 }

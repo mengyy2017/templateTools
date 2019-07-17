@@ -2,8 +2,6 @@ package com.spider.bussiness.controller;
 
 import com.common.bussiness.controller.BaseController;
 import com.common.pub.pubBo.Resp;
-import com.common.pub.pubInter.AnalyzerAnnotation;
-import com.spider.bussiness.entity.NgramAnalyzerInfo;
 import com.spider.bussiness.entity.UInfo;
 import com.spider.bussiness.service.UInfoService;
 import com.spider.pub.conf.elasticsearch.EClient;
@@ -23,20 +21,6 @@ public class UInfoController extends BaseController {
 
     @Autowired
     private EClient eClient;
-
-    @RequestMapping("/createIndex")
-    @ResponseBody
-    public Resp<String> createIndex() {
-        try {
-            NgramAnalyzerInfo ngramAnalyzerInfo = new NgramAnalyzerInfo();
-            ngramAnalyzerInfo.setAnalyzerName(AnalyzerAnnotation.AnalyzerName.edgeNgramAnalyzer);
-            eClient.createIndex(Consts.indexName, UInfo.class, null);
-            mkSuccResp("123456");
-        } catch (Exception e) {
-            mkFailResp(e);
-        }
-        return respResult.get();
-    }
 
     @RequestMapping("/addDoc")
     @ResponseBody

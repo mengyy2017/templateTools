@@ -14,6 +14,8 @@ import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.action.search.SearchRequest;
+import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.support.master.AcknowledgedResponse;
 import org.elasticsearch.action.support.replication.ReplicationResponse;
 import org.elasticsearch.client.RequestOptions;
@@ -23,7 +25,10 @@ import org.elasticsearch.client.indices.CreateIndexRequest;
 import org.elasticsearch.client.indices.CreateIndexResponse;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
+import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.rest.RestStatus;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.stereotype.Component;
 import javax.persistence.Table;
 import java.io.IOException;
@@ -261,6 +266,20 @@ public class EClient extends AbstractEClient {
         }
     }
 
+    public List<Map<String, Object>> matchPhrase(String indexName, String fieldName, String phrase) throws IOException {
+        SearchRequest searchRequest = new SearchRequest(indexName);
+
+        SearchSourceBuilder builder = new SearchSourceBuilder();
+        builder.query(QueryBuilders.matchPhraseQuery(fieldName, phrase));
+
+        searchRequest.source(builder);
+
+        SearchResponse searchResponse = esClient.search(searchRequest, RequestOptions.DEFAULT);
+
+        List<Map<String, Object>> list = parseSearchResponse(searchResponse);
+
+        return list;
+    }
 
 }
 
