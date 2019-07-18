@@ -62,7 +62,7 @@ public class ESController extends BaseController {
 
     @RequestMapping("/matchPhrase")
     @ResponseBody
-    public Resp<String> matchPhrase(@RequestParam(name = "indexName") String indexName, @RequestParam(name = "fieldName") String fieldName, @RequestParam(name = "phrase") String phrase) {
+    public Resp<String> matchPhrase(String indexName, String fieldName, String phrase) {
         try {
 
 //            List<Map<String, Object>> list = eClient.matchPhrase("wb", "school", "北");
