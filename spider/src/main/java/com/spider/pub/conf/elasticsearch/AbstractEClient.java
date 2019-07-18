@@ -172,11 +172,14 @@ public abstract class AbstractEClient extends CheckedUtil {
         }
     }
 
-    protected List<Map<String, Object>> parseSearchResponse(SearchResponse response){
-        List<Map<String, Object>> resultList = new ArrayList<>();
+//    protected List<Map<String, Object>> parseSearchResponse(SearchResponse response){
+    protected List<SearchHit> parseSearchResponse(SearchResponse response){
+//        List<Map<String, Object>> resultList = new ArrayList<>();
+        List<SearchHit> resultList = new ArrayList<>();
         SearchHit[] hits = response.getHits().getHits();
         for (SearchHit hit : hits) {
-            resultList.add(hit.getSourceAsMap());
+//            resultList.add(hit.getSourceAsMap());
+            resultList.add(hit);
         }
         return resultList;
     }

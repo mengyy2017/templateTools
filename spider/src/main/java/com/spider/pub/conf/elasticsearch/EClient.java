@@ -28,6 +28,7 @@ import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.rest.RestStatus;
+import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.stereotype.Component;
 import javax.persistence.Table;
@@ -266,7 +267,8 @@ public class EClient extends AbstractEClient {
         }
     }
 
-    public List<Map<String, Object>> matchPhrase(String indexName, String fieldName, String phrase) throws IOException {
+//    public List<Map<String, Object>> matchPhrase(String indexName, String fieldName, String phrase) throws IOException {
+    public List<SearchHit> matchPhrase(String indexName, String fieldName, String phrase) throws IOException {
         SearchRequest searchRequest = new SearchRequest(indexName);
 
         SearchSourceBuilder builder = new SearchSourceBuilder();
@@ -276,7 +278,8 @@ public class EClient extends AbstractEClient {
 
         SearchResponse searchResponse = esClient.search(searchRequest, RequestOptions.DEFAULT);
 
-        List<Map<String, Object>> list = parseSearchResponse(searchResponse);
+//        List<Map<String, Object>> list = parseSearchResponse(searchResponse);
+        List<SearchHit> list = parseSearchResponse(searchResponse);
 
         return list;
     }

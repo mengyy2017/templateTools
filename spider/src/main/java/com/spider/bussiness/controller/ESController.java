@@ -13,9 +13,11 @@ import com.spider.bussiness.service.WbInfoService;
 import com.spider.pub.conf.elasticsearch.EClient;
 import com.spider.pub.conf.elasticsearch.EsClient;
 import com.spider.pub.consts.Consts;
+import org.elasticsearch.search.SearchHit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 import java.util.Map;
@@ -60,10 +62,11 @@ public class ESController extends BaseController {
 
     @RequestMapping("/matchPhrase")
     @ResponseBody
-    public Resp<String> matchPhrase(String indexName, String fieldName, String phrase) {
+    public Resp<String> matchPhrase(@RequestParam(name = "indexName") String indexName, @RequestParam(name = "fieldName") String fieldName, @RequestParam(name = "phrase") String phrase) {
         try {
 
-            List<Map<String, Object>> list = eClient.matchPhrase("wb", "school", "北");
+//            List<Map<String, Object>> list = eClient.matchPhrase("wb", "school", "北");
+            List<SearchHit> list = eClient.matchPhrase("wb", "school", "北");
 
             mkSuccResp(list);
         } catch (Exception e) {
