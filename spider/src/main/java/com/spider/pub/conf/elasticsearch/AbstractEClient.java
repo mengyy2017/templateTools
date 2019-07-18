@@ -13,7 +13,6 @@ import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.search.SearchHit;
-
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
@@ -172,13 +171,10 @@ public abstract class AbstractEClient extends CheckedUtil {
         }
     }
 
-//    protected List<Map<String, Object>> parseSearchResponse(SearchResponse response){
     protected List<SearchHit> parseSearchResponse(SearchResponse response){
-//        List<Map<String, Object>> resultList = new ArrayList<>();
         List<SearchHit> resultList = new ArrayList<>();
         SearchHit[] hits = response.getHits().getHits();
         for (SearchHit hit : hits) {
-//            resultList.add(hit.getSourceAsMap());
             resultList.add(hit);
         }
         return resultList;

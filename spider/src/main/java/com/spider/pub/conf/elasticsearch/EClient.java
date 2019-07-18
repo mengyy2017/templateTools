@@ -25,7 +25,6 @@ import org.elasticsearch.client.indices.CreateIndexRequest;
 import org.elasticsearch.client.indices.CreateIndexResponse;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
-import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.search.SearchHit;
@@ -267,7 +266,6 @@ public class EClient extends AbstractEClient {
         }
     }
 
-//    public List<Map<String, Object>> matchPhrase(String indexName, String fieldName, String phrase) throws IOException {
     public List<SearchHit> matchPhrase(String indexName, String fieldName, String phrase) throws IOException {
         SearchRequest searchRequest = new SearchRequest(indexName);
 
@@ -278,7 +276,6 @@ public class EClient extends AbstractEClient {
 
         SearchResponse searchResponse = esClient.search(searchRequest, RequestOptions.DEFAULT);
 
-//        List<Map<String, Object>> list = parseSearchResponse(searchResponse);
         List<SearchHit> list = parseSearchResponse(searchResponse);
 
         return list;
