@@ -39,7 +39,7 @@
             <div class="form-group col-lg-5 col-sm-6 col-xs-6">
                 <label for="${columnEntity.camelColName}" class="col-lg-6 col-sm-5 col-xs-5 control-label"><${"@"}spring.message code="label.opc.${camelTableName}.${columnEntity.camelColName}"/>:</label>
                 <div class="col-lg-6 col-sm-6 col-xs-7">
-                    <p>${"$"}{cur${upperCamelTableName}.${columnEntity.camelColName}?string('yyyy-MM-dd HH:mm:ss')}</p>
+                    <p>${"$"}{(cur${upperCamelTableName}.${columnEntity.camelColName}?string('yyyy-MM-dd HH:mm:ss'))!}</p>
                 </div>
             </div>
         <#else >

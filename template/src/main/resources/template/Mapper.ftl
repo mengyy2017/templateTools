@@ -6,9 +6,9 @@
     <#list columnList as columnEntity>
         <#if columnEntity.columnKey! == "PRI">
         <#--javaType="${columnEntity.javaFiledType}" javaType可以不设置-->
-        <result column="${columnEntity.columnName}" property="id" jdbcType="${columnEntity.dataType}" />	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
+        <result column="${columnEntity.columnName}" property="id" jdbcType="<#if columnEntity.dataType == "TEXT">CLOB<#else>${columnEntity.dataType}</#if>" />	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
         <#elseif columnEntity.columnKey! != "PRI">
-        <result column="${columnEntity.columnName}" property="${columnEntity.camelColName}" jdbcType="${columnEntity.dataType}" />	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
+        <result column="${columnEntity.columnName}" property="${columnEntity.camelColName}" jdbcType="<#if columnEntity.dataType == "TEXT">CLOB<#else>${columnEntity.dataType}</#if>" />	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
         </#if>
     </#list>
     </resultMap>
