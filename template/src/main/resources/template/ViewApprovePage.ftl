@@ -13,7 +13,7 @@
 
 <div style="height: inherit; overflow-y: scroll;">
 
-    <${"#"}include "/opc/view${"upperCamelTableName"}Body.html" />
+    <${"#"}include "/opc/view${upperCamelTableName}Body.html" />
     <${"#"}include "/workflow/approveCommon.html" />
     <${"#"}include "/workflow/defApproveFooter.html" />
 </div>

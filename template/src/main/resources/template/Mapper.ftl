@@ -30,7 +30,7 @@
         <#list columnList as columnEntity>
         <#if columnEntity.columnKey! != "PRI">
             <if test="${columnEntity.camelColName} != null and  ${columnEntity.camelColName} != ''" >
-                AND ${camelTableName}.${columnEntity.columnName} = ${"#"}{${columnEntity.camelColName}, jdbcType=${columnEntity.dataType}},	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
+                AND ${camelTableName}.${columnEntity.columnName} = ${"#"}{${columnEntity.camelColName}, jdbcType=${columnEntity.dataType}} 	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
             </if>
         </#if>
         </#list>

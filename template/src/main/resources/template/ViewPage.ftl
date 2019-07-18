@@ -11,7 +11,7 @@
 
 <body>
 
-<${"#"}include "/opc/view${"upperCamelTableName"}Body.html" />
+<${"#"}include "/opc/view${upperCamelTableName}Body.html" />
 <${"#"}include "/center/foot.html" />
 
 </body>
