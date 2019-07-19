@@ -38,6 +38,13 @@
                     || (columnEntity.camelColName)?contains("msmilestoneCode")
                     || (columnEntity.camelColName)?contains("item")
                     || (columnEntity.camelColName)?contains("details")
+                    || (columnEntity.camelColName)?contains("dataContent")
+                    || (columnEntity.camelColName)?contains("goodsName")
+                    || (columnEntity.camelColName)?contains("registrationNumber")
+                    || (columnEntity.camelColName)?contains("authentification")
+                    || (columnEntity.camelColName)?contains("totalProduced")
+                    || (columnEntity.camelColName)?contains("limitations")
+                    || (columnEntity.camelColName)?contains("contracts")
                 >
                     <div class="form-group col-lg-12 col-sm-12 col-xs-12">
                         <label for="${columnEntity.camelColName}" class="col-lg-2 col-sm-2 col-xs-2 control-label describeSpan"><${"@"}spring.message code="label.opc.${camelTableName}.${columnEntity.camelColName}"/>:</label>
