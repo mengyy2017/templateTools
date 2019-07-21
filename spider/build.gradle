@@ -9,5 +9,7 @@ dependencies {
     compile group: 'org.elasticsearch.client', name: 'elasticsearch-rest-high-level-client', version: '7.2.0'
 //    compile group: 'org.elasticsearch.client', name: 'elasticsearch-rest-client', version: '7.2.0'
     compile group: 'org.elasticsearch', name: 'elasticsearch', version: '7.2.0'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-amqp', version: '2.1.0.RELEASE'
+
 
 }
