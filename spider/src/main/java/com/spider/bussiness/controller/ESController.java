@@ -4,9 +4,7 @@ import com.common.bussiness.controller.BaseController;
 import com.common.pub.pubBo.Resp;
 import com.common.pub.pubInter.AnalyzerAnnotation;
 import com.spider.bussiness.entity.*;
-import com.spider.bussiness.service.CommentInfoService;
-import com.spider.bussiness.service.UInfoService;
-import com.spider.bussiness.service.WbInfoService;
+import com.spider.bussiness.service.ESService;
 import com.spider.pub.conf.elasticsearch.EClient;
 import com.spider.pub.consts.Consts;
 import org.elasticsearch.search.SearchHit;
@@ -23,14 +21,9 @@ import java.util.stream.Stream;
 public class ESController extends BaseController {
 
     @Autowired
-    private UInfoService uInfoService;
-    @Autowired
-    private WbInfoService wbInfoService;
-    @Autowired
-    private CommentInfoService commentInfoService;
-    @Autowired
     private EClient eClient;
-
+    @Autowired
+    ESService esService;
     @RequestMapping("/createIndex")
     @ResponseBody
     public Resp<String> createIndex() {
@@ -59,7 +52,7 @@ public class ESController extends BaseController {
     public Resp<String> matchPhrase(String indexName, String fieldName, String phrase) {
         try {
 
-            List<SearchHit> searchHitList = eClient.matchPhrase("wb", fieldName, phrase);
+            List<SearchHit> searchHitList = eClient.matchPhrase(indexName, fieldName, phrase);
 
             List<SearchResult> searchResultList = searchHitList.parallelStream().map(result -> {
                 SearchResult searchResult = newAndSet0(SearchResult::new, new String[]{result.getId(),
@@ -80,7 +73,7 @@ public class ESController extends BaseController {
     public Resp<String> addWb() {
         try {
 
-            addRelationDoc("wb");
+            esService.addRelationDoc(Consts.indexName);
 
             mkSuccResp("111");
         } catch (Exception e) {
@@ -94,7 +87,7 @@ public class ESController extends BaseController {
     public Resp<String> addWb0() {
         try {
 
-            addRelationDoc("wb0");
+            esService.addRelationDoc("wb0");
 
             mkSuccResp("111");
         } catch (Exception e) {
@@ -108,7 +101,7 @@ public class ESController extends BaseController {
     public Resp<String> addWb1() {
         try {
 
-            addRelationDoc("wb1");
+            esService.addRelationDoc("wb1");
 
             mkSuccResp("111");
         } catch (Exception e) {
@@ -122,25 +115,13 @@ public class ESController extends BaseController {
     public Resp<String> addWb2() {
         try {
 
-            addRelationDoc("wb2");
+            esService.addRelationDoc("wb2");
 
             mkSuccResp("111");
         } catch (Exception e) {
             mkFailResp(e);
         }
         return respResult.get();
-    }
-
-
-    void addRelationDoc(String indexName) throws Exception {
-        List<UInfo> uInfoList = uInfoService.selectAll();
-        eClient.bulkAddRelationDoc(indexName, uInfoList, Boolean.FALSE);
-
-        List<WbInfo> wbInfoList = wbInfoService.selectAll();
-        eClient.bulkAddRelationDoc(indexName, wbInfoList, Boolean.TRUE);
-
-        List<CommentInfo> commentInfoList = commentInfoService.selectAll();
-        eClient.bulkAddRelationDoc(indexName, commentInfoList, Boolean.TRUE);
     }
 
 }

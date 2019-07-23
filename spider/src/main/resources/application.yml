@@ -19,24 +19,24 @@ spring:
     #    url:jdbc:oracle:thin:@192.168.1.128:1521:orcl
     username: root
     password: 1
-#  security:
-#    oauth2:     #token检查的授权端url
-#      client:
-#        clientId: createCodeClient
-#        clientSecret: secret
-#        userAuthorizationUri: ${server.authUri}/oauth/authorize
-#        grantType: password
-#        scope: select
-#        accessTokenUri: ${server.authUri}/oauth/token
-#      #      authentication-scheme: form     #获得授权端的当前用户信息url
-#      resource:
-#        #      id: createCode
-#        userInfoUri: ${server.authUri}/user/me
-#        filterOrder: 3
-#        #        tokenInfoUri: ${server.authUri}/oauth/check_token
-#        preferTokenInfo: true
-#      authorization:
-#        checkTokenAccess: ${server.authUri}/oauth/check_token     #对应的注册码与注册密码
+  security:
+    oauth2:     #token检查的授权端url
+      client:
+        clientId: createCodeClient
+        clientSecret: secret
+        userAuthorizationUri: ${server.authUri}/oauth/authorize
+        grantType: password
+        scope: select
+        accessTokenUri: ${server.authUri}/oauth/token
+      #      authentication-scheme: form     #获得授权端的当前用户信息url
+      resource:
+        #      id: createCode
+        userInfoUri: ${server.authUri}/user/me
+        filterOrder: 3
+        #        tokenInfoUri: ${server.authUri}/oauth/check_token
+        preferTokenInfo: true
+      authorization:
+        checkTokenAccess: ${server.authUri}/oauth/check_token     #对应的注册码与注册密码
   rabbitmq:
     host: 127.0.0.1
     port: 5672

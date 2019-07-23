@@ -111,16 +111,16 @@ public abstract class AbstractEClient extends CheckedUtil {
 
     protected void buildChildObjField(XContentBuilder builder, List<Field> childAnnoFieldList, String parentName, Map<String, String[]> relationshipMap){
         String[] relationshipArr = childAnnoFieldList.stream().map(applyOrThrow(f -> { // 构建每个子关系字段
-                    Class childClazz = (Class) ((ParameterizedType) f.getGenericType()).getActualTypeArguments()[0];
-                    List<Field> childReflectFields = filterCreateIndexField(getReflectFileds(childClazz), true);
-                    String childObjName = f.getAnnotation(ChildAnnotation.class).name();
-                    buildObjField(builder, childObjName, childReflectFields);
+                Class childClazz = (Class) ((ParameterizedType) f.getGenericType()).getActualTypeArguments()[0];
+                List<Field> childReflectFields = filterCreateIndexField(getReflectFileds(childClazz), true);
+                String childObjName = f.getAnnotation(ChildAnnotation.class).name();
+                buildObjField(builder, childObjName, childReflectFields);
 
-                    List<Field> childAnnoFields = filterCreateIndexField(getReflectFileds(childClazz), false);
-                    if (childAnnoFields.size() > 0)
-                        buildChildObjField(builder, childAnnoFields, childObjName, relationshipMap);
-                    return childObjName;
-                })
+                List<Field> childAnnoFields = filterCreateIndexField(getReflectFileds(childClazz), false);
+                if (childAnnoFields.size() > 0)
+                    buildChildObjField(builder, childAnnoFields, childObjName, relationshipMap);
+                return childObjName;
+            })
         ).toArray(String[]::new);
         relationshipMap.put(parentName, relationshipArr);
     }

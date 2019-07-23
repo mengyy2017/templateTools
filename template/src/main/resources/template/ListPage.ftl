@@ -31,7 +31,6 @@
                                         </${"#"}if>
                                     </select>
                                 </div>
-                            <#else >
                                 <div class="formInput">
                                     <label for="${columnEntity.camelColName}"><${"@"}spring.message code="label.opc.${camelTableName}.${columnEntity.camelColName}"/>：</label>
                                     <input type="text" style="" id="${columnEntity.camelColName}" name="${columnEntity.camelColName}" value="${"$"}{q.${columnEntity.camelColName}!}" placeholder="">
@@ -78,8 +77,11 @@
                                                 </${"#"}list>
                                                 </${"#"}if>
                                             </td>
-                                        <#elseif columnEntity.dataType == 'timestamp'>
-                                            <td>${"$"}{(q.${columnEntity.camelColName!}?string('yyyy-MM-dd HH:mm:ss'))}</td>
+
+                                        <#elseif (columnEntity.dataType)?contains("DATE")
+                                        || (columnEntity.dataType)?contains("DATETIME")
+                                        >
+                                            <td>${"$"}{(q.${columnEntity.camelColName!}?string('yyyy-MM-dd HH:mm:ss'))!}</td>
                                         <#else >
                                             <td>${"$"}{q.${columnEntity.camelColName!}!}
                                         </#if>

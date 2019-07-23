@@ -26,6 +26,8 @@ import org.elasticsearch.client.indices.CreateIndexResponse;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.reindex.DeleteByQueryRequest;
+import org.elasticsearch.index.reindex.DeleteByQueryRequestBuilder;
 import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
@@ -234,6 +236,14 @@ public class EClient extends AbstractEClient {
             throw new RuntimeException(e.getMessage());
         }
 
+    }
+
+    public void deleteAllDoc(String indexName) throws IOException {
+        DeleteByQueryRequest deleteByQueryRequest = new DeleteByQueryRequest(indexName);
+
+        deleteByQueryRequest.setQuery(QueryBuilders.matchAllQuery());
+
+        esClient.deleteByQuery(deleteByQueryRequest, RequestOptions.DEFAULT);
     }
 
     public <T extends BaseEntity> void bulkDeleteDoc(String indexName, List<T> dataList) throws Exception {
