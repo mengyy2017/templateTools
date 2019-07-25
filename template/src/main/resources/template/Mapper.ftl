@@ -29,9 +29,15 @@
         WHERE 1=1
         <#list columnList as columnEntity>
         <#if columnEntity.columnKey! != "PRI">
-            <if test="${columnEntity.camelColName} != null and  ${columnEntity.camelColName} != ''" >
+            <#if columnEntity.dataType != "DATE" && columnEntity.dataType != "DATETIME" && columnEntity.dataType != "TIMESTAMP">
+            <if test="${columnEntity.camelColName} != null and ${columnEntity.camelColName} != ''" >
                 AND ${camelTableName}.${columnEntity.columnName} = ${"#"}{${columnEntity.camelColName}, jdbcType=${columnEntity.dataType}} 	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
             </if>
+            <#else>
+                <if test="${columnEntity.camelColName} != null" >
+                    AND ${camelTableName}.${columnEntity.columnName} = ${"#"}{${columnEntity.camelColName}, jdbcType=${columnEntity.dataType}} 	${"<!--"} ${columnEntity.columnComment!} ${"-->"}
+                </if>
+            </#if>
         </#if>
         </#list>
     </select>
@@ -43,9 +49,15 @@
              <#if columnEntity.columnKey! == "PRI">
                  ${columnEntity.columnName!},
              <#elseif columnEntity.columnKey! != "PRI">
-                 <if test="${columnEntity.camelColName} != null and  ${columnEntity.camelColName} != ''" >
+                 <#if columnEntity.dataType != "DATE" && columnEntity.dataType != "DATETIME" && columnEntity.dataType != "TIMESTAMP">
+                 <if test="${columnEntity.camelColName} != null and ${columnEntity.camelColName} != ''" >
                      ${columnEntity.columnName},
                  </if>
+                 <#else>
+                 <if test="${columnEntity.camelColName} != null" >
+                     ${columnEntity.columnName},
+                 </if>
+                 </#if>
              </#if>
              </#list>
          </trim>
@@ -54,9 +66,15 @@
              <#if columnEntity.columnKey! == "PRI">
                  ${"#"}{id},
              <#elseif columnEntity.columnKey! != "PRI">
-                 <if test="${columnEntity.camelColName} != null and  ${columnEntity.camelColName} != ''" >
+                 <#if columnEntity.dataType != "DATE" && columnEntity.dataType != "DATETIME" && columnEntity.dataType != "TIMESTAMP">
+                 <if test="${columnEntity.camelColName} != null and ${columnEntity.camelColName} != ''" >
                      ${"#"}{${columnEntity.camelColName}},
                  </if>
+                 <#else>
+                 <if test="${columnEntity.camelColName} != null" >
+                     ${"#"}{${columnEntity.camelColName}},
+                 </if>
+                 </#if>
              </#if>
              </#list>
          </trim>
@@ -69,9 +87,15 @@
             <#list columnList as columnEntity>
                 <#if columnEntity.columnKey! != "PRI">
                 <choose>
+                    <#if columnEntity.dataType != "DATE" && columnEntity.dataType != "DATETIME" && columnEntity.dataType != "TIMESTAMP">
                     <when test="${columnEntity.camelColName} != null and ${columnEntity.camelColName} != ''">
                         ${columnEntity.columnName} = ${"#"}{${columnEntity.camelColName}},
                     </when>
+                    <#else>
+                    <when test="${columnEntity.camelColName} != null">
+                        ${columnEntity.columnName} = ${"#"}{${columnEntity.camelColName}},
+                    </when>
+                    </#if>
                     <otherwise>
                         ${columnEntity.columnName} = null,
                     </otherwise>

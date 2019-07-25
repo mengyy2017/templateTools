@@ -11,7 +11,7 @@
 
 <body>
 
-<div style="height: inherit; overflow-y: scroll;">
+<div style="height: inherit; overflow-y: scroll; padding-top: 30px;">
 
     <${"#"}include "/opc/view${upperCamelTableName}Body.html" />
     <${"#"}include "/workflow/approveCommon.html" />
