@@ -35,6 +35,12 @@ public class ColumnEntity {
 
     private String characterMaximumLength;
 
+    @Transient
+    private Boolean isFronted;
+
+    @Transient
+    private int sortIndex;
+
     public String getId() {
         return id;
     }
@@ -128,5 +134,21 @@ public class ColumnEntity {
 
     public void setCharacterMaximumLength(String characterMaximumLength) {
         this.characterMaximumLength = characterMaximumLength;
+    }
+
+    public Boolean getIsFronted() {
+        return isFronted;
+    }
+
+    public void setIsFronted(Boolean fronted) {
+        isFronted = fronted;
+    }
+
+    public int getSortIndex() {
+        return sortIndex;
+    }
+
+    public void setSortIndex(int sortIndex) {
+        this.sortIndex = sortIndex;
     }
 }

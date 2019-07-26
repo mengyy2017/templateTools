@@ -15,6 +15,7 @@ public class ${upperCamelTableName}Entity implements Serializable {
 	<#if column.columnKey! == "PRI">
 	private String id; // id
 	<#elseif column.columnKey! != "PRI">
+	<#if (column.isFronted)??>${"@"}ExcelAnnotation(order = ${column.sortIndex!}, exportName = "${column.camelColName}")</#if>
 	private ${column.javaFiledType} ${column.camelColName}; // ${column.columnComment!}
 	</#if>
 </#list>

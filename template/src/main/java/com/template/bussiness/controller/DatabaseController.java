@@ -18,8 +18,11 @@ import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Example;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/database")
@@ -83,16 +86,29 @@ public class DatabaseController extends BaseController {
     @ResponseBody
     public Resp createCode (@RequestBody List<TableColsInfo> tableColsInfoList){
 
-        tableColsInfoList.stream().forEach(dbModel -> {
+        tableColsInfoList.stream().forEach(tableColesInfo -> {
 
-            if(dbModel.getColList().size() == 0){
-                List<ColumnEntity> columnList = columnService.select(
-                        newAndSet(ColumnEntity::new, getVAndF(dbModel.getTableName(), ColumnEntity::setTableName)
-                                    , getVAndF(CreateInfo.creInfoFromToken().getTableSchema(), ColumnEntity::setTableSchema)));
-                setVals(dbModel, getVAndF(columnList, TableColsInfo::setColList));
-            }
+            Map<String, ColumnEntity> tableAllColMap = columnService.select(
+                    newAndSet(ColumnEntity::new, getVAndF(tableColesInfo.getTableName(), ColumnEntity::setTableName)
+                    , getVAndF(CreateInfo.creInfoFromToken().getTableSchema(), ColumnEntity::setTableSchema))
+            ).stream().collect(Collectors.groupingBy(ColumnEntity::getColumnName,
+                    Collectors.collectingAndThen(Collectors.maxBy(Comparator.comparing(ColumnEntity::getColumnName)), it -> it.get())
+                )
+            );
 
-            Map dataMap = HandelDataUtil.convertData(dbModel);
+            AtomicInteger i = new AtomicInteger(10);
+            Map<String, ColumnEntity> frontedColMap = tableColesInfo.getColList().stream().map(columnEntity -> {
+                columnEntity.setIsFronted(Boolean.TRUE); columnEntity.setSortIndex(i.getAndAdd(10)); return columnEntity;
+            }).collect(Collectors.groupingBy(ColumnEntity::getColumnName,
+                    Collectors.collectingAndThen(Collectors.maxBy(Comparator.comparing(ColumnEntity::getColumnName)), it -> it.get())
+                    )
+            );
+
+            tableAllColMap.putAll(frontedColMap);
+
+            setVals(tableColesInfo, getVAndF(tableAllColMap.values().parallelStream().collect(Collectors.toList()), TableColsInfo::setColList));
+
+            Map dataMap = HandelDataUtil.convertData(tableColesInfo);
 
             try {
                 FreeMarkerUtil.outputFile(dataMap);
