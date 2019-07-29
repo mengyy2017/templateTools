@@ -50,7 +50,7 @@ public class ConnAspect {
 //     }
 
 //     起作用了 得是spring管理的类 才可以拦截
-//    @Before("execution(* com.template.service.TableService.*(..))")
+//    @Before("execution(* com.template.bussiness.service.TableService.*(..))")
 //    public void aaaaa(JoinPoint joinPoint){
 //        Object a = joinPoint.getTarget();
 //        System.out.println("代理TableService的方法");
