@@ -59,8 +59,13 @@ public class PyController extends BaseController {
             esService.deleteAllDoc(Consts.indexName);
             esService.addRelationDoc(Consts.indexName);
 
-//            for(int i = 0; i < 100; i++)
-//                rabbitTemplate.convertAndSend("FanoutExchange1","","aaaaaaaa", new CorrelationData(UUID.randomUUID().toString()));
+//            String message = "aaaaaaaa";
+//            for(int i = 0; i < 10; i++){
+//                message = message + message;
+//            }
+//            for (int j = 0; j < 15; j++){
+//                rabbitTemplate.convertAndSend("FanoutExchange1","",message, new CorrelationData(UUID.randomUUID().toString()));
+//            }
         } catch (Exception e) {
             mkFailResp(e);
         }
