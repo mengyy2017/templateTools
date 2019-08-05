@@ -1,6 +1,6 @@
 server:
   port: 8043
-  authUri: http://127.0.0.1:8040
+  authUri: http://127.0.0.1:8041
 
 grpc:
   client: # 这个表明当前工程是grpc的client
