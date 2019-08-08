@@ -49,7 +49,7 @@
                     <div class="form-group col-lg-12 col-sm-12 col-xs-12">
                         <label for="${columnEntity.camelColName}" class="col-lg-2 col-sm-2 col-xs-2 control-label describeSpan"><${"@"}spring.message code="label.opc.${camelTableName}.${columnEntity.camelColName}"/>:</label>
                         <div class="col-lg-9 col-sm-9 col-xs-9 describeTextArea">
-                            <textarea type="text" maxlength="${columnEntity.characterMaximumLength!}" class="form-control" id="${columnEntity.camelColName}" name="${columnEntity.camelColName}" value="${"$"}{cur${upperCamelTableName}.${columnEntity.camelColName}!}" placeholder="<${"@"}spring.message code="msg.input.tips"/><${"@"}spring.message code="label.opc.${camelTableName}.${columnEntity.camelColName}"/>"></textarea>
+                            <textarea type="text" maxlength="${columnEntity.characterMaximumLength!}" class="form-control" id="${columnEntity.camelColName}" name="${columnEntity.camelColName}" placeholder="<${"@"}spring.message code="msg.input.tips"/><${"@"}spring.message code="label.opc.${camelTableName}.${columnEntity.camelColName}"/>">${"$"}{cur${upperCamelTableName}.${columnEntity.camelColName}!}</textarea>
                         </div>
                     </div>
                 <#elseif (columnEntity.dataType)?contains("DATE")
